@@ -1,53 +1,53 @@
 #ifndef TLSE_H
 #define TLSE_H
 
-// #define DEBUG
+// // #define DEBUG
 
-// define TLS_LEGACY_SUPPORT to support TLS 1.1/1.0 (legacy)
-// legacy support it will use an additional 272 bytes / context
-#ifndef NO_TLS_LEGACY_SUPPORT
-#define TLS_LEGACY_SUPPORT
-#endif
-// SSL_* style blocking APIs
-#ifndef NO_SSL_COMPATIBLE_INTERFACE
-#define SSL_COMPATIBLE_INTERFACE
-#endif
-// support ChaCha20/Poly1305
-#if !defined(__BIG_ENDIAN__) && ((!defined(__BYTE_ORDER)) || (__BYTE_ORDER == __LITTLE_ENDIAN))
-    // not working on big endian machines
-    #ifndef NO_TLS_WITH_CHACHA20_POLY1305
-        #define TLS_WITH_CHACHA20_POLY1305
-    #endif
-#endif
-#ifndef NO_TLS_13
-#define WITH_TLS_13
-#endif
-// support forward secrecy (Diffie-Hellman ephemeral)
-#ifndef NO_TLS_FORWARD_SECRECY
-#define TLS_FORWARD_SECRECY
-#endif
-// support client-side ECDHE
-#ifndef NO_TLS_CLIENT_ECDHE
-#define TLS_CLIENT_ECDHE
-#endif
-// suport ecdsa
-#ifndef NO_TLS_ECDSA_SUPPORTED
-#define TLS_ECDSA_SUPPORTED
-#endif
-// suport ecdsa client-side
-// #define TLS_CLIENT_ECDSA
-// TLS renegotiation is disabled by default (secured or not)
-// do not uncomment next line!
-// #define TLS_ACCEPT_SECURE_RENEGOTIATION
-// basic superficial X509v1 certificate support
-#ifndef NO_TLS_X509_V1_SUPPORT
-#define TLS_X509_V1_SUPPORT
-#endif
+// // define TLS_LEGACY_SUPPORT to support TLS 1.1/1.0 (legacy)
+// // legacy support it will use an additional 272 bytes / context
+// #ifndef NO_TLS_LEGACY_SUPPORT
+// #define TLS_LEGACY_SUPPORT
+// #endif
+// // SSL_* style blocking APIs
+// #ifndef NO_SSL_COMPATIBLE_INTERFACE
+// #define SSL_COMPATIBLE_INTERFACE
+// #endif
+// // support ChaCha20/Poly1305
+// #if !defined(__BIG_ENDIAN__) && ((!defined(__BYTE_ORDER)) || (__BYTE_ORDER == __LITTLE_ENDIAN))
+//     // not working on big endian machines
+//     #ifndef NO_TLS_WITH_CHACHA20_POLY1305
+//         #define TLS_WITH_CHACHA20_POLY1305
+//     #endif
+// #endif
+// #ifndef NO_TLS_13
+// #define WITH_TLS_13
+// #endif
+// // support forward secrecy (Diffie-Hellman ephemeral)
+// #ifndef NO_TLS_FORWARD_SECRECY
+// #define TLS_FORWARD_SECRECY
+// #endif
+// // support client-side ECDHE
+// #ifndef NO_TLS_CLIENT_ECDHE
+// #define TLS_CLIENT_ECDHE
+// #endif
+// // suport ecdsa
+// #ifndef NO_TLS_ECDSA_SUPPORTED
+// #define TLS_ECDSA_SUPPORTED
+// #endif
+// // suport ecdsa client-side
+// // #define TLS_CLIENT_ECDSA
+// // TLS renegotiation is disabled by default (secured or not)
+// // do not uncomment next line!
+// // #define TLS_ACCEPT_SECURE_RENEGOTIATION
+// // basic superficial X509v1 certificate support
+// #ifndef NO_TLS_X509_V1_SUPPORT
+// #define TLS_X509_V1_SUPPORT
+// #endif
 
-// disable TLS_RSA_WITH_* ciphers
-#ifndef NO_TLS_ROBOT_MITIGATION
-#define TLS_ROBOT_MITIGATION
-#endif
+// // disable TLS_RSA_WITH_* ciphers
+// #ifndef NO_TLS_ROBOT_MITIGATION
+// #define TLS_ROBOT_MITIGATION
+// #endif
 
 #define SSL_V30                 0x0300
 #define TLS_V10                 0x0301
