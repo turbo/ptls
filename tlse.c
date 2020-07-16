@@ -4779,16 +4779,16 @@ int tls_cipher_supported(struct TLSContext *context, unsigned short cipher) {
       if ((context->version == TLS_V13) || (context->version == DTLS_V13))
         return 1;
       return 0;
-    case TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA:
-    case TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA:
-      if ((context) &&
-          (((context->certificates) && (context->certificates_count) &&
-            (context->ec_private_key)) ||
-           (!context->is_server)))
-        return 1;
-      return 0;
-    case TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256:
-    case TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384:
+    // case TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA:
+    // case TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA:
+    //   if ((context) &&
+    //       (((context->certificates) && (context->certificates_count) &&
+    //         (context->ec_private_key)) ||
+    //        (!context->is_server)))
+    //     return 1;
+    //   return 0;
+    // case TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256:
+    // case TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384:
     case TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256:
     case TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384:
     case TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256:
@@ -4800,25 +4800,25 @@ int tls_cipher_supported(struct TLSContext *context, unsigned short cipher) {
           return 1;
       }
       return 0;
-    case TLS_DHE_RSA_WITH_AES_128_CBC_SHA:
-    case TLS_DHE_RSA_WITH_AES_256_CBC_SHA:
-    case TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA:
-    case TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA:
-    case TLS_RSA_WITH_AES_128_CBC_SHA:
-    case TLS_RSA_WITH_AES_256_CBC_SHA:
-      return 1;
-    case TLS_DHE_RSA_WITH_AES_128_CBC_SHA256:
-    case TLS_DHE_RSA_WITH_AES_256_CBC_SHA256:
+    // case TLS_DHE_RSA_WITH_AES_128_CBC_SHA:
+    // case TLS_DHE_RSA_WITH_AES_256_CBC_SHA:
+    // case TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA:
+    // case TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA:
+    // case TLS_RSA_WITH_AES_128_CBC_SHA:
+    // case TLS_RSA_WITH_AES_256_CBC_SHA:
+    //   return 1;
+    // case TLS_DHE_RSA_WITH_AES_128_CBC_SHA256:
+    // case TLS_DHE_RSA_WITH_AES_256_CBC_SHA256:
     case TLS_DHE_RSA_WITH_AES_128_GCM_SHA256:
     case TLS_DHE_RSA_WITH_AES_256_GCM_SHA384:
     case TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256:
-    case TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256:
+    // case TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256:
     case TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384:
     case TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256:
     case TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256:
     case TLS_RSA_WITH_AES_128_GCM_SHA256:
-    case TLS_RSA_WITH_AES_128_CBC_SHA256:
-    case TLS_RSA_WITH_AES_256_CBC_SHA256:
+    // case TLS_RSA_WITH_AES_128_CBC_SHA256:
+    // case TLS_RSA_WITH_AES_256_CBC_SHA256:
     case TLS_RSA_WITH_AES_256_GCM_SHA384:
       if ((context->version == TLS_V12) || (context->version == DTLS_V12))
         return 1;
@@ -4839,15 +4839,15 @@ int tls_cipher_is_fs(struct TLSContext *context, unsigned short cipher) {
     return 0;
   }
   switch (cipher) {
-    case TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA:
-    case TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA:
+    // case TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA:
+    // case TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA:
     case TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256:
       if ((context) && (context->certificates) &&
           (context->certificates_count) && (context->ec_private_key))
         return 1;
       return 0;
-    case TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256:
-    case TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384:
+    // case TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256:
+    // case TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384:
     case TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256:
     case TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384:
       if ((context->version == TLS_V12) || (context->version == DTLS_V12)) {
@@ -4856,17 +4856,17 @@ int tls_cipher_is_fs(struct TLSContext *context, unsigned short cipher) {
           return 1;
       }
       return 0;
-    case TLS_DHE_RSA_WITH_AES_128_CBC_SHA:
-    case TLS_DHE_RSA_WITH_AES_256_CBC_SHA:
-    case TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA:
-    case TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA:
-      return 1;
-    case TLS_DHE_RSA_WITH_AES_128_CBC_SHA256:
-    case TLS_DHE_RSA_WITH_AES_256_CBC_SHA256:
+    // case TLS_DHE_RSA_WITH_AES_128_CBC_SHA:
+    // case TLS_DHE_RSA_WITH_AES_256_CBC_SHA:
+    // case TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA:
+    // case TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA:
+    //   return 1;
+    // case TLS_DHE_RSA_WITH_AES_128_CBC_SHA256:
+    // case TLS_DHE_RSA_WITH_AES_256_CBC_SHA256:
     case TLS_DHE_RSA_WITH_AES_128_GCM_SHA256:
     case TLS_DHE_RSA_WITH_AES_256_GCM_SHA384:
     case TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256:
-    case TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256:
+    // case TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256:
     case TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384:
     case TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256:
     case TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256:
@@ -5613,37 +5613,38 @@ struct TLSPacket *tls_build_hello(struct TLSContext *context,
         tls_packet_uint16(packet, TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256);
       } else if ((context->version == TLS_V12) ||
                  (context->version == DTLS_V12)) {
-        tls_packet_uint16(packet, TLS_CIPHERS_SIZE(16, 5));
+        tls_packet_uint16(packet, TLS_CIPHERS_SIZE(6, 5));
         tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256);
         tls_packet_uint16(packet,
                           TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256);
-        tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256);
-        tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA);
-        tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA);
+        // tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256);
+        // tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA);
+        // tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA);
         tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256);
-        tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA);
-        tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA);
-        tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256);
+        // tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA);
+        // tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA);
+        // tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256);
         tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256);
         // not yet supported, because the first message sent (this one)
         // is already hashed by the client with sha256 (sha384 not yet supported
         // client-side) but is fully suported server-side
         // tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_256_GCM_SHA384);
         tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_128_GCM_SHA256);
-        tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_256_CBC_SHA256);
-        tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_128_CBC_SHA256);
-        tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_256_CBC_SHA);
-        tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_128_CBC_SHA);
+        // tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_256_CBC_SHA256);
+        // tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_128_CBC_SHA256);
+        // tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_256_CBC_SHA);
+        // tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_128_CBC_SHA);
         tls_packet_uint16(packet, TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256);
         // tls_packet_uint16(packet, TLS_RSA_WITH_AES_256_GCM_SHA384);
-      } else {
-        tls_packet_uint16(packet, TLS_CIPHERS_SIZE(5, 2));
-        tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA);
-        tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA);
-        tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_256_CBC_SHA);
-        tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_256_CBC_SHA);
-        tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_128_CBC_SHA);
-      }
+      } 
+      // else {
+      //   tls_packet_uint16(packet, TLS_CIPHERS_SIZE(5, 2));
+      //   tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA);
+      //   tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA);
+      //   tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_256_CBC_SHA);
+      //   tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_256_CBC_SHA);
+      //   tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_128_CBC_SHA);
+      // }
       // compression
       tls_packet_uint8(packet, 1);
       // no compression
@@ -6175,19 +6176,19 @@ int tls_parse_hello(struct TLSContext *context, const unsigned char *buf,
   DEBUG_PRINT("VERSION REQUIRED BY REMOTE %x, VERSION NOW %x\n", (int)version,
               (int)context->version);
   // when no legacy support, don't downgrade
-#ifndef TLS_FORCE_LOCAL_VERSION
-  // downgrade ?
-  if (context->dtls) {
-    // for dlts, newer version has lower id (1.0 = FEFF, 1.2 = FEFD)
-    if (context->version < version) downgraded = 1;
-  } else {
-    if (context->version > version) downgraded = 1;
-  }
-  if (downgraded) {
-    context->version = version;
-    if (!context->is_server) _private_tls_change_hash_type(context);
-  }
-#endif
+// #ifndef TLS_FORCE_LOCAL_VERSION
+//   // downgrade ?
+//   if (context->dtls) {
+//     // for dlts, newer version has lower id (1.0 = FEFF, 1.2 = FEFD)
+//     if (context->version < version) downgraded = 1;
+//   } else {
+//     if (context->version > version) downgraded = 1;
+//   }
+//   if (downgraded) {
+//     context->version = version;
+//     if (!context->is_server) _private_tls_change_hash_type(context);
+//   }
+// #endif
   memcpy(context->remote_random, &buf[res], TLS_CLIENT_RANDOM_SIZE);
   res += TLS_CLIENT_RANDOM_SIZE;
 

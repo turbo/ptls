@@ -44,6 +44,7 @@ Use TLS1.3 unless 1.2 is really needed. TLS1.2 will fail with ECDSA certs. Need 
 
 ![](https://mermaid.ink/svg/eyJjb2RlIjoiZ3JhcGggVERcbiAgQVtUTFMxLjIgQ2xpZW50XSAtLT58U3VjY2Vzc3wgQihSZXNwb25zZSlcbiAgQSAtLT58RmFpbHVyZXwgQ3tFQ0RTQT99XG4gIEMgLS0-fE5vfCBEKEVycm9yKVxuICBDIC0tPnxZZXN8IEVcbiAgRVtUTFMxLjMgQ2xpZW50XSAtLT58U3VjY2Vzc3wgQlxuICBFIC0tPnxGYWlsdXJlfCBEXG4iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9LCJ1cGRhdGVFZGl0b3IiOmZhbHNlfQ)
 
+Conversly, TLS1.3 might not be ready for some other servers. If TLS1.3 fails with INTEGRITY CHECK FAILED (-11 in consume), retry with 1.2
 
 License
 ----------

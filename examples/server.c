@@ -1,4 +1,4 @@
-#include "../ptls.c"
+#include "../tlse.c"
 
 #include <stdio.h>
 #include <string.h>  //strlen
@@ -173,34 +173,34 @@ int main(int argc, char *argv[]) {
             char sni[0xFF];
             sni[0] = 0;
             if (context->sni) snprintf(sni, 0xFF, "%s", context->sni);
-            /* COOL STUFF => */ int size = tls_export_context(
-                context, export_buffer, sizeof(export_buffer), 1);
-            if (size > 0) {
-              /* COOLER STUFF => */ struct TLSContext *imported_context =
-                  tls_import_context(export_buffer, size);
-              // This is cool because a context can be sent to an existing
-              // process. It will work both with fork and with already existing
-              // worker process.
-              fprintf(stderr, "Imported context (size: %i): %x\n", size,
-                      imported_context);
-              if (imported_context) {
-                // destroy old context
-                tls_destroy_context(context);
-                // simulate serialization/deserialization of context
-                context = imported_context;
-              }
-            }
+            /* COOL STUFF => */ 
+            // int size = tls_export_context(context, export_buffer, sizeof(export_buffer), 1);
+            // if (size > 0) {
+            //   /* COOLER STUFF => */ struct TLSContext *imported_context =
+            //       tls_import_context(export_buffer, size);
+            //   // This is cool because a context can be sent to an existing
+            //   // process. It will work both with fork and with already existing
+            //   // worker process.
+            //   fprintf(stderr, "Imported context (size: %i): %x\n", size,
+            //           imported_context);
+            //   if (imported_context) {
+            //     // destroy old context
+            //     tls_destroy_context(context);
+            //     // simulate serialization/deserialization of context
+            //     context = imported_context;
+            //   }
+            // }
             // ugly inefficient code ... don't write like me
             char send_buffer[0xF000];
             char send_buffer_with_header[0xF000];
             char out_buffer[0xFFF];
-            int tls_version = 2;
+            int tls_version = -1;
             switch (context->version) {
-              case TLS_V10:
-                tls_version = 0;
+              case TLS_V12:
+                tls_version = 2;
                 break;
-              case TLS_V11:
-                tls_version = 1;
+              case TLS_V13:
+                tls_version = 3;
                 break;
             }
             snprintf(send_buffer, sizeof(send_buffer),

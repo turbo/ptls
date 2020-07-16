@@ -117,7 +117,7 @@ int main(int argc, char *argv[]) {
   struct hostent *server;
 
   char buffer[256];
-  char *ref_argv[] = {"", "std.fyi", "443"};
+  char *ref_argv[] = {"", "example.com", "443"};
   if (argc < 3) {
     argv = ref_argv;
     // fprintf(stderr,"usage %s hostname port\n", argv[0]);
@@ -151,7 +151,7 @@ int main(int argc, char *argv[]) {
   tls_make_exportable(context, 1);
 
   // set sni
-  tls_sni_set(context, "std.fyi");
+  tls_sni_set(context, "example.com");
 
   tls_client_connect(context);
 
@@ -168,7 +168,7 @@ int main(int argc, char *argv[]) {
     send_pending(sockfd, context);
     if (tls_established(context)) {
       if (!sent) {
-        const char *request = "GET / HTTP/1.1\r\nHost: std.fyi:443\r\nConnection: close\r\n\r\n";
+        const char *request = "GET / HTTP/1.1\r\nHost: example.com:443\r\nConnection: close\r\n\r\n";
         // try kTLS (kernel TLS implementation in linux >= 4.13)
         // note that you can use send on a ktls socket
         // recv must be handled by TLSe
