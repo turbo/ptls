@@ -1,4 +1,4 @@
-#include "../tlse.c"
+#include "../ptls.c"
 
 #include <stdio.h>
 #include <string.h>  //strlen
@@ -39,23 +39,6 @@ void load_keys(struct TLSContext *context, char *fname, char *priv_fname) {
     }
   }
 }
-
-/*
-// Use this version with DTLS (preserving message boundary)
-int send_pending_udp(int client_sock, struct TLSContext *context, struct
-sockaddr_in *clientaddr, socklen_t socket_len) { unsigned int out_buffer_len =
-0; unsigned int offset = 0; int send_res = 0; const unsigned char *out_buffer;
-    do {
-        out_buffer = tls_get_message(context, &out_buffer_len, offset);
-        if (out_buffer) {
-            send_res += sendto(client_sock, out_buffer, out_buffer_len, 0,
-(struct sockaddr *)clientaddr, socket_len); offset += out_buffer_len;
-        }
-    } while (out_buffer);
-    tls_buffer_clear(context);
-    return send_res;
-}
-*/
 
 int send_pending(int client_sock, struct TLSContext *context) {
   unsigned int out_buffer_len = 0;
@@ -136,7 +119,7 @@ int main(int argc, char *argv[]) {
 
   struct TLSContext *server_context = tls_create_context(1, TLS_V12);
   // load keys
-  load_keys(server_context, "testcert/fullchain.pem", "testcert/privkey.pem");
+  load_keys(server_context, "./fullchain.pem", "./privkey.pem");
 
   char source_buf[0xFFFF];
   int source_size = read_from_file("tlshelloworld.c", source_buf, 0xFFFF);
