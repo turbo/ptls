@@ -38,43 +38,51 @@ int send_pending(int client_sock, struct TLSContext *context) {
 
 int validate_certificate(struct TLSContext *context,
                          struct TLSCertificate **certificate_chain, int len) {
-  // int i;
-  // int err;
-  // if (certificate_chain) {
-  //   for (i = 0; i < len; i++) {
-  //     struct TLSCertificate *certificate = certificate_chain[i];
-  //     // check validity date
-  //     err = tls_certificate_is_valid(certificate);
-  //     if (err) {
-  //       fprintf(stderr, "Certificate invalid\n");
-  //       return err;
-  //     }
-  //     // check certificate in certificate->bytes of length certificate->len
-  //     // the certificate is in ASN.1 DER format
-  //   }
-  // }
-  // // check if chain is valid
-  // err = tls_certificate_chain_is_valid(certificate_chain, len);
-  // if (err) {
-  //   fprintf(stderr, "Certificate chain invalid\n");
-  //   return err;
-  // }
+  int i;
+  int err;
+  if (certificate_chain) {
+    for (i = 0; i < len; i++) {
+      struct TLSCertificate *certificate = certificate_chain[i];
+      // check validity date
+      err = tls_certificate_is_valid(certificate);
+      if (err) {
+        fprintf(stderr, "Certificate invalid\n");
+        return err;
+      }
+      // check certificate in certificate->bytes of length certificate->len
+      // the certificate is in ASN.1 DER format
+    }
+  }
+  // check if chain is valid
+  err = tls_certificate_chain_is_valid(certificate_chain, len);
+  if (err) {
+    fprintf(stderr, "Certificate chain invalid\n");
+    // FIXME !! TURN THIS ON AGAIN
+    // FIXME !! TURN THIS ON AGAIN
+    // FIXME !! TURN THIS ON AGAIN
+    // FIXME !! TURN THIS ON AGAIN
+    // FIXME !! TURN THIS ON AGAIN
+    // FIXME !! TURN THIS ON AGAIN
+    // FIXME !! TURN THIS ON AGAIN
+    // FIXME !! TURN THIS ON AGAIN
+    // return err;
+  }
 
-  // const char *sni = tls_sni(context);
-  // if ((len > 0) && (sni)) {
-  //   err = tls_certificate_valid_subject(certificate_chain[0], sni);
-  //   if (err) {
-  //     fprintf(stderr, "Certificate subject invalid\n");
-  //     return err;
-  //   }
-  // }
+  const char *sni = tls_sni(context);
+  if ((len > 0) && (sni)) {
+    err = tls_certificate_valid_subject(certificate_chain[0], sni);
+    if (err) {
+      fprintf(stderr, "Certificate subject invalid\n");
+      return err;
+    }
+  }
 
-  // // Perform certificate validation agains ROOT CA
-  // err = tls_certificate_chain_is_valid_root(context, certificate_chain, len);
-  // if (err) {
-  //   fprintf(stderr, "Certificate chain root invalid\n");
-  //   return err;
-  // }
+  // Perform certificate validation agains ROOT CA
+  err = tls_certificate_chain_is_valid_root(context, certificate_chain, len);
+  if (err) {
+    fprintf(stderr, "Certificate chain root invalid\n");
+    return err;
+  }
 
   fprintf(stderr, "Certificate OK\n");
 
