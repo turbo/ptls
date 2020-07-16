@@ -38,17 +38,74 @@ int send_pending(int client_sock, struct TLSContext *context) {
 
 int validate_certificate(struct TLSContext *context,
                          struct TLSCertificate **certificate_chain, int len) {
-  int i;
-  if (certificate_chain) {
-    for (i = 0; i < len; i++) {
-      struct TLSCertificate *certificate = certificate_chain[i];
-      // check certificate ...
-    }
-  }
+  // int i;
+  // int err;
+  // if (certificate_chain) {
+  //   for (i = 0; i < len; i++) {
+  //     struct TLSCertificate *certificate = certificate_chain[i];
+  //     // check validity date
+  //     err = tls_certificate_is_valid(certificate);
+  //     if (err) {
+  //       fprintf(stderr, "Certificate invalid\n");
+  //       return err;
+  //     }
+  //     // check certificate in certificate->bytes of length certificate->len
+  //     // the certificate is in ASN.1 DER format
+  //   }
+  // }
+  // // check if chain is valid
+  // err = tls_certificate_chain_is_valid(certificate_chain, len);
+  // if (err) {
+  //   fprintf(stderr, "Certificate chain invalid\n");
+  //   return err;
+  // }
+
+  // const char *sni = tls_sni(context);
+  // if ((len > 0) && (sni)) {
+  //   err = tls_certificate_valid_subject(certificate_chain[0], sni);
+  //   if (err) {
+  //     fprintf(stderr, "Certificate subject invalid\n");
+  //     return err;
+  //   }
+  // }
+
+  // // Perform certificate validation agains ROOT CA
+  // err = tls_certificate_chain_is_valid_root(context, certificate_chain, len);
+  // if (err) {
+  //   fprintf(stderr, "Certificate chain root invalid\n");
+  //   return err;
+  // }
+
+  fprintf(stderr, "Certificate OK\n");
+
   // return certificate_expired;
   // return certificate_revoked;
   // return certificate_unknown;
   return no_error;
+}
+
+int SSL_CTX_root_ca(struct TLSContext *context, const char *pem_filename) {
+  if (!context) return TLS_GENERIC_ERROR;
+
+  int count = TLS_GENERIC_ERROR;
+  FILE *f = fopen(pem_filename, "rb");
+  if (f) {
+    fseek(f, 0, SEEK_END);
+    size_t size = (size_t)ftell(f);
+    fseek(f, 0, SEEK_SET);
+    if (size) {
+      unsigned char *buf = (unsigned char *)TLS_MALLOC(size + 1);
+      if (buf) {
+        buf[size] = 1;
+        if (fread(buf, 1, size, f) == size) {
+          count = tls_load_root_certificates(context, buf, size);
+        }
+        TLS_FREE(buf);
+      }
+    }
+    fclose(f);
+  }
+  return count;
 }
 
 int main(int argc, char *argv[]) {
@@ -60,7 +117,7 @@ int main(int argc, char *argv[]) {
   struct hostent *server;
 
   char buffer[256];
-  char *ref_argv[] = {"", "google.com", "443"};
+  char *ref_argv[] = {"", "std.fyi", "443"};
   if (argc < 3) {
     argv = ref_argv;
     // fprintf(stderr,"usage %s hostname port\n", argv[0]);
@@ -89,9 +146,18 @@ int main(int argc, char *argv[]) {
     error("ERROR connecting");
 
   struct TLSContext *context = tls_create_context(0, TLS_V12);
+
+  // NOTE: load verifications certs
+  int res = SSL_CTX_root_ca(context, "../root.pem");
+  fprintf(stderr, "Loaded %i certificates\n", res);
+
   // the next line is needed only if you want to serialize the connection
   // context or kTLS is used
   tls_make_exportable(context, 1);
+
+  // set sni
+  tls_sni_set(context, "std.fyi");
+
   tls_client_connect(context);
   send_pending(sockfd, context);
   unsigned char client_message[0xFFFF];
@@ -104,7 +170,7 @@ int main(int argc, char *argv[]) {
     send_pending(sockfd, context);
     if (tls_established(context)) {
       if (!sent) {
-        const char *request = "GET / HTTP/1.1\r\nConnection: close\r\n\r\n";
+        const char *request = "GET / HTTP/1.1\r\nHost: std.fyi:443\r\nConnection: close\r\n\r\n";
         // try kTLS (kernel TLS implementation in linux >= 4.13)
         // note that you can use send on a ktls socket
         // recv must be handled by TLSe
