@@ -59,7 +59,7 @@ int validate_certificate(struct TLSContext *context,
     // FIXME !! TURN THIS ON AGAIN
     // FIXME !! TURN THIS ON AGAIN
     // FIXME !! TURN THIS ON AGAIN
-    // return err;
+    return err;
   }
 
   const char *sni = tls_sni(context);
@@ -119,7 +119,7 @@ int main(int argc, char *argv[]) {
   struct hostent *server;
 
   char buffer[256];
-  char *ref_argv[] = {"", "std.fyi", "443"};
+  char *ref_argv[] = {"", "tio.run", "443"};
   if (argc < 3) {
     argv = ref_argv;
     // fprintf(stderr,"usage %s hostname port\n", argv[0]);
@@ -153,28 +153,31 @@ int main(int argc, char *argv[]) {
   tls_make_exportable(context, 1);
 
   // set sni
-  tls_sni_set(context, "std.fyi");
+  tls_sni_set(context, "tio.run");
 
   tls_client_connect(context);
+
   send_pending(sockfd, context);
   unsigned char client_message[0xFFFF];
   int read_size;
   int sent = 0;
-  
+
   while ((read_size = recv(sockfd, client_message, sizeof(client_message), 0)) >
          0) {
     tls_consume_stream(context, client_message, read_size,
                        validate_certificate);
+    
     send_pending(sockfd, context);
     if (tls_established(context)) {
       if (!sent) {
-        const char *request = "GET / HTTP/1.1\r\nHost: std.fyi:443\r\nConnection: close\r\n\r\n";
+        const char *request = "GET / HTTP/1.1\r\nHost: tio.run:443\r\nConnection: close\r\n\r\n";
         // try kTLS (kernel TLS implementation in linux >= 4.13)
         // note that you can use send on a ktls socket
         // recv must be handled by TLSe
         if (!tls_make_ktls(context, socket)) {
           // call send as on regular TCP sockets
           // TLS record layer is handled by the kernel
+          fprintf(stderr, "Using KTLS\n");
           send(sockfd, request, strlen(request), 0);
         } else {
           tls_write(context, (unsigned char *)request, strlen(request));

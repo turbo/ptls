@@ -3577,7 +3577,10 @@ char *tls_certificate_to_string(struct TLSCertificate *cert, char *buffer,
           res += snprintf(buffer + res, len - res, "EC_PUBLIC_KEY):\n");
           break;
         default:
-          res += snprintf(buffer + res, len - res, "not supported):\n");
+          res += snprintf(
+            buffer + res, len - res, "not supported: %i):\n", 
+            cert->algorithm
+          );
       }
 
       for (i = 0; i < cert->sign_len; i++)
@@ -5576,27 +5579,27 @@ struct TLSPacket *tls_build_hello(struct TLSContext *context,
         tls_packet_uint16(packet, TLS_AES_128_GCM_SHA256);
         tls_packet_uint16(packet, TLS_AES_256_GCM_SHA384);
         tls_packet_uint16(packet, TLS_CHACHA20_POLY1305_SHA256);
+        tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256);
         tls_packet_uint16(packet,
                           TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256);
-        tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256);
-        tls_packet_uint16(packet, TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256);
-        tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256);
         tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256);
+        tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256);
         tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_128_GCM_SHA256);
+        tls_packet_uint16(packet, TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256);
       } else if ((context->version == TLS_V12) ||
                  (context->version == DTLS_V12)) {
         tls_packet_uint16(packet, TLS_CIPHERS_SIZE(16, 5));
+        tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256);
         tls_packet_uint16(packet,
                           TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256);
-        tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256);
         tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256);
         tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA);
         tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA);
-        tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256);
         tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256);
         tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA);
         tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA);
         tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256);
+        tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256);
         // not yet supported, because the first message sent (this one)
         // is already hashed by the client with sha256 (sha384 not yet supported
         // client-side) but is fully suported server-side
@@ -7005,6 +7008,7 @@ int tls_parse_finished(struct TLSContext *context, const unsigned char *buf,
     }
     if (context->is_server) {
       context->connection_status = 0xFF;
+      DEBUG_PRINT("CONNECTION STATUS: FF (tls_parse_finished)\n");
       res += size;
       _private_tls13_key(context, 0);
       context->local_sequence_number = 0;
@@ -7044,8 +7048,11 @@ int tls_parse_finished(struct TLSContext *context, const unsigned char *buf,
   }
   if (context->is_server)
     *write_packets = 3;
-  else
-    context->connection_status = 0xFF;
+  else {
+    DEBUG_PRINT("CONNECTION STATUS: FF (tls_parse_finished 2)\n");
+      context->connection_status = 0xFF;
+  }
+
   res += size;
   return res;
 }
@@ -7343,6 +7350,7 @@ int tls_parse_payload(struct TLSContext *context, const unsigned char *buf,
           _private_tls_write_packet(tls_build_finished(context));
           _private_tls13_key(context, 0);
           context->connection_status = 0xFF;
+          DEBUG_PRINT("CONNECTION STATUS: FF (tls_parse_payload)\n");
           context->local_sequence_number = 0;
           context->remote_sequence_number = 0;
         }
@@ -7514,6 +7522,7 @@ int tls_parse_payload(struct TLSContext *context, const unsigned char *buf,
         _private_tls_write_packet(tls_build_change_cipher_spec(context));
         _private_tls_write_packet(tls_build_finished(context));
         context->connection_status = 0xFF;
+        DEBUG_PRINT("CONNECTION STATUS: FF (tls_parse_payload 2)\n");
         break;
       case 4:
         // dtls only
@@ -8092,6 +8101,9 @@ unsigned char *_private_tls_compute_hash(int algorithm,
 
 int tls_certificate_verify_signature(struct TLSCertificate *cert,
                                      struct TLSCertificate *parent) {
+  char out_buf[0xFFFF];
+
+  fprintf(stderr, "--- CERT DUMP BEGIN ---\n%s\n--- CERT DUMP END ---\n\n", tls_certificate_to_string(cert, out_buf, 0xFFFF));
 
   if (!cert) {
     DEBUG_PRINT("CANNOT VERIFY SIGNATURE: cert\n");
@@ -9610,20 +9622,37 @@ int tls_unmake_ktls(struct TLSContext *context, int socket) {
 }
 
 int tls_make_ktls(struct TLSContext *context, int socket) {
-  if ((!context) || (context->critical_error) ||
-      (context->connection_status != 0xFF) || (!context->crypto.created)) {
-    DEBUG_PRINT("CANNOT SWITCH TO kTLS\n");
+  if (!context) {
+    DEBUG_PRINT("CANNOT SWITCH TO kTLS: NO CONTEXT\n");
     return TLS_GENERIC_ERROR;
   }
+
+  if (context->critical_error) {
+    DEBUG_PRINT("CANNOT SWITCH TO kTLS: CRITICAL ERROR\n");
+    return TLS_GENERIC_ERROR;
+  }
+
+  if (context->connection_status != 0xFF) {
+    DEBUG_PRINT("CANNOT SWITCH TO kTLS: INVALID CONNECTION STATUS\n");
+    return TLS_GENERIC_ERROR;
+  }
+
+  if (!context->crypto.created) {
+    DEBUG_PRINT("CANNOT SWITCH TO kTLS: NO CRYPTO IN CONTEXT\n");
+    return TLS_GENERIC_ERROR;
+  }
+
   if ((!context->exportable) || (!context->exportable_keys)) {
     DEBUG_PRINT("KEY MUST BE EXPORTABLE TO BE ABLE TO USE kTLS\n");
     return TLS_GENERIC_ERROR;
   }
+
   if ((context->version != TLS_V12) && (context->version != DTLS_V12) &&
       (context->version != TLS_V13) && (context->version != DTLS_V13)) {
     DEBUG_PRINT("kTLS IS SUPPORTED ONLY FOR TLS >= 1.2 AND DTLS >= 1.2\n");
     return TLS_FEATURE_NOT_SUPPORTED;
   }
+
   switch (context->cipher) {
     case TLS_RSA_WITH_AES_128_GCM_SHA256:
     case TLS_DHE_RSA_WITH_AES_128_GCM_SHA256:

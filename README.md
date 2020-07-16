@@ -8,9 +8,6 @@
 - client side 1.3 enabled
 - bundled [tomcrypt])(https://github.com/libtom/libtomcrypt)
 
-TODO:
-
-- remove DTLS (no upd in std)
 
 generate from upstream:
 
