@@ -1,14 +1,8 @@
 #include <stdio.h>
 #include <sys/types.h>
-#ifdef _WIN32
-#include <winsock2.h>
-#define socklen_t int
-#define sleep(x) Sleep(x * 1000)
-#else
 #include <netdb.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
-#endif
 #include "../tlse.c"
 
 void error(char *msg) {
@@ -131,12 +125,7 @@ int main(int argc, char *argv[]) {
     // fprintf(stderr,"usage %s hostname port\n", argv[0]);
     // exit(0);
   }
-#ifdef _WIN32
-  WSADATA wsaData;
-  WSAStartup(MAKEWORD(2, 2), &wsaData);
-#else
   signal(SIGPIPE, SIG_IGN);
-#endif
   portno = atoi(argv[2]);
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
   if (sockfd < 0) error("ERROR opening socket");
@@ -171,6 +160,7 @@ int main(int argc, char *argv[]) {
   unsigned char client_message[0xFFFF];
   int read_size;
   int sent = 0;
+  
   while ((read_size = recv(sockfd, client_message, sizeof(client_message), 0)) >
          0) {
     tls_consume_stream(context, client_message, read_size,

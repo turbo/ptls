@@ -8092,11 +8092,36 @@ unsigned char *_private_tls_compute_hash(int algorithm,
 
 int tls_certificate_verify_signature(struct TLSCertificate *cert,
                                      struct TLSCertificate *parent) {
-  if ((!cert) || (!parent) || (!cert->sign_key) || (!cert->fingerprint) ||
-      (!cert->sign_len) || (!parent->der_bytes) || (!parent->der_len)) {
-    DEBUG_PRINT("CANNOT VERIFY SIGNATURE");
+
+  if (!cert) {
+    DEBUG_PRINT("CANNOT VERIFY SIGNATURE: cert\n");
     return 0;
   }
+  if (!parent) {
+    DEBUG_PRINT("CANNOT VERIFY SIGNATURE: parent\n");
+    return 0;
+  }
+  if (!cert->sign_key) {
+    DEBUG_PRINT("CANNOT VERIFY SIGNATURE: cert->sign_key\n");
+    return 0;
+  }
+  if (!cert->fingerprint) {
+    DEBUG_PRINT("CANNOT VERIFY SIGNATURE: cert->fingerprint\n");
+    return 0;
+  }
+  if (!cert->sign_len) {
+    DEBUG_PRINT("CANNOT VERIFY SIGNATURE: cert->sign_len\n");
+    return 0;
+  }
+  if (!parent->der_bytes) {
+    DEBUG_PRINT("CANNOT VERIFY SIGNATURE: parent->der_bytes\n");
+    return 0;
+  }
+  if (!parent->der_len) {
+    DEBUG_PRINT("CANNOT VERIFY SIGNATURE: parent->der_len\n");
+    return 0;
+  }
+
   tls_init();
   int hash_len = _private_tls_hash_len(cert->algorithm);
   if (hash_len <= 0) return 0;
