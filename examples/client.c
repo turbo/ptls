@@ -30,6 +30,12 @@ int send_pending(int client_sock, struct TLSContext *context) {
   return send_res;
 }
 
+// NOTE: TLS1.2 only. Chain validation will fail with TLS1.2 and servers that send
+//       ECDSA signatures (like Cloudflare) see[1]. We need to detect this 
+//       specific failure mode and return an error suggesting TLS1.3 instead.
+//
+//       [1] https://github.com/eduardsui/tlse/issues/53
+
 int validate_certificate(struct TLSContext *context,
                          struct TLSCertificate **certificate_chain, int len) {
   int i;
@@ -51,14 +57,6 @@ int validate_certificate(struct TLSContext *context,
   err = tls_certificate_chain_is_valid(certificate_chain, len);
   if (err) {
     fprintf(stderr, "Certificate chain invalid\n");
-    // FIXME !! TURN THIS ON AGAIN
-    // FIXME !! TURN THIS ON AGAIN
-    // FIXME !! TURN THIS ON AGAIN
-    // FIXME !! TURN THIS ON AGAIN
-    // FIXME !! TURN THIS ON AGAIN
-    // FIXME !! TURN THIS ON AGAIN
-    // FIXME !! TURN THIS ON AGAIN
-    // FIXME !! TURN THIS ON AGAIN
     return err;
   }
 
@@ -119,7 +117,7 @@ int main(int argc, char *argv[]) {
   struct hostent *server;
 
   char buffer[256];
-  char *ref_argv[] = {"", "tio.run", "443"};
+  char *ref_argv[] = {"", "std.fyi", "443"};
   if (argc < 3) {
     argv = ref_argv;
     // fprintf(stderr,"usage %s hostname port\n", argv[0]);
@@ -142,18 +140,18 @@ int main(int argc, char *argv[]) {
   if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
     error("ERROR connecting");
 
-  struct TLSContext *context = tls_create_context(0, TLS_V12);
+  struct TLSContext *context = tls_create_context(0, TLS_V13);
 
   // NOTE: load verifications certs
-  int res = SSL_CTX_root_ca(context, "../root.pem");
-  fprintf(stderr, "Loaded %i certificates\n", res);
+  // int res = SSL_CTX_root_ca(context, "../root.pem");
+  // fprintf(stderr, "Loaded %i certificates\n", res);
 
   // the next line is needed only if you want to serialize the connection
   // context or kTLS is used
   tls_make_exportable(context, 1);
 
   // set sni
-  tls_sni_set(context, "tio.run");
+  tls_sni_set(context, "std.fyi");
 
   tls_client_connect(context);
 
@@ -170,7 +168,7 @@ int main(int argc, char *argv[]) {
     send_pending(sockfd, context);
     if (tls_established(context)) {
       if (!sent) {
-        const char *request = "GET / HTTP/1.1\r\nHost: tio.run:443\r\nConnection: close\r\n\r\n";
+        const char *request = "GET / HTTP/1.1\r\nHost: std.fyi:443\r\nConnection: close\r\n\r\n";
         // try kTLS (kernel TLS implementation in linux >= 4.13)
         // note that you can use send on a ktls socket
         // recv must be handled by TLSe

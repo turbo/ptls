@@ -3,18 +3,22 @@
  All rights reserved.
  
 
+
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions are met:
  
+
 
  1. Redistributions of source code must retain the above copyright notice, this
  list of conditions and the following disclaimer.
  
 
+
  2. Redistributions in binary form must reproduce the above copyright notice,
  this list of conditions and the following disclaimer in the documentation
  and/or other materials provided with the distribution.
  
+
 
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -1353,16 +1357,21 @@ static const unsigned char TLS_RSA_SIGN_SHA384_OID[] = {
 static const unsigned char TLS_RSA_SIGN_SHA512_OID[] = {
     0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x0D, 0x00};
 
-// static const unsigned char TLS_ECDSA_SIGN_SHA1_OID[] = {0x2A, 0x86, 0x48,
-// 0xCE, 0x3D, 0x04, 0x01, 0x05, 0x00, 0x00}; static const unsigned char
-// TLS_ECDSA_SIGN_SHA224_OID[] = {0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03,
-// 0x01, 0x05, 0x00, 0x00}; static const unsigned char
-// TLS_ECDSA_SIGN_SHA256_OID[] = {0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03,
-// 0x02, 0x05, 0x00, 0x00}; static const unsigned char
-// TLS_ECDSA_SIGN_SHA384_OID[] = {0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03,
-// 0x03, 0x05, 0x00, 0x00}; static const unsigned char
-// TLS_ECDSA_SIGN_SHA512_OID[] = {0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03,
-// 0x04, 0x05, 0x00, 0x00};
+static const unsigned char TLS_ECDSA_SIGN_SHA1_OID[] = {
+    0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x01, 0x05, 0x00, 0x00};
+static const unsigned char TLS_ECDSA_SIGN_SHA224_OID[] = {
+    0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x01, 0x05, 0x00, 0x00};
+
+
+// 1.2.840.10045.4.3.2
+static const unsigned char TLS_ECDSA_SIGN_SHA256_OID[] = {
+    0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x02, 0x05, 0x00, 0x00};
+
+
+static const unsigned char TLS_ECDSA_SIGN_SHA384_OID[] = {
+    0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x03, 0x05, 0x00, 0x00};
+static const unsigned char TLS_ECDSA_SIGN_SHA512_OID[] = {
+    0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x04, 0x05, 0x00, 0x00};
 
 static const unsigned char TLS_EC_PUBLIC_KEY_OID[] = {0x2A, 0x86, 0x48, 0xCE,
                                                       0x3D, 0x02, 0x01, 0x00};
@@ -2388,6 +2397,8 @@ int _private_tls_verify_ecdsa(struct TLSContext *context,
   tls_init();
   ecc_key key;
   int err;
+
+  DEBUG_PRINT("ECDSA VERIFY");
 
   if (!curve_hint) curve_hint = context->curve;
 
@@ -3577,10 +3588,8 @@ char *tls_certificate_to_string(struct TLSCertificate *cert, char *buffer,
           res += snprintf(buffer + res, len - res, "EC_PUBLIC_KEY):\n");
           break;
         default:
-          res += snprintf(
-            buffer + res, len - res, "not supported: %i):\n", 
-            cert->algorithm
-          );
+          res += snprintf(buffer + res, len - res, "not supported: %i):\n",
+                          cert->algorithm);
       }
 
       for (i = 0; i < cert->sign_len; i++)
@@ -3619,33 +3628,41 @@ void tls_certificate_set_algorithm(unsigned int *algorithm,
   }
   if (len == 8) {
     if (_is_oid(val, TLS_EC_prime192v1_OID, len)) {
+      DEBUG_PRINT(" (SETTING ALGORITHM: TLS_EC_prime192v1) ");
       *algorithm = TLS_EC_prime192v1;
       return;
     }
     if (_is_oid(val, TLS_EC_prime192v2_OID, len)) {
+      DEBUG_PRINT(" (SETTING ALGORITHM: TLS_EC_prime192v2) ");
       *algorithm = TLS_EC_prime192v2;
       return;
     }
     if (_is_oid(val, TLS_EC_prime192v3_OID, len)) {
+      DEBUG_PRINT(" (SETTING ALGORITHM: TLS_EC_prime192v3) ");
       *algorithm = TLS_EC_prime192v3;
       return;
     }
     if (_is_oid(val, TLS_EC_prime239v1_OID, len)) {
+      DEBUG_PRINT(" (SETTING ALGORITHM: TLS_EC_prime239v1) ");
       *algorithm = TLS_EC_prime239v1;
       return;
     }
     if (_is_oid(val, TLS_EC_prime239v2_OID, len)) {
+      DEBUG_PRINT(" (SETTING ALGORITHM: TLS_EC_prime239v2) ");
       *algorithm = TLS_EC_prime239v2;
       return;
     }
     if (_is_oid(val, TLS_EC_prime239v3_OID, len)) {
+      DEBUG_PRINT(" (SETTING ALGORITHM: TLS_EC_prime239v3) ");
       *algorithm = TLS_EC_prime239v3;
       return;
     }
     if (_is_oid(val, TLS_EC_prime256v1_OID, len)) {
+      DEBUG_PRINT(" (SETTING ALGORITHM: TLS_EC_prime256v1) ");
       *algorithm = TLS_EC_prime256v1;
       return;
     }
+    DEBUG_PRINT(" (ERROR: L8 ALGO DOESN'T MATCH ANY OID) ");
   }
   if (len == 5) {
     if (_is_oid2(val, TLS_EC_secp224r1_OID, len,
@@ -3667,34 +3684,42 @@ void tls_certificate_set_algorithm(unsigned int *algorithm,
   if (len != 9) return;
 
   if (_is_oid(val, TLS_RSA_SIGN_SHA256_OID, 9)) {
+    DEBUG_PRINT(" (SETTING ALGORITHM: TLS_RSA_SIGN_SHA256) ");
     *algorithm = TLS_RSA_SIGN_SHA256;
     return;
   }
 
   if (_is_oid(val, TLS_RSA_SIGN_RSA_OID, 9)) {
+    DEBUG_PRINT(" (SETTING ALGORITHM: TLS_RSA_SIGN_RSA) ");
     *algorithm = TLS_RSA_SIGN_RSA;
     return;
   }
 
   if (_is_oid(val, TLS_RSA_SIGN_SHA1_OID, 9)) {
+    DEBUG_PRINT(" (SETTING ALGORITHM: TLS_RSA_SIGN_SHA1) ");
     *algorithm = TLS_RSA_SIGN_SHA1;
     return;
   }
 
   if (_is_oid(val, TLS_RSA_SIGN_SHA512_OID, 9)) {
+    DEBUG_PRINT(" (SETTING ALGORITHM: TLS_RSA_SIGN_SHA512) ");
     *algorithm = TLS_RSA_SIGN_SHA512;
     return;
   }
 
   if (_is_oid(val, TLS_RSA_SIGN_SHA384_OID, 9)) {
+    DEBUG_PRINT(" (SETTING ALGORITHM: TLS_RSA_SIGN_SHA384) ");
     *algorithm = TLS_RSA_SIGN_SHA384;
     return;
   }
 
   if (_is_oid(val, TLS_RSA_SIGN_MD5_OID, 9)) {
+    DEBUG_PRINT(" (SETTING ALGORITHM: TLS_RSA_SIGN_MD5) ");
     *algorithm = TLS_RSA_SIGN_MD5;
     return;
   }
+
+  DEBUG_PRINT(" (ERROR: L9 ALGO DOESN'T MATCH ANY OID) ");
 }
 
 void tls_destroy_certificate(struct TLSCertificate *cert) {
@@ -7050,7 +7075,7 @@ int tls_parse_finished(struct TLSContext *context, const unsigned char *buf,
     *write_packets = 3;
   else {
     DEBUG_PRINT("CONNECTION STATUS: FF (tls_parse_finished 2)\n");
-      context->connection_status = 0xFF;
+    context->connection_status = 0xFF;
   }
 
   res += size;
@@ -8103,7 +8128,8 @@ int tls_certificate_verify_signature(struct TLSCertificate *cert,
                                      struct TLSCertificate *parent) {
   char out_buf[0xFFFF];
 
-  fprintf(stderr, "--- CERT DUMP BEGIN ---\n%s\n--- CERT DUMP END ---\n\n", tls_certificate_to_string(cert, out_buf, 0xFFFF));
+  fprintf(stderr, "--- CERT DUMP BEGIN ---\n%s\n--- CERT DUMP END ---\n\n",
+          tls_certificate_to_string(cert, out_buf, 0xFFFF));
 
   if (!cert) {
     DEBUG_PRINT("CANNOT VERIFY SIGNATURE: cert\n");
@@ -8456,9 +8482,11 @@ int _private_asn1_parse(struct TLSContext *context, struct TLSCertificate *cert,
               tls_certificate_set_algorithm(&cert->key_algorithm, &buffer[pos],
                                             length);
           }
-          if (_is_field(fields, algorithm_id))
+          if (_is_field(fields, algorithm_id)) {
+            DEBUG_PRINT(" !!!SIGN_ALGO!!! ");
             tls_certificate_set_algorithm(&cert->algorithm, &buffer[pos],
                                           length);
+          }
 
           DEBUG_PRINT("OBJECT IDENTIFIER(%i): ", length);
           DEBUG_DUMP_HEX(&buffer[pos], length);

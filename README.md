@@ -40,6 +40,11 @@ Notes
 - The library supports certificate validation by using ``tls_certificate_chain_is_valid``, ``tls_certificate_chain_is_valid_root``, ``tls_certificate_valid_subject`` and ``tls_certificate_is_valid``(checks not before/not after).
 - Certificates fed to ``tls_certificate_chain_is_valid`` must be in correct order (certificate 2 signs certificate 1, certificate 3 signs certificate 2 and so on; also certificate 1 (first) is the certificate to be used in key exchange).
 
+Use TLS1.3 unless 1.2 is really needed. TLS1.2 will fail with ECDSA certs. Need to build logic like this:
+
+![](https://mermaid.ink/svg/eyJjb2RlIjoiZ3JhcGggVERcbiAgQVtUTFMxLjIgQ2xpZW50XSAtLT58U3VjY2Vzc3wgQihSZXNwb25zZSlcbiAgQSAtLT58RmFpbHVyZXwgQ3tFQ0RTQT99XG4gIEMgLS0-fE5vfCBEKEVycm9yKVxuICBDIC0tPnxZZXN8IEVcbiAgRVtUTFMxLjMgQ2xpZW50XSAtLT58U3VjY2Vzc3wgQlxuICBFIC0tPnxGYWlsdXJlfCBEXG4iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9LCJ1cGRhdGVFZGl0b3IiOmZhbHNlfQ)
+
+
 License
 ----------
 Public domain. Google code removed.
