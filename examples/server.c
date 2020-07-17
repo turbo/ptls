@@ -214,8 +214,11 @@ int main(int argc, char *argv[]) {
                      read_buffer, source_buf);
             int content_length = strlen(send_buffer);
             snprintf(send_buffer_with_header, sizeof(send_buffer),
-                     "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-type: "
-                     "text/plain\r\nContent-length: %i\r\n\r\n%s",
+                     "HTTP/1.1 200 OK\r\n"
+                     "Connection: close\r\n"
+                     "Content-type: text/plain\r\n"
+                     "Strict-Transport-Security: max-age=63072000;\r\n"
+                     "Content-length: %i\r\n\r\n%s",
                      content_length, send_buffer);
             tls_write(context, send_buffer_with_header,
                       strlen(send_buffer_with_header));
