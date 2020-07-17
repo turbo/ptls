@@ -1,45 +1,15 @@
-/********************************************************************************
- Copyright (c) 2016-2020, Eduard Suica
- All rights reserved.
- 
-
-
-
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions are met:
- 
-
-
-
- 1. Redistributions of source code must retain the above copyright notice, this
- list of conditions and the following disclaimer.
- 
-
-
-
- 2. Redistributions in binary form must reproduce the above copyright notice,
- this list of conditions and the following disclaimer in the documentation
- and/or other materials provided with the distribution.
- 
-
-
-
- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
- FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- ********************************************************************************/
 #ifndef TLSE_C
 #define TLSE_C
 
+// Keep only 256, non-weak ciphers
+// #define FORITIFY_CIPHERS
+
 // Enable CBC (required for older gnuTLS clients)
 // #define WEAK_CIPHERS
+
+#ifdef FORITIFY_CIPHERS
+#undef WEAK_CIPHERS
+#endif
 
 #include <stdint.h>
 #include <stdio.h>
@@ -4778,7 +4748,9 @@ int tls_cipher_supported(struct TLSContext *context, unsigned short cipher) {
   if (!context) return 0;
 
   switch (cipher) {
+#ifndef FORITIFY_CIPHERS
     case TLS_AES_128_GCM_SHA256:
+#endif
     case TLS_AES_256_GCM_SHA384:
     case TLS_CHACHA20_POLY1305_SHA256:
       if ((context->version == TLS_V13) || (context->version == DTLS_V13))
@@ -4796,7 +4768,9 @@ int tls_cipher_supported(struct TLSContext *context, unsigned short cipher) {
     case TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256:
     case TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384:
 #endif
+#ifndef FORITIFY_CIPHERS
     case TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256:
+#endif
     case TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384:
     case TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256:
       if ((context->version == TLS_V12) || (context->version == DTLS_V12)) {
@@ -4818,16 +4792,23 @@ int tls_cipher_supported(struct TLSContext *context, unsigned short cipher) {
     case TLS_DHE_RSA_WITH_AES_128_CBC_SHA256:
     case TLS_DHE_RSA_WITH_AES_256_CBC_SHA256:
 #endif
+
+#ifndef FORITIFY_CIPHERS
     case TLS_DHE_RSA_WITH_AES_128_GCM_SHA256:
+#endif
     case TLS_DHE_RSA_WITH_AES_256_GCM_SHA384:
+#ifndef FORITIFY_CIPHERS
     case TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256:
+#endif
 #ifdef WEAK_CIPHERS
     case TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256:
 #endif
     case TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384:
     case TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256:
     case TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256:
+#ifndef FORITIFY_CIPHERS
     case TLS_RSA_WITH_AES_128_GCM_SHA256:
+#endif
 #ifdef WEAK_CIPHERS
     case TLS_RSA_WITH_AES_128_CBC_SHA256:
     case TLS_RSA_WITH_AES_256_CBC_SHA256:
@@ -4844,7 +4825,9 @@ int tls_cipher_is_fs(struct TLSContext *context, unsigned short cipher) {
   if (!context) return 0;
   if ((context->version == TLS_V13) || (context->version == DTLS_V13)) {
     switch (cipher) {
+#ifndef FORITIFY_CIPHERS
       case TLS_AES_128_GCM_SHA256:
+#endif
       case TLS_AES_256_GCM_SHA384:
       case TLS_CHACHA20_POLY1305_SHA256:
         return 1;
@@ -4865,7 +4848,9 @@ int tls_cipher_is_fs(struct TLSContext *context, unsigned short cipher) {
     case TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256:
     case TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384:
 #endif
+#ifndef FORITIFY_CIPHERS
     case TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256:
+#endif
     case TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384:
       if ((context->version == TLS_V12) || (context->version == DTLS_V12)) {
         if ((context) && (context->certificates) &&
@@ -4882,9 +4867,11 @@ int tls_cipher_is_fs(struct TLSContext *context, unsigned short cipher) {
     case TLS_DHE_RSA_WITH_AES_128_CBC_SHA256:
     case TLS_DHE_RSA_WITH_AES_256_CBC_SHA256:
 #endif
+#ifndef FORITIFY_CIPHERS
     case TLS_DHE_RSA_WITH_AES_128_GCM_SHA256:
-    case TLS_DHE_RSA_WITH_AES_256_GCM_SHA384:
     case TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256:
+#endif
+    case TLS_DHE_RSA_WITH_AES_256_GCM_SHA384:
 #ifdef WEAK_CIPHERS
     case TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256:
 #endif
@@ -4900,6 +4887,7 @@ int tls_cipher_is_fs(struct TLSContext *context, unsigned short cipher) {
 
 int _private_tls_prefer_ktls(struct TLSContext *context,
                              unsigned short cipher) {
+#ifndef FORITIFY_CIPHERS
   if ((context->version == TLS_V13) || (context->version == DTLS_V13) ||
       ((context->version != TLS_V12) && (context->version != DTLS_V12)))
     return 0;
@@ -4917,6 +4905,7 @@ int _private_tls_prefer_ktls(struct TLSContext *context,
     case TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256:
       return 1;
   }
+#endif
   return 0;
 }
 
@@ -5621,25 +5610,44 @@ struct TLSPacket *tls_build_hello(struct TLSContext *context,
       }
 
       if ((context->version == TLS_V13) || (context->version == DTLS_V13)) {
+#ifndef FORITIFY_CIPHERS
         tls_packet_uint16(packet, TLS_CIPHERS_SIZE(9, 0));
+#else
+        tls_packet_uint16(packet, TLS_CIPHERS_SIZE(5, 0));
+#endif
+#ifndef FORITIFY_CIPHERS
         tls_packet_uint16(packet, TLS_AES_128_GCM_SHA256);
+#endif
         tls_packet_uint16(packet, TLS_AES_256_GCM_SHA384);
         tls_packet_uint16(packet, TLS_CHACHA20_POLY1305_SHA256);
+#ifndef FORITIFY_CIPHERS
         tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256);
+#endif
         tls_packet_uint16(packet,
                           TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256);
+#ifndef FORITIFY_CIPHERS
         tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256);
+#endif
         tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256);
+#ifndef FORITIFY_CIPHERS
         tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_128_GCM_SHA256);
+#endif
         tls_packet_uint16(packet, TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256);
       } else if ((context->version == TLS_V12) ||
                  (context->version == DTLS_V12)) {
+#ifndef FORITIFY_CIPHERS
 #ifdef WEAK_CIPHERS
         tls_packet_uint16(packet, TLS_CIPHERS_SIZE(16, 5));
 #else
         tls_packet_uint16(packet, TLS_CIPHERS_SIZE(6, 5));
 #endif
+#else
+        tls_packet_uint16(packet, TLS_CIPHERS_SIZE(3, 5));
+#endif
+
+#ifndef FORITIFY_CIPHERS
         tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256);
+#endif
         tls_packet_uint16(packet,
                           TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256);
 #ifdef WEAK_CIPHERS
@@ -5647,15 +5655,18 @@ struct TLSPacket *tls_build_hello(struct TLSContext *context,
         tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA);
         tls_packet_uint16(packet, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA);
 #endif
-        tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256);
+#ifndef FORITIFY_CIPHERS
+        // tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256);
+#endif
 #ifdef WEAK_CIPHERS
         tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA);
         tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA);
         tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256);
 #endif
         tls_packet_uint16(packet, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256);
-
+#ifndef FORITIFY_CIPHERS
         tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_128_GCM_SHA256);
+#endif
 #ifdef WEAK_CIPHERS
         tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_256_CBC_SHA256);
         tls_packet_uint16(packet, TLS_DHE_RSA_WITH_AES_128_CBC_SHA256);
@@ -6205,7 +6216,7 @@ int tls_parse_hello(struct TLSContext *context, const unsigned char *buf,
   VERSION_SUPPORTED(version, TLS_NOT_SAFE)
   DEBUG_PRINT("VERSION REQUIRED BY REMOTE %x, VERSION NOW %x\n", (int)version,
               (int)context->version);
-  
+
   memcpy(context->remote_random, &buf[res], TLS_CLIENT_RANDOM_SIZE);
   res += TLS_CLIENT_RANDOM_SIZE;
 

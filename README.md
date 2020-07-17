@@ -8,6 +8,12 @@
 - client side 1.3 enabled
 - bundled [tomcrypt])(https://github.com/libtom/libtomcrypt)
 
+Options in ptls:
+
+- `WEAK_CHIPHERS` will re-enable CBC ciphers, which are considered WEAK. Only non-browser GnuTLS clients on old CentOS versions will need this.
+- `FORITIFY_CIPHERS` will get rid of all ciphers except AES 256 and ChaCha20. You should enable this. All modern browsers support them. Only needed for Safari on macOS 10.10 and older, Android 6 and old Chrome (<70) on Win7. This will reach 100% on SSLLabs' cipher score. 
+
+
 
 generate from upstream:
 
