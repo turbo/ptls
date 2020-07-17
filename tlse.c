@@ -40,6 +40,13 @@
 #include "tlse.h"
 // using ChaCha20 implementation by D. J. Bernstein
 
+
+// #define TLS_DH_DEFAULT_P "00B90486BB459345F09EDC8F786D7BBA17D9FE4954C87D3E264A2CD2216ADA77272118D6F92F155644EAD21A5FE0DE91B7A014C0E8D70FAB9ED31B16DF2E4665BE8FE92514F6540836FFCBDD8E85D06117F1D36E80318EDD6B7A2FD82B29E7766F3634BF6A521671A987167A7C98508D7CE6AFBD59D84EFAA296817E223BA83AE763900B5961C3402EC9AB7D5B94D7388036EA72671DCF4DF67771E69A373A00BCA0EBE86B3AFA4A739BD188C3D84D36E12DEDA8D5516728281729C0A028FA729422AD21EEA6230F3C877ACC0247DF98D7AA1A4D6B7C69B81DDF0D0479B69577ECFC7264EDDE92646DEF07A34920C64D5501E3DB4C2AC25D2A4C7A211B598796628043798B7CEDCEF81CEF035E50B79332CAB810EBCE0760CCBA3012EA6F1143C4929F82C48D46DA3BA1232A7D7DDEA37802F68FF1905E17400F10808888B6D7C3D5D5A69B2715EE9D510893AEA0F1956AF42F3789570F69AAA54B3B72A762C961AA6D9545B0B955F41EB26165C2E6F3F29283693B86D670C32FEE22933077B5F3EAB878E618E7DF21AD8AE660E20065A93D5E915B6B33FA6B514D0E616432A28742EBE54427855F3F899C0CA29F96809F097F96469A7339AF350878668F81A66E6779906BC61425F4C0B718C528AEAC1020EDCF352BE350AA296EFED7660DEC32F984C929CAD41E62C8E3B325023D5DFD158A42565F2003F8ECD74D85A399C995"
+
+// #define TLS_DH_DEFAULT_G "50b1047264232f44bae9673dda2968206a422cc5e8b25b24718bdcf747a1e1d4e8d0fc1c4cb225ce4c00d1c2c35de34ee4aeafeef0690c0f4cb6049e6f0cc92acb225bd1315922175a1987ccb0da7f947a0744e68b79c3c8d39bab02f3ee3d8245d4e98e218eca893a577fccebc55bff6d60ccf9e4fbc1db205026411e494047a9c4d061c6d797f2299d3142082f7150c54637b7d952c13473752467dd9759ad7d3d18f5a5734f283753d82648d699ae883b2bcc9c31eb11684667a66c67a941e3a76b4184b022fd03d45fcfc4580623e27994c7ff3c1cda80cef69b5d9d3c575288019d4cdab3a3c1240eb65ad8b532d717756ffbeba56638e4338218ee460a573d0541e15463264209beae400fac206d2df5827a17dfc841a710ebb371c2fa398d9b93c50e66becf754fe2d227f5a6bb06e0c4dd49a4c63ffb6cd1248a7b84dcdbe383b45d72ec0af6730336a65dbc4ab3302061bb0a5ac39abb3106eb4310f1d06d4ea4ebb2ebdbd563c6e08772d846b063b3964eb5070e2219f0c194a736fa6a310abc8f22614d490d47e868b58cbd6e4a523e869e76f18062aae97186ffa2fc5ca9d872f9c751b3828d624395a8aea59e4abfb78ed25daa2bc37a7df74aa687ffa26f3c2edec80690f6ee55746f3b67cce981258bcd4d7cf47e23a39b9a31beb6060412d0cea8e77827946a1354ca66af9ed9e3a8c3f87a23b2daa67033"
+
+// #define TLS_DHE_KEY_SIZE 4096
+
 #define TLS_DH_DEFAULT_P                                                       \
   "87A8E61DB4B6663CFFBBD19C651959998CEEF608660DD0F25D2CEED4435E3B00E00DF8F1D6" \
   "1957D4FAF7DF4561B2AA3016C3D91134096FAA3BF4296D830E9A7C209E0C6497517ABD5A8A" \
@@ -1198,7 +1205,7 @@ static struct ECCCurveParameters secp521r1 = {
     "83BF2F966B7FCC0148F709A5D03BB5C9B8899C47AEBB6FB71E91386409"  // order (n)
 };
 
-static struct ECCCurveParameters *const default_curve = &secp256r1;
+static struct ECCCurveParameters *const default_curve = &secp384r1;
 
 void init_curve(struct ECCCurveParameters *curve) {
   curve->dp.size = curve->size;
@@ -5720,11 +5727,14 @@ struct TLSPacket *tls_build_hello(struct TLSContext *context,
         // supported groups
         tls_packet_uint16(packet, 0x0A);
         tls_packet_uint16(packet, 8);
+
         // 3 curves x 2 bytes
         tls_packet_uint16(packet, 6);
-        tls_packet_uint16(packet, secp256r1.iana);
         tls_packet_uint16(packet, secp384r1.iana);
+        tls_packet_uint16(packet, secp256r1.iana);
         tls_packet_uint16(packet, secp224r1.iana);
+
+
         if (alpn_len) {
           tls_packet_uint16(packet, 0x10);
           tls_packet_uint16(packet, alpn_len + 2);
@@ -6335,34 +6345,17 @@ int tls_parse_hello(struct TLSContext *context, const unsigned char *buf,
             DEBUG_DUMP_HEX_LABEL("SUPPORTED GROUPS", &buf[res + 2], group_len);
             int i;
             int selected = 0;
+
+            context->curve = &secp256r1;
+
+            // we prefer 384 if the client supports it
             for (i = 0; i < group_len; i += 2) {
               unsigned short iana_n =
                   ntohs(*(unsigned short *)&buf[res + 2 + i]);
-              switch (iana_n) {
-                case 23:
-                  context->curve = &secp256r1;
-                  selected = 1;
-                  break;
-                case 24:
-                  context->curve = &secp384r1;
-                  selected = 1;
-                  break;
-                  // needs different implementation
-                  // case 29:
-                  //     context->curve = &x25519;
-                  //     selected = 1;
-                  //     break;
-                  // do not use it anymore
-                  // case 25:
-                  //    context->curve = &secp521r1;
-                  //    selected = 1;
-                  //    break;
-              }
-              if (selected) {
-                DEBUG_PRINT("SELECTED CURVE %s\n", context->curve->name);
-                break;
-              }
+              if (iana_n == 24) context->curve = &secp384r1;
             }
+
+            DEBUG_PRINT("SELECTED CURVE %s\n", context->curve->name);
           }
         }
       } else if ((extension_type == 0x10) && (context->alpn) &&

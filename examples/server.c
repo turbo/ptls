@@ -134,7 +134,7 @@ int main(int argc, char *argv[]) {
     struct TLSContext *context = tls_accept(server_context);
 
     // uncomment next line to request client certificate
-    tls_request_client_certificate(context);
+    // tls_request_client_certificate(context);
 
     // make the TLS context serializable (this must be called before
     // negotiation)
