@@ -1,4 +1,4 @@
-#include "../tlse.c"
+#include "nutls.c"
 
 #include <stdio.h>
 #include <string.h>  //strlen
@@ -173,23 +173,24 @@ int main(int argc, char *argv[]) {
             char sni[0xFF];
             sni[0] = 0;
             if (context->sni) snprintf(sni, 0xFF, "%s", context->sni);
-            /* COOL STUFF => */ 
-            // int size = tls_export_context(context, export_buffer, sizeof(export_buffer), 1);
-            // if (size > 0) {
-            //   /* COOLER STUFF => */ struct TLSContext *imported_context =
-            //       tls_import_context(export_buffer, size);
-            //   // This is cool because a context can be sent to an existing
-            //   // process. It will work both with fork and with already existing
-            //   // worker process.
-            //   fprintf(stderr, "Imported context (size: %i): %x\n", size,
-            //           imported_context);
-            //   if (imported_context) {
-            //     // destroy old context
-            //     tls_destroy_context(context);
-            //     // simulate serialization/deserialization of context
-            //     context = imported_context;
-            //   }
-            // }
+            /* COOL STUFF => */
+            int size = tls_export_context(context, export_buffer,
+                                          sizeof(export_buffer), 1);
+            if (size > 0) {
+              /* COOLER STUFF => */ struct TLSContext *imported_context =
+                  tls_import_context(export_buffer, size);
+              // This is cool because a context can be sent to an existing
+              // process. It will work both with fork and with already existing
+              // worker process.
+              fprintf(stderr, "Imported context (size: %i): %x\n", size,
+                      imported_context);
+              if (imported_context) {
+                // destroy old context
+                tls_destroy_context(context);
+                // simulate serialization/deserialization of context
+                context = imported_context;
+              }
+            }
             // ugly inefficient code ... don't write like me
             char send_buffer[0xF000];
             char send_buffer_with_header[0xF000];

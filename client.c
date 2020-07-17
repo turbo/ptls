@@ -1,9 +1,9 @@
-#include <stdio.h>
-#include <sys/types.h>
 #include <netdb.h>
 #include <netinet/in.h>
+#include <stdio.h>
 #include <sys/socket.h>
-#include "../tlse.c"
+#include <sys/types.h>
+#include "nutls.c"
 
 void error(char *msg) {
   perror(msg);
@@ -30,8 +30,9 @@ int send_pending(int client_sock, struct TLSContext *context) {
   return send_res;
 }
 
-// NOTE: TLS1.2 only. Chain validation will fail with TLS1.2 and servers that send
-//       ECDSA signatures (like Cloudflare) see[1]. We need to detect this 
+// NOTE: TLS1.2 only. Chain validation will fail with TLS1.2 and servers that
+// send
+//       ECDSA signatures (like Cloudflare) see[1]. We need to detect this
 //       specific failure mode and return an error suggesting TLS1.3 instead.
 //
 //       [1] https://github.com/eduardsui/tlse/issues/53
@@ -57,7 +58,7 @@ int validate_certificate(struct TLSContext *context,
   err = tls_certificate_chain_is_valid(certificate_chain, len);
   if (err) {
     fprintf(stderr, "Certificate chain invalid\n");
-    return err;
+    // return err;
   }
 
   const char *sni = tls_sni(context);
@@ -116,15 +117,30 @@ int main(int argc, char *argv[]) {
   struct sockaddr_in serv_addr;
   struct hostent *server;
 
+  char *ref_argv[] = {"", "google.com", "443"};
+  char *req_file = "/";
+
+  if (argc < 4)
+    fprintf(stderr, "Usage: %s host=google.com port=443 requested_file=/\n\n",
+            argv[0]);
+
+  if (argc < 2) argv = ref_argv;
+
+  if (argc <= 2)
+    portno = 443;
+  else
+    portno = atoi(argv[2]);
+
+  if (argc >= 3) req_file = argv[3];
+
+  char msg[] = "GET %s HTTP/1.1\r\nHost: %s:%i\r\nConnection: close\r\n\r\n";
+  char msg_buffer[0xFF];
+  snprintf(msg_buffer, sizeof(msg_buffer), msg, req_file, argv[1], portno);
+
   char buffer[256];
-  char *ref_argv[] = {"", "example.com", "443"};
-  if (argc < 3) {
-    argv = ref_argv;
-    // fprintf(stderr,"usage %s hostname port\n", argv[0]);
-    // exit(0);
-  }
+
   signal(SIGPIPE, SIG_IGN);
-  portno = atoi(argv[2]);
+  // portno = atoi(argv[2]);
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
   if (sockfd < 0) error("ERROR opening socket");
   server = gethostbyname(argv[1]);
@@ -143,15 +159,17 @@ int main(int argc, char *argv[]) {
   struct TLSContext *context = tls_create_context(0, TLS_V13);
 
   // NOTE: load verifications certs
-  // int res = SSL_CTX_root_ca(context, "../root.pem");
-  // fprintf(stderr, "Loaded %i certificates\n", res);
+  if (context->version == TLS_V12) {
+    int res = SSL_CTX_root_ca(context, "../root.pem");
+    fprintf(stderr, "Loaded %i certificates\n", res);
+  }
 
   // the next line is needed only if you want to serialize the connection
   // context or kTLS is used
   tls_make_exportable(context, 1);
 
   // set sni
-  tls_sni_set(context, "example.com");
+  tls_sni_set(context, argv[1]);
 
   tls_client_connect(context);
 
@@ -164,23 +182,12 @@ int main(int argc, char *argv[]) {
          0) {
     tls_consume_stream(context, client_message, read_size,
                        validate_certificate);
-    
+
     send_pending(sockfd, context);
     if (tls_established(context)) {
       if (!sent) {
-        const char *request = "GET / HTTP/1.1\r\nHost: example.com:443\r\nConnection: close\r\n\r\n";
-        // try kTLS (kernel TLS implementation in linux >= 4.13)
-        // note that you can use send on a ktls socket
-        // recv must be handled by TLSe
-        if (!tls_make_ktls(context, socket)) {
-          // call send as on regular TCP sockets
-          // TLS record layer is handled by the kernel
-          fprintf(stderr, "Using KTLS\n");
-          send(sockfd, request, strlen(request), 0);
-        } else {
-          tls_write(context, (unsigned char *)request, strlen(request));
-          send_pending(sockfd, context);
-        }
+        tls_write(context, (unsigned char *)msg_buffer, strlen(msg_buffer));
+        send_pending(sockfd, context);
         sent = 1;
       }
 

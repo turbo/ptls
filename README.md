@@ -13,12 +13,10 @@ Options in ptls:
 - `WEAK_CHIPHERS` will re-enable CBC ciphers, which are considered WEAK. Only non-browser GnuTLS clients on old CentOS versions will need this.
 - `FORITIFY_CIPHERS` will get rid of all ciphers except AES 256 and ChaCha20. You should enable this. All modern browsers support them. Only needed for Safari on macOS 10.10 and older, Android 6 and old Chrome (<70) on Win7. This will reach 100% on SSLLabs' cipher score. 
 
-
-
-generate from upstream:
+LE proper cert (4k):
 
 ```bash
-unifdef -DTLS_AMALGAMATION -DWITH_KTLS -DTLS_RX -U _WIN32 -U_APPLE_ -DNO_TLS_LEGACY_SUPPORT -UTLS_LEGACY_SUPPORT -DNO_SSL_COMPATIBLE_INTERFACE -UNO_TLS_13 -UNO_TLS_FORWARD_SECRECY -UNO_TLS_CLIENT_ECDHE -UNO_TLS_ECDSA_SUPPORTED -UNO_TLS_X509_V1_SUPPORT -UNO_TLS_ROBOT_MITIGATION -USSL_COMPATIBLE_INTERFACE -DTLS_LEGACY_SUPPORT -DWITH_TLS_13 -DTLS_FORWARD_SECRECY -DTLS_CLIENT_ECDHE -DTLS_ECDSA_SUPPORTED -DTLS_X509_V1_SUPPORT -DTLS_ROBOT_MITIGATION -UTLS_WITH_CHACHA20_POLY1305 -UTLS_CURVE25519 -UTLS_ACCEPT_SECURE_RENEGOTIATION -DTLS_12_FALSE_START -U__APPLE__ -UTLS_USE_RANDOM_SOURCE -UTLS_REEXPORTABLE -UTLS_SRTP -DTLS_CLIENT_ECDSA -UIGNORE_SESSION_ID -USTRICT_TLS -DTLS_PREFER_CHACHA20 -DWITH_RANDOM_DLTS_COOKIE -DTLS_CHECK_PREMASTER_KEY -DTLS_WITH_CHACHA20_POLY1305 -o ../tlse.c ../tlse.c
+acme.sh --issue --standalone -d nutls2.std.fyi -d www.nutls2.std.fyi -k 4096 -ak 4096
 ```
 
 Compiling
