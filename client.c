@@ -156,11 +156,11 @@ int main(int argc, char *argv[]) {
   if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
     error("ERROR connecting");
 
-  struct TLSContext *context = tls_create_context(0, TLS_V13);
+  struct TLSContext *context = tls_create_context(0, TLS_V12);
 
   // NOTE: load verifications certs
   if (context->version == TLS_V12) {
-    int res = SSL_CTX_root_ca(context, "../root.pem");
+    int res = SSL_CTX_root_ca(context, "./ca-certificates.pem");
     fprintf(stderr, "Loaded %i certificates\n", res);
   }
 

@@ -1,13 +1,14 @@
 #ifndef NUTLS_C
 #define NUTLS_C
 
-#include <arpa/inet.h>
-#include <errno.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+// hton* and ntoh* functions
+#include <arpa/inet.h>
+#include <errno.h>
 #include <unistd.h>
 
 #include "libtomcrypt.c"
@@ -1225,9 +1226,7 @@ struct TLSContext {
   char *default_dhe_p;
   char *default_dhe_g;
   const struct ECCCurveParameters *curve;
-  struct TLSCertificate **client_certificates;
   unsigned int certificates_count;
-  unsigned int client_certificates_count;
   unsigned char *master_key;
   unsigned int master_key_len;
   unsigned char *premaster_key;
@@ -1255,7 +1254,6 @@ struct TLSContext {
   unsigned char *exportable_keys;
   unsigned char exportable_size;
   char *sni;
-  unsigned char request_client_certificate;
   unsigned char dtls;
   unsigned short dtls_epoch_local;
   unsigned short dtls_epoch_remote;
@@ -1751,16 +1749,8 @@ int _private_tls_verify_rsa(struct TLSContext *context, unsigned int hash_type,
   int err;
 
   if (context->is_server) {
-    if ((!len) || (!context->client_certificates) ||
-        (!context->client_certificates_count) ||
-        (!context->client_certificates[0]) ||
-        (!context->client_certificates[0]->der_bytes) ||
-        (!context->client_certificates[0]->der_len)) {
-      DEBUG_PRINT("No client certificate set\n");
-      return TLS_GENERIC_ERROR;
-    }
-    err = rsa_import(context->client_certificates[0]->der_bytes,
-                     context->client_certificates[0]->der_len, &key);
+    DEBUG_PRINT("No client certificate support\n");
+    return TLS_GENERIC_ERROR;
   } else {
     if ((!len) || (!context->certificates) || (!context->certificates_count) ||
         (!context->certificates[0]) || (!context->certificates[0]->der_bytes) ||
@@ -2367,17 +2357,8 @@ int _private_tls_verify_ecdsa(struct TLSContext *context,
   if (!curve_hint) curve_hint = context->curve;
 
   if (context->is_server) {
-    if ((!len) || (!context->client_certificates) ||
-        (!context->client_certificates_count) ||
-        (!context->client_certificates[0]) ||
-        (!context->client_certificates[0]->pk) ||
-        (!context->client_certificates[0]->pk_len) || (!curve_hint)) {
-      DEBUG_PRINT("No client certificate set\n");
-      return TLS_GENERIC_ERROR;
-    }
-    err = _private_tls_ecc_import_pk(context->client_certificates[0]->pk,
-                                     context->client_certificates[0]->pk_len,
-                                     &key, (ltc_ecc_set_type *)&curve_hint->dp);
+    DEBUG_PRINT("No client certificate support\n");
+    return TLS_GENERIC_ERROR;
   } else {
     if ((!len) || (!context->certificates) || (!context->certificates_count) ||
         (!context->certificates[0]) || (!context->certificates[0]->pk) ||
@@ -4222,8 +4203,7 @@ int _private_tls_update_hash(struct TLSContext *context,
     if (!hash->created) {
       _private_tls_create_hash(context);
       // cache first hello in case of protocol downgrade
-      if ((!context->is_server) && (!context->cached_handshake) &&
-          (!context->request_client_certificate) && (len)) {
+      if ((!context->is_server) && (!context->cached_handshake) && (len)) {
         context->cached_handshake = (unsigned char *)TLS_MALLOC(len);
         if (context->cached_handshake) {
           memcpy(context->cached_handshake, in, len);
@@ -4243,18 +4223,7 @@ int _private_tls_update_hash(struct TLSContext *context,
     md5_process(&hash->hash, in, len);
     sha1_process(&hash->hash2, in, len);
   }
-  if ((context->request_client_certificate) && (len)) {
-    // cache all messages for verification
-    int new_len = context->cached_handshake_len + len;
-    context->cached_handshake =
-        (unsigned char *)TLS_REALLOC(context->cached_handshake, new_len);
-    if (context->cached_handshake) {
-      memcpy(context->cached_handshake + context->cached_handshake_len, in,
-             len);
-      context->cached_handshake_len = new_len;
-    } else
-      context->cached_handshake_len = 0;
-  }
+
   return 0;
 }
 
@@ -4703,12 +4672,7 @@ void tls_destroy_context(struct TLSContext *context) {
       TLS_FREE(context->alpn);
     }
   }
-  if (context->client_certificates) {
-    for (i = 0; i < context->client_certificates_count; i++)
-      tls_destroy_certificate(context->client_certificates[i]);
-    TLS_FREE(context->client_certificates);
-  }
-  context->client_certificates = NULL;
+
   TLS_FREE(context->master_key);
   TLS_FREE(context->premaster_key);
   if (context->crypto.created) _private_tls_crypto_done(context);
@@ -6461,14 +6425,6 @@ int tls_parse_certificate(struct TLSContext *context, const unsigned char *buf,
         }
         // valid certificate
         if (is_client) {
-          valid_certificate = 1;
-          context->client_certificates = (struct TLSCertificate **)TLS_REALLOC(
-              context->client_certificates,
-              (context->client_certificates_count + 1) *
-                  sizeof(struct TLSCertificate *));
-          context->client_certificates[context->client_certificates_count] =
-              cert;
-          context->client_certificates_count++;
         } else {
           context->certificates = (struct TLSCertificate **)TLS_REALLOC(
               context->certificates, (context->certificates_count + 1) *
@@ -7185,10 +7141,6 @@ int tls_parse_payload(struct TLSContext *context, const unsigned char *buf,
             payload_res = tls_parse_certificate(context, buf + 1, payload_size,
                                                 context->is_server);
             if (context->is_server) {
-              if ((certificate_verify) && (context->client_certificates_count))
-                certificate_verify_alert =
-                    certificate_verify(context, context->client_certificates,
-                                       context->client_certificates_count);
               // empty certificates are permitted for client
               if (payload_res <= 0) payload_res = 1;
             }
@@ -7199,10 +7151,7 @@ int tls_parse_payload(struct TLSContext *context, const unsigned char *buf,
             // client certificate
             payload_res =
                 tls_parse_certificate(context, buf + 1, payload_size, 1);
-            if ((certificate_verify) && (context->client_certificates_count))
-              certificate_verify_alert =
-                  certificate_verify(context, context->client_certificates,
-                                     context->client_certificates_count);
+
             // empty certificates are permitted for client
             if (payload_res <= 0) payload_res = 1;
           } else {
@@ -7418,10 +7367,7 @@ int tls_parse_payload(struct TLSContext *context, const unsigned char *buf,
             context->cipher_spec_set = 1;
             DEBUG_PRINT("<= SENDING ENCRYPTED EXTENSIONS\n");
             _private_tls_write_packet(tls_build_encrypted_extensions(context));
-            if (context->request_client_certificate) {
-              DEBUG_PRINT("<= SENDING CERTIFICATE REQUEST\n");
-              _private_tls_write_packet(tls_certificate_request(context));
-            }
+
             DEBUG_PRINT("<= SENDING CERTIFICATE\n");
             _private_tls_write_packet(tls_build_certificate(context));
             DEBUG_PRINT("<= SENDING CERTIFICATE VERIFY\n");
@@ -7446,10 +7392,7 @@ int tls_parse_payload(struct TLSContext *context, const unsigned char *buf,
                 context,
                 ephemeral_cipher == 1 ? KEA_dhe_rsa : KEA_ec_diffie_hellman));
           }
-          if (context->request_client_certificate) {
-            DEBUG_PRINT("<= SENDING CERTIFICATE REQUEST\n");
-            _private_tls_write_packet(tls_certificate_request(context));
-          }
+
           DEBUG_PRINT("<= SENDING DONE\n");
           _private_tls_write_packet(tls_build_done(context));
         }
@@ -8726,9 +8669,6 @@ struct TLSPacket *tls_build_certificate(struct TLSContext *context) {
   if (context->is_server) {
     certificates_count = context->certificates_count;
     certificates = context->certificates;
-  } else {
-    certificates_count = context->client_certificates_count;
-    certificates = context->client_certificates;
   }
   int delta = 3;
   if ((context->version == TLS_V13) || (context->version == DTLS_V13))
@@ -9427,13 +9367,6 @@ struct TLSContext *tls_import_context(const unsigned char *buffer,
 int tls_is_broken(struct TLSContext *context) {
   if ((!context) || (context->critical_error)) return 1;
   return 0;
-}
-
-int tls_request_client_certificate(struct TLSContext *context) {
-  if ((!context) || (!context->is_server)) return 0;
-
-  context->request_client_certificate = 1;
-  return 1;
 }
 
 int tls_client_verified(struct TLSContext *context) {
