@@ -284,7 +284,7 @@ struct TLSPacket *tls_build_alert(struct TLSContext *context, char critical,
   non-NULL.
  */
 int tls_consume_stream(struct TLSContext *context, const unsigned char *buf,
-                       int buf_len, tls_validation_function certificate_verify);
+                       ssize_t buf_len, tls_validation_function certificate_verify);
 void tls_close_notify(struct TLSContext *context);
 void tls_alert(struct TLSContext *context, unsigned char critical, int code);
 
@@ -292,7 +292,7 @@ int tls_client_verified(struct TLSContext *context);
 const char *tls_sni(struct TLSContext *context);
 int tls_sni_set(struct TLSContext *context, const char *sni);
 int tls_load_root_certificates(struct TLSContext *context,
-                               const unsigned char *pem_buffer, int pem_size);
+                               const unsigned char *pem_buffer, size_t pem_size);
 
 void tls_print_certificate(const char *fname);
 //int tls_add_alpn(struct TLSContext *context, const char *alpn);

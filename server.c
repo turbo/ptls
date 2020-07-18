@@ -4,7 +4,7 @@
 
 static char identity_str[0xFF] = {0};
 
-unsigned long read_from_file(const char *fname, void *buf, int max_len) {
+unsigned long read_from_file(const char *fname, void *buf, size_t max_len) {
   FILE *f = fopen(fname, "rb");
   if (f) {
     unsigned long size = fread(buf, 1, max_len - 1, f);
@@ -38,7 +38,7 @@ int send_pending(int client_sock, struct TLSContext *context) {
   unsigned int out_buffer_index = 0;
   int send_res = 0;
   while ((out_buffer) && (out_buffer_len > 0)) {
-    int res = send(client_sock, (char *)&out_buffer[out_buffer_index],
+    ssize_t res = send(client_sock, (char *)&out_buffer[out_buffer_index],
                    out_buffer_len, 0);
     if (res <= 0) {
       send_res = res;
@@ -51,6 +51,8 @@ int send_pending(int client_sock, struct TLSContext *context) {
   return send_res;
 }
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "UnusedLocalVariable"
 // verify signature
 int verify_signature(struct TLSContext *context,
                      struct TLSCertificate **certificate_chain, int len) {
@@ -65,9 +67,11 @@ int verify_signature(struct TLSContext *context,
   }
   return no_error;
 }
+#pragma clang diagnostic pop
 
 int main(int argc, char *argv[]) {
-  int socket_desc, client_sock, read_size;
+  int socket_desc, client_sock;
+  ssize_t read_size;
   socklen_t c;
   struct sockaddr_in server, client;
   unsigned char client_message[0xFFFF];

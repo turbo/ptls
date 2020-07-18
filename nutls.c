@@ -1349,7 +1349,7 @@ unsigned int _private_tls_hmac_message(unsigned char local,
                                        const unsigned char *buf2, int buf_len2,
                                        unsigned char *out, unsigned int outlen,
                                        uint64_t remote_sequence_number);
-int tls_random(unsigned char *key, int len);
+int tls_random(unsigned char *key, unsigned long len);
 void tls_destroy_packet(struct TLSPacket *packet);
 struct TLSPacket *tls_build_hello(struct TLSContext *context,
                                   int tls13_downgrade);
@@ -2476,7 +2476,7 @@ void _private_tls_prf_helper(int hash_idx, unsigned long dlen,
     if ((seed_b) && (seed_b_len)) hmac_process(&hmac, seed_b, seed_b_len);
     hmac_done(&hmac, digest_out1, &dlen);
 
-    unsigned int copylen = outlen;
+    unsigned long copylen = outlen;
     if (copylen > dlen) copylen = dlen;
 
     for (i = 0; i < copylen; i++) {
@@ -3771,23 +3771,23 @@ int _private_tls_crypto_create(struct TLSContext *context, int key_length,
   return 0;
 }
 
-int _private_tls_crypto_encrypt(struct TLSContext *context, unsigned char *buf,
-                                unsigned char *ct, unsigned int len) {
-  // if (context->crypto.created == 1)
-  //   return cbc_encrypt(buf, ct, len, &context->crypto.ctx_local.aes_local);
-
-  memset(ct, 0, len);
-  return TLS_GENERIC_ERROR;
-}
-
-int _private_tls_crypto_decrypt(struct TLSContext *context, unsigned char *buf,
-                                unsigned char *pt, unsigned int len) {
-  // if (context->crypto.created == 1)
-  //   return cbc_decrypt(buf, pt, len, &context->crypto.ctx_remote.aes_remote);
-
-  memset(pt, 0, len);
-  return TLS_GENERIC_ERROR;
-}
+//int _private_tls_crypto_encrypt(struct TLSContext *context, unsigned char *buf,
+//                                unsigned char *ct, unsigned int len) {
+//  // if (context->crypto.created == 1)
+//  //   return cbc_encrypt(buf, ct, len, &context->crypto.ctx_local.aes_local);
+//
+//  memset(ct, 0, len);
+//  return TLS_GENERIC_ERROR;
+//}
+//
+//int _private_tls_crypto_decrypt(struct TLSContext *context, unsigned char *buf,
+//                                unsigned char *pt, unsigned int len) {
+//  // if (context->crypto.created == 1)
+//  //   return cbc_decrypt(buf, pt, len, &context->crypto.ctx_remote.aes_remote);
+//
+//  memset(pt, 0, len);
+//  return TLS_GENERIC_ERROR;
+//}
 
 void _private_tls_crypto_done(struct TLSContext *context) {
   unsigned char dummy_buffer[32];
@@ -3912,8 +3912,8 @@ void tls_packet_update(struct TLSPacket *packet) {
                 buf_pos += padding;
 
                 // DEBUG_DUMP_HEX_LABEL("PT BUFFER", buf, length);
-                _private_tls_crypto_encrypt(packet->context, buf,
-                                            ct + header_size, length);
+//                _private_tls_crypto_encrypt(packet->context, buf,
+//                                            ct + header_size, length);
                 TLS_FREE(packet->buf);
                 packet->buf = ct;
                 packet->len = length + header_size;
@@ -4097,7 +4097,7 @@ int tls_packet_uint24(struct TLSPacket *packet, unsigned int i) {
   return tls_packet_append(packet, buf, 3);
 }
 
-int tls_random(unsigned char *key, int len) {
+int tls_random(unsigned char *key, unsigned long len) {
   FILE *fp = fopen("/dev/urandom", "r");
   if (fp) {
     int key_len = fread(key, 1, len, fp);
@@ -7610,14 +7610,7 @@ int tls_parse_message(struct TLSContext *context, unsigned char *buf,
         return TLS_INTEGRITY_FAILED;
       }
     } else {
-      int err =
-          _private_tls_crypto_decrypt(context, buf + header_size, pt, length);
-      if (err) {
-        TLS_FREE(pt);
-        DEBUG_PRINT("Decryption error %i\n", (int)err);
-        _private_random_sleep(context, TLS_MAX_ERROR_SLEEP_uS);
-        return TLS_BROKEN_PACKET;
-      }
+
       unsigned char padding_byte = pt[length - 1];
       unsigned char padding = padding_byte + 1;
 
@@ -8592,10 +8585,8 @@ struct TLSPacket *tls_build_certificate(struct TLSContext *context) {
   unsigned int all_certificate_size = 0;
   int certificates_count;
   struct TLSCertificate **certificates;
-  if (context->is_server) {
     certificates_count = context->certificates_count;
     certificates = context->certificates;
-  }
   int delta = 3;
   if ((context->version == TLS_V13) || (context->version == DTLS_V13))
     delta = 5;
@@ -8844,7 +8835,7 @@ int _private_tls_read_from_file(const char *fname, void *buf, int max_len) {
 }
 
 int tls_consume_stream(struct TLSContext *context, const unsigned char *buf,
-                       int buf_len,
+                       ssize_t buf_len,
                        tls_validation_function certificate_verify) {
   if (!context) return TLS_GENERIC_ERROR;
 
@@ -8975,7 +8966,7 @@ int tls_sni_set(struct TLSContext *context, const char *sni) {
 }
 
 int tls_load_root_certificates(struct TLSContext *context,
-                               const unsigned char *pem_buffer, int pem_size) {
+                               const unsigned char *pem_buffer, size_t pem_size) {
   if (!context) return TLS_GENERIC_ERROR;
 
   unsigned int len;

@@ -7,14 +7,14 @@ void error(char *msg) {
   exit(0);
 }
 
-int send_pending(int client_sock, struct TLSContext *context) {
+ssize_t send_pending(int client_sock, struct TLSContext *context) {
   unsigned int out_buffer_len = 0;
   const unsigned char *out_buffer =
       tls_get_write_buffer(context, &out_buffer_len);
   unsigned int out_buffer_index = 0;
-  int send_res = 0;
+    ssize_t send_res = 0;
   while ((out_buffer) && (out_buffer_len > 0)) {
-    int res = send(client_sock, (char *)&out_buffer[out_buffer_index],
+    ssize_t res = send(client_sock, (char *)&out_buffer[out_buffer_index],
                    out_buffer_len, 0);
     if (res <= 0) {
       send_res = res;
@@ -107,7 +107,8 @@ int SSL_CTX_root_ca(struct TLSContext *context, const char *pem_filename) {
 }
 
 int main(int argc, char *argv[]) {
-  int sockfd, portno;
+  int sockfd;
+  uint16_t portno;
 
   struct sockaddr_in serv_addr;
   struct hostent *server;
@@ -143,7 +144,7 @@ int main(int argc, char *argv[]) {
   memset((char *)&serv_addr, 0, sizeof(serv_addr));
   serv_addr.sin_family = AF_INET;
   memcpy((char *)&serv_addr.sin_addr.s_addr, server->h_addr,
-         server->h_length);
+         (size_t) server->h_length);
   serv_addr.sin_port = htons(portno);
   if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
     error("ERROR connecting");
@@ -163,7 +164,7 @@ int main(int argc, char *argv[]) {
 
   send_pending(sockfd, context);
   unsigned char client_message[0xFFFF];
-  int read_size;
+  ssize_t read_size;
   int sent = 0;
 
   while ((read_size = recv(sockfd, client_message, sizeof(client_message), 0)) >
@@ -180,7 +181,7 @@ int main(int argc, char *argv[]) {
       }
 
       unsigned char read_buffer[0xFFFF];
-      int readSize = tls_read(context, read_buffer, 0xFFFF - 1);
+        size_t readSize = tls_read(context, read_buffer, 0xFFFF - 1);
       if (readSize > 0) fwrite(read_buffer, readSize, 1, stdout);
     }
   }

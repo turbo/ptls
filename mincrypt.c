@@ -2615,10 +2615,13 @@ int mp_prime_is_prime(mp_int *a, int t, int *result);
 int mp_count_bits(mp_int *a);
 
 int mp_unsigned_bin_size(mp_int *a);
+
 int mp_read_unsigned_bin(mp_int *a, const unsigned char *b, int c);
+
 int mp_to_unsigned_bin(mp_int *a, unsigned char *b);
 
 int mp_read_radix(mp_int *a, const char *str, int radix);
+
 int mp_toradix(mp_int *a, char *str, int radix);
 
 #define mp_tohex(M, S) mp_toradix((M), (S), 16)
@@ -2683,24 +2686,41 @@ extern void XFREE(void *p);
 
 /* lowlevel functions, do not call! */
 int s_mp_add(mp_int *a, mp_int *b, mp_int *c);
+
 int s_mp_sub(mp_int *a, mp_int *b, mp_int *c);
 
 #define s_mp_mul(a, b, c) s_mp_mul_digs(a, b, c, (a)->used + (b)->used + 1)
+
 int fast_s_mp_mul_digs(mp_int *a, mp_int *b, mp_int *c, int digs);
+
 int s_mp_mul_digs(mp_int *a, mp_int *b, mp_int *c, int digs);
+
 int fast_s_mp_mul_high_digs(mp_int *a, mp_int *b, mp_int *c, int digs);
+
 int s_mp_mul_high_digs(mp_int *a, mp_int *b, mp_int *c, int digs);
+
 int fast_s_mp_sqr(mp_int *a, mp_int *b);
+
 int s_mp_sqr(mp_int *a, mp_int *b);
+
 int mp_karatsuba_mul(mp_int *a, mp_int *b, mp_int *c);
+
 int mp_toom_mul(mp_int *a, mp_int *b, mp_int *c);
+
 int mp_karatsuba_sqr(mp_int *a, mp_int *b);
+
 int mp_toom_sqr(mp_int *a, mp_int *b);
+
 int fast_mp_invmod(mp_int *a, mp_int *b, mp_int *c);
+
 int mp_invmod_slow(mp_int *a, mp_int *b, mp_int *c);
+
 int fast_mp_montgomery_reduce(mp_int *x, mp_int *n, mp_digit rho);
+
 int mp_exptmod_fast(mp_int *G, mp_int *X, mp_int *P, mp_int *Y, int redmode);
+
 int s_mp_exptmod(mp_int *G, mp_int *X, mp_int *P, mp_int *Y, int redmode);
+
 void bn_reverse(unsigned char *s, int len);
 
 extern const char *mp_s_rmap;
@@ -2891,6 +2911,7 @@ LBL_ERR:
   mp_clear_multi(&x, &y, &u, &v, &B, &D, NULL);
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -3063,6 +3084,7 @@ int fast_mp_montgomery_reduce(mp_int *x, mp_int *n, mp_digit rho) {
   }
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -3133,8 +3155,8 @@ int fast_s_mp_mul_digs(mp_int *a, mp_int *b, mp_int *c, int digs) {
     tmpy = b->dp + ty;
 
     /* this is the number of times the loop will iterrate, essentially
-       while (tx++ < a->used && ty-- >= 0) { ... }
-     */
+   while (tx++ < a->used && ty-- >= 0) { ... }
+ */
     iy = MIN(a->used - tx, ty + 1);
 
     /* execute loop */
@@ -3169,6 +3191,7 @@ int fast_s_mp_mul_digs(mp_int *a, mp_int *b, mp_int *c, int digs) {
   mp_clamp(c);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -3230,8 +3253,8 @@ int fast_s_mp_mul_high_digs(mp_int *a, mp_int *b, mp_int *c, int digs) {
     tmpy = b->dp + ty;
 
     /* this is the number of times the loop will iterrate, essentially its
-       while (tx++ < a->used && ty-- >= 0) { ... }
-     */
+   while (tx++ < a->used && ty-- >= 0) { ... }
+ */
     iy = MIN(a->used - tx, ty + 1);
 
     /* execute loop */
@@ -3267,6 +3290,7 @@ int fast_s_mp_mul_high_digs(mp_int *a, mp_int *b, mp_int *c, int digs) {
   mp_clamp(c);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -3332,8 +3356,8 @@ int fast_s_mp_sqr(mp_int *a, mp_int *b) {
     tmpy = a->dp + ty;
 
     /* this is the number of times the loop will iterrate, essentially
-       while (tx++ < a->used && ty-- >= 0) { ... }
-     */
+   while (tx++ < a->used && ty-- >= 0) { ... }
+ */
     iy = MIN(a->used - tx, ty + 1);
 
     /* now for squaring tx can never equal ty
@@ -3381,6 +3405,7 @@ int fast_s_mp_sqr(mp_int *a, mp_int *b) {
   mp_clamp(b);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -3428,6 +3453,7 @@ int mp_2expt(mp_int *a, int b) {
 
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -3470,6 +3496,7 @@ int mp_abs(mp_int *a, mp_int *b) {
 
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -3522,6 +3549,7 @@ int mp_add(mp_int *a, mp_int *b, mp_int *c) {
   }
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -3632,6 +3660,7 @@ int mp_add_d(mp_int *a, mp_digit b, mp_int *c) {
 
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -3721,6 +3750,7 @@ void mp_clamp(mp_int *a) {
     a->sign = MP_ZPOS;
   }
 }
+
 #endif
 
 /* $Source$ */
@@ -3764,6 +3794,7 @@ void mp_clear(mp_int *a) {
     a->sign = MP_ZPOS;
   }
 }
+
 #endif
 
 /* $Source$ */
@@ -3799,6 +3830,7 @@ void mp_clear_multi(mp_int *mp, ...) {
   }
   va_end(args);
 }
+
 #endif
 
 /* $Source$ */
@@ -3841,6 +3873,7 @@ int mp_cmp(mp_int *a, mp_int *b) {
     return mp_cmp_mag(a, b);
   }
 }
+
 #endif
 
 /* $Source$ */
@@ -3885,6 +3918,7 @@ int mp_cmp_d(mp_int *a, mp_digit b) {
     return MP_EQ;
   }
 }
+
 #endif
 
 /* $Source$ */
@@ -3940,6 +3974,7 @@ int mp_cmp_mag(mp_int *a, mp_int *b) {
   }
   return MP_EQ;
 }
+
 #endif
 
 /* $Source$ */
@@ -3991,6 +4026,7 @@ int mp_cnt_lsb(mp_int *a) {
   }
   return x;
 }
+
 #endif
 
 /* $Source$ */
@@ -4058,6 +4094,7 @@ int mp_copy(mp_int *a, mp_int *b) {
   b->sign = a->sign;
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -4102,6 +4139,7 @@ int mp_count_bits(mp_int *a) {
   }
   return r;
 }
+
 #endif
 
 /* $Source$ */
@@ -4310,10 +4348,10 @@ int mp_div(mp_int *a, mp_int *b, mp_int *c, mp_int *d) {
     }
 
     /* while (q{i-t-1} * (yt * b + y{t-1})) >
-             xi * b**2 + xi-1 * b + xi-2
+         xi * b**2 + xi-1 * b + xi-2
 
-       do q{i-t-1} -= 1;
-     */
+   do q{i-t-1} -= 1;
+ */
     q.dp[(i - t) - 1] = (q.dp[(i - t) - 1] + 1) & MP_MASK;
     do {
       q.dp[(i - t) - 1] = (q.dp[(i - t) - 1] - 1) & MP_MASK;
@@ -4397,6 +4435,7 @@ LBL_Q:
   mp_clear(&q);
   return res;
 }
+
 #endif
 #endif
 
@@ -4466,6 +4505,7 @@ int mp_div_2(mp_int *a, mp_int *b) {
   mp_clamp(b);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -4564,6 +4604,7 @@ int mp_div_2d(mp_int *a, int b, mp_int *c, mp_int *d) {
   mp_clear(&t);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -4641,6 +4682,7 @@ int mp_div_3(mp_int *a, mp_int *c, mp_digit *d) {
 
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -4754,6 +4796,7 @@ int mp_div_d(mp_int *a, mp_digit b, mp_int *c, mp_digit *d) {
 
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -4796,6 +4839,7 @@ int mp_dr_is_modulus(mp_int *a) {
   }
   return 1;
 }
+
 #endif
 
 /* $Source$ */
@@ -4848,9 +4892,9 @@ int mp_dr_reduce(mp_int *x, mp_int *n, mp_digit k) {
     }
   }
 
-/* top of loop, this is where the code resumes if
- * another reduction pass is required.
- */
+  /* top of loop, this is where the code resumes if
+   * another reduction pass is required.
+   */
 top:
   /* aliases for digits */
   /* alias for lower half of x */
@@ -4891,6 +4935,7 @@ top:
   }
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -4921,6 +4966,7 @@ void mp_dr_setup(mp_int *a, mp_digit *d) {
    */
   *d = (mp_digit)((((mp_word)1) << ((mp_word)DIGIT_BIT)) - ((mp_word)a->dp[0]));
 }
+
 #endif
 
 /* $Source$ */
@@ -4954,6 +5000,7 @@ void mp_exch(mp_int *a, mp_int *b) {
   *a = *b;
   *b = t;
 }
+
 #endif
 
 /* $Source$ */
@@ -5134,6 +5181,7 @@ int mp_exptmod(mp_int *G, mp_int *X, mp_int *P, mp_int *Y) {
   }
 #endif
 }
+
 #endif
 
 /* $Source$ */
@@ -5280,11 +5328,11 @@ int mp_exptmod_fast(mp_int *G, mp_int *X, mp_int *P, mp_int *Y, int redmode) {
   }
 
   /* create M table
-   *
+ *
 
-   *
-   * The first half of the table is not computed though accept for M[0] and M[1]
-   */
+ *
+ * The first half of the table is not computed though accept for M[0] and M[1]
+ */
 
   if (redmode == 0) {
 #ifdef BN_MP_MONTGOMERY_CALC_NORMALIZATION_C
@@ -5458,6 +5506,7 @@ LBL_M:
   }
   return err;
 }
+
 #endif
 
 /* $Source$ */
@@ -5619,6 +5668,7 @@ LBL_U:
   mp_clear(&v);
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -5667,6 +5717,7 @@ unsigned long mp_get_int(mp_int *a) {
    */
   return res & 0xFFFFFFFFUL;
 }
+
 #endif
 
 /* $Source$ */
@@ -5762,6 +5813,7 @@ int mp_grow(mp_int *a, int size) {
   }
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -5831,6 +5883,7 @@ int mp_init(mp_int *a) {
 
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -5863,6 +5916,7 @@ int mp_init_copy(mp_int *a, mp_int *b) {
   }
   return mp_copy(b, a);
 }
+
 #endif
 
 /* $Source$ */
@@ -5896,8 +5950,8 @@ int mp_init_multi(mp_int *mp, ...) {
   while (cur_arg != NULL) {
     if (mp_init(cur_arg) != MP_OKAY) {
       /* Oops - error! Back-track and mp_clear what we already
-         succeeded in init-ing, then return error.
-       */
+   succeeded in init-ing, then return error.
+ */
       va_list clean_args;
 
       /* end the current list */
@@ -5920,6 +5974,7 @@ int mp_init_multi(mp_int *mp, ...) {
   va_end(args);
   return res; /* Assumed ok, if error flagged above. */
 }
+
 #endif
 
 /* $Source$ */
@@ -6014,6 +6069,7 @@ int mp_init_size(mp_int *a, int size) {
 
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -6057,6 +6113,7 @@ int mp_invmod(mp_int *a, mp_int *b, mp_int *c) {
   return MP_VAL;
 #endif
 }
+
 #endif
 
 /* $Source$ */
@@ -6231,6 +6288,7 @@ LBL_ERR:
   mp_clear_multi(&x, &y, &u, &v, &A, &B, &C, &D, NULL);
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -6368,6 +6426,7 @@ LBL_A1:
   mp_clear(&a1);
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -6527,6 +6586,7 @@ X0:
 ERR:
   return err;
 }
+
 #endif
 
 /* $Source$ */
@@ -6640,6 +6700,7 @@ X0:
 ERR:
   return err;
 }
+
 #endif
 
 /* $Source$ */
@@ -6699,6 +6760,7 @@ LBL_T:
   mp_clear_multi(&t1, &t2, NULL);
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -6766,6 +6828,7 @@ int mp_lshd(mp_int *a, int b) {
   }
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -6813,6 +6876,7 @@ int mp_mod(mp_int *a, mp_int *b, mp_int *c) {
   mp_clear(&t);
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -6868,6 +6932,7 @@ int mp_mod_2d(mp_int *a, int b, mp_int *c) {
   mp_clamp(c);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -6894,6 +6959,7 @@ int mp_mod_2d(mp_int *a, int b, mp_int *c) {
 int mp_mod_d(mp_int *a, mp_digit b, mp_digit *c) {
   return mp_div_d(a, b, NULL, c);
 }
+
 #endif
 
 /* $Source$ */
@@ -6953,6 +7019,7 @@ int mp_montgomery_calc_normalization(mp_int *a, mp_int *b) {
 
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -7067,6 +7134,7 @@ int mp_montgomery_reduce(mp_int *x, mp_int *n, mp_digit rho) {
 
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -7125,6 +7193,7 @@ int mp_montgomery_setup(mp_int *n, mp_digit *rho) {
 
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -7193,6 +7262,7 @@ int mp_mul(mp_int *a, mp_int *b, mp_int *c) {
   c->sign = (c->used > 0) ? neg : MP_ZPOS;
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -7274,6 +7344,7 @@ int mp_mul_2(mp_int *a, mp_int *b) {
   b->sign = a->sign;
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -7359,6 +7430,7 @@ int mp_mul_2d(mp_int *a, int b, mp_int *c) {
   mp_clamp(c);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -7437,6 +7509,7 @@ int mp_mul_d(mp_int *a, mp_digit b, mp_int *c) {
 
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -7477,6 +7550,7 @@ int mp_mulmod(mp_int *a, mp_int *b, mp_int *c, mp_int *d) {
   mp_clear(&t);
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -7564,6 +7638,7 @@ int mp_neg(mp_int *a, mp_int *b) {
 
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -7660,6 +7735,7 @@ int mp_prime_is_divisible(mp_int *a, int *result) {
 
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -7744,6 +7820,7 @@ LBL_B:
   mp_clear(&b);
   return err;
 }
+
 #endif
 
 /* $Source$ */
@@ -7850,6 +7927,7 @@ LBL_N1:
   mp_clear(&n1);
   return err;
 }
+
 #endif
 
 /* $Source$ */
@@ -8095,6 +8173,7 @@ int mp_read_radix(mp_int *a, const char *str, int radix) {
   }
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -8173,6 +8252,7 @@ int mp_read_unsigned_bin(mp_int *a, const unsigned char *b, int c) {
   mp_clamp(a);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -8271,6 +8351,7 @@ CLEANUP:
 
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -8333,6 +8414,7 @@ ERR:
   mp_clear(&q);
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -8396,6 +8478,7 @@ ERR:
   mp_clear(&q);
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -8443,6 +8526,7 @@ int mp_reduce_2k_setup(mp_int *a, mp_digit *d) {
   mp_clear(&tmp);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -8487,6 +8571,7 @@ ERR:
   mp_clear(&tmp);
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -8538,6 +8623,7 @@ int mp_reduce_is_2k(mp_int *a) {
   }
   return MP_YES;
 }
+
 #endif
 
 /* $Source$ */
@@ -8580,6 +8666,7 @@ int mp_reduce_is_2k_l(mp_int *a) {
   }
   return MP_NO;
 }
+
 #endif
 
 /* $Source$ */
@@ -8614,6 +8701,7 @@ int mp_reduce_setup(mp_int *a, mp_int *b) {
   }
   return mp_div(a, b, a, NULL);
 }
+
 #endif
 
 /* $Source$ */
@@ -8664,15 +8752,15 @@ void mp_rshd(mp_int *a, int b) {
     top = a->dp + b;
 
     /* this is implemented as a sliding window where
-     * the window is b-digits long and digits from
-     * the top of the window are copied to the bottom
-     *
-     * e.g.
+ * the window is b-digits long and digits from
+ * the top of the window are copied to the bottom
+ *
+ * e.g.
 
-       b-2 | b-1 | b0 | b1 | b2 | ... | bb |   ---->
-                 /\                   |      ---->
-     **\-------------------/      ---->
-     */
+   b-2 | b-1 | b0 | b1 | b2 | ... | bb |   ---->
+             /\                   |      ---->
+ **\-------------------/      ---->
+ */
     for (x = 0; x < (a->used - b); x++) {
       *bottom++ = *top++;
     }
@@ -8686,6 +8774,7 @@ void mp_rshd(mp_int *a, int b) {
   /* remove excess digits */
   a->used -= b;
 }
+
 #endif
 
 /* $Source$ */
@@ -8715,6 +8804,7 @@ void mp_set(mp_int *a, mp_digit b) {
   a->dp[0] = b & MP_MASK;
   a->used = (a->dp[0] != 0) ? 1 : 0;
 }
+
 #endif
 
 /* $Source$ */
@@ -8763,6 +8853,7 @@ int mp_set_int(mp_int *a, unsigned long b) {
   mp_clamp(a);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -8788,6 +8879,7 @@ int mp_set_int(mp_int *a, unsigned long b) {
 
 /* set a platform dependent unsigned long int */
 MP_SET_XLONG(mp_set_long, unsigned long)
+
 #endif
 
 /* $Source$ */
@@ -8813,6 +8905,7 @@ MP_SET_XLONG(mp_set_long, unsigned long)
 
 /* set a platform dependent unsigned long long int */
 MP_SET_XLONG(mp_set_long_long, unsigned long long)
+
 #endif
 
 /* $Source$ */
@@ -8918,6 +9011,7 @@ int mp_sqr(mp_int *a, mp_int *b) {
   b->sign = MP_ZPOS;
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -8958,6 +9052,7 @@ int mp_sqrmod(mp_int *a, mp_int *b, mp_int *c) {
   mp_clear(&t);
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -9051,6 +9146,7 @@ int mp_sub(mp_int *a, mp_int *b, mp_int *c) {
   }
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -9142,6 +9238,7 @@ int mp_sub_d(mp_int *a, mp_digit b, mp_int *c) {
   mp_clamp(c);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -9259,6 +9356,7 @@ int mp_to_unsigned_bin(mp_int *a, unsigned char *b) {
   mp_clear(&t);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -9427,15 +9525,15 @@ int mp_toom_mul(mp_int *a, mp_int *b, mp_int *c) {
 
   /* now solve the matrix
 
-     0  0  0  0  1
-     1  2  4  8  16
-     1  1  1  1  1
-     16 8  4  2  1
-     1  0  0  0  0
+   0  0  0  0  1
+   1  2  4  8  16
+   1  1  1  1  1
+   16 8  4  2  1
+   1  0  0  0  0
 
-     using 12 subtractions, 4 shifts,
-            2 small divisions and 1 small multiplication
-   */
+   using 12 subtractions, 4 shifts,
+          2 small divisions and 1 small multiplication
+ */
 
   /* r1 - r4 */
   if ((res = mp_sub(&w1, &w4, &w1)) != MP_OKAY) {
@@ -9541,6 +9639,7 @@ ERR:
                  &tmp2, NULL);
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -9655,15 +9754,15 @@ int mp_toom_sqr(mp_int *a, mp_int *b) {
 
   /* now solve the matrix
 
-     0  0  0  0  1
-     1  2  4  8  16
-     1  1  1  1  1
-     16 8  4  2  1
-     1  0  0  0  0
+   0  0  0  0  1
+   1  2  4  8  16
+   1  1  1  1  1
+   16 8  4  2  1
+   1  0  0  0  0
 
-     using 12 subtractions, 4 shifts, 2 small divisions and 1 small
-     multiplication.
-   */
+   using 12 subtractions, 4 shifts, 2 small divisions and 1 small
+   multiplication.
+ */
 
   /* r1 - r4 */
   if ((res = mp_sub(&w1, &w4, &w1)) != MP_OKAY) {
@@ -9768,6 +9867,7 @@ ERR:
   mp_clear_multi(&w0, &w1, &w2, &w3, &w4, &a0, &a1, &a2, &tmp1, NULL);
   return res;
 }
+
 #endif
 
 /* $Source$ */
@@ -9842,6 +9942,7 @@ int mp_toradix(mp_int *a, char *str, int radix) {
   mp_clear(&t);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -9871,6 +9972,7 @@ int mp_unsigned_bin_size(mp_int *a) {
 
   return (size / 8) + (((size & 7) != 0) ? 1 : 0);
 }
+
 #endif
 
 /* $Source$ */
@@ -9930,6 +10032,7 @@ void mp_zero(mp_int *a) {
     *tmp++ = 0;
   }
 }
+
 #endif
 
 /* $Source$ */
@@ -10029,6 +10132,7 @@ void bn_reverse(unsigned char *s, int len) {
     --iy;
   }
 }
+
 #endif
 
 /* $Source$ */
@@ -10137,6 +10241,7 @@ int s_mp_add(mp_int *a, mp_int *b, mp_int *c) {
   mp_clamp(c);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -10387,6 +10492,7 @@ LBL_M:
   }
   return err;
 }
+
 #endif
 
 /* $Source$ */
@@ -10475,6 +10581,7 @@ int s_mp_mul_digs(mp_int *a, mp_int *b, mp_int *c, int digs) {
   mp_clear(&t);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -10554,6 +10661,7 @@ int s_mp_mul_high_digs(mp_int *a, mp_int *b, mp_int *c, int digs) {
   mp_clear(&t);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -10637,6 +10745,7 @@ int s_mp_sqr(mp_int *a, mp_int *b) {
   mp_clear(&t);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -10724,6 +10833,7 @@ int s_mp_sub(mp_int *a, mp_int *b, mp_int *c) {
   mp_clamp(c);
   return MP_OKAY;
 }
+
 #endif
 
 /* $Source$ */
@@ -10803,16 +10913,19 @@ int KARATSUBA_MUL_CUTOFF =
  */
 
 #if (ARGTYPE == 0)
+
 void crypt_argchk(char *v, char *s, int d) {
   fprintf(stderr, "LTC_ARGCHK '%s' failure on line %d of file %s\n", v, d, s);
   (void)raise(SIGABRT);
 }
+
 #endif
 
 #ifndef TOMCRYPT_H_
 #define TOMCRYPT_H_
 #define LTM_DESC
 #define LTC_SHA1
+
 #include <string.h>
 #include <time.h>
 
@@ -11033,7 +11146,6 @@ void crypt_argchk(char *v, char *s, int d) {
 /* which descriptor of AES to use?  */
 /* 0 = rijndael_enc 1 = aes_enc, 2 = rijndael [full], 3 = aes [full] */
 
-
 /* a PRNG that simply reads from an available system source */
 #define LTC_SPRNG
 
@@ -11178,7 +11290,6 @@ extern "C" {
 
 /* max size of either a cipher/hash block or symmetric key [largest of the two]
  */
-#define MAXBLOCKSIZE 128
 
 /* descriptor table size */
 
@@ -11189,8 +11300,8 @@ enum {
   CRYPT_NOP,    /* Not a failure but no operation was performed */
 
   CRYPT_INVALID_KEYSIZE, /* Invalid key size given */
-  CRYPT_INVALID_ROUNDS  /* Invalid number of rounds */
-    , /* Algorithm failed test vectors */
+  CRYPT_INVALID_ROUNDS   /* Invalid number of rounds */
+  ,                      /* Algorithm failed test vectors */
 
   CRYPT_BUFFER_OVERFLOW, /* Not enough space for output */
   CRYPT_INVALID_PACKET,  /* Invalid input packet given */
@@ -11207,8 +11318,8 @@ enum {
   CRYPT_PK_TYPE_MISMATCH, /* Not equivalent types of PK keys */
   CRYPT_PK_NOT_PRIVATE,   /* Requires a private PK key */
 
-  CRYPT_INVALID_ARG   /* Generic invalid argument */
-    , /* File Not Found */
+  CRYPT_INVALID_ARG /* Generic invalid argument */
+  ,                 /* File Not Found */
 
   CRYPT_PK_INVALID_TYPE, /* Invalid type of PK key */
 
@@ -11245,8 +11356,11 @@ enum {
 
 /* you can change how memory allocation works ... */
 LTC_EXPORT void *LTC_CALL XMALLOC(size_t n);
+
 LTC_EXPORT void *LTC_CALL XREALLOC(void *p, size_t n);
+
 LTC_EXPORT void *LTC_CALL XCALLOC(size_t n, size_t s);
+
 LTC_EXPORT void LTC_CALL XFREE(void *p);
 
 LTC_EXPORT void LTC_CALL XQSORT(void *base, size_t nmemb, size_t size,
@@ -11257,10 +11371,13 @@ LTC_EXPORT clock_t LTC_CALL XCLOCK(void);
 
 /* various other functions */
 LTC_EXPORT void *LTC_CALL XMEMCPY(void *dest, const void *src, size_t n);
+
 LTC_EXPORT int LTC_CALL XMEMCMP(const void *s1, const void *s2, size_t n);
+
 LTC_EXPORT void *LTC_CALL XMEMSET(void *s, int c, size_t n);
 
 LTC_EXPORT int LTC_CALL XSTRCMP(const char *s1, const char *s2);
+
 #endif
 
 /* type of argument checking, 0=default, 1=fatal and 2=error+continue, 3=nothing
@@ -11882,7 +11999,6 @@ struct rijndael_key {
 };
 #endif
 
-
 typedef union Symmetric_key {
 #ifdef LTC_RIJNDAEL
   struct rijndael_key rijndael;
@@ -11898,232 +12014,48 @@ extern struct ltc_cipher_descriptor {
   /** internal ID */
   unsigned char ID;
   /** min keysize (octets) */
-  int min_key_length,
+  int
       /** max keysize (octets) */
-      max_key_length,
       /** block size (octets) */
-      block_length,
-      /** default number of rounds */
-      default_rounds;
+      block_length;
 
   /** Setup the cipher
-     @param key         The input symmetric key
-     @param keylen      The length of the input key (octets)
-     @param num_rounds  The requested number of rounds (0==default)
-     @param skey        [out] The destination of the scheduled key
-     @return CRYPT_OK if successful
-   */
+   @param key         The input symmetric key
+   @param keylen      The length of the input key (octets)
+   @param num_rounds  The requested number of rounds (0==default)
+   @param skey        [out] The destination of the scheduled key
+   @return CRYPT_OK if successful
+ */
   int (*setup)(const unsigned char *key, int keylen, int num_rounds,
                symmetric_key *skey);
 
   /** Encrypt a block
-     @param pt      The plaintext
-     @param ct      [out] The ciphertext
-     @param skey    The scheduled key
-     @return CRYPT_OK if successful
-   */
+   @param pt      The plaintext
+   @param ct      [out] The ciphertext
+   @param skey    The scheduled key
+   @return CRYPT_OK if successful
+ */
   int (*ecb_encrypt)(const unsigned char *pt, unsigned char *ct,
                      symmetric_key *skey);
 
   /** Decrypt a block
-     @param ct      The ciphertext
-     @param pt      [out] The plaintext
-     @param skey    The scheduled key
-     @return CRYPT_OK if successful
-   */
-  int (*ecb_decrypt)(const unsigned char *ct, unsigned char *pt,
-                     symmetric_key *skey);
+   @param ct      The ciphertext
+   @param pt      [out] The plaintext
+   @param skey    The scheduled key
+   @return CRYPT_OK if successful
+ */
 
   /** Test the block cipher
-      @return CRYPT_OK if successful, CRYPT_NOP if self-testing has been
-     disabled
-   */
+    @return CRYPT_OK if successful, CRYPT_NOP if self-testing has been
+   disabled
+ */
   int (*test)(void);
 
   /** Terminate the context
-     @param skey    The scheduled key
-   */
+   @param skey    The scheduled key
+ */
   void (*done)(symmetric_key *skey);
 
-  /** Determine a key size
-      @param keysize    [in/out] The size of the key desired and the suggested
-     size
-      @return CRYPT_OK if successful
-   */
-  int (*keysize)(int *keysize);
-
-  /** Accelerators **/
-
-  /** Accelerated ECB encryption
-      @param pt      Plaintext
-      @param ct      Ciphertext
-      @param blocks  The number of complete blocks to process
-      @param skey    The scheduled key context
-      @return CRYPT_OK if successful
-   */
-  int (*accel_ecb_encrypt)(const unsigned char *pt, unsigned char *ct,
-                           unsigned long blocks, symmetric_key *skey);
-
-  /** Accelerated ECB decryption
-      @param pt      Plaintext
-      @param ct      Ciphertext
-      @param blocks  The number of complete blocks to process
-      @param skey    The scheduled key context
-      @return CRYPT_OK if successful
-   */
-  int (*accel_ecb_decrypt)(const unsigned char *ct, unsigned char *pt,
-                           unsigned long blocks, symmetric_key *skey);
-
-  /** Accelerated CBC encryption
-      @param pt      Plaintext
-      @param ct      Ciphertext
-      @param blocks  The number of complete blocks to process
-      @param IV      The initial value (input/output)
-      @param skey    The scheduled key context
-      @return CRYPT_OK if successful
-   */
-  int (*accel_cbc_encrypt)(const unsigned char *pt, unsigned char *ct,
-                           unsigned long blocks, unsigned char *IV,
-                           symmetric_key *skey);
-
-  /** Accelerated CBC decryption
-      @param pt      Plaintext
-      @param ct      Ciphertext
-      @param blocks  The number of complete blocks to process
-      @param IV      The initial value (input/output)
-      @param skey    The scheduled key context
-      @return CRYPT_OK if successful
-   */
-  int (*accel_cbc_decrypt)(const unsigned char *ct, unsigned char *pt,
-                           unsigned long blocks, unsigned char *IV,
-                           symmetric_key *skey);
-
-  /** Accelerated CTR encryption
-      @param pt      Plaintext
-      @param ct      Ciphertext
-      @param blocks  The number of complete blocks to process
-      @param IV      The initial value (input/output)
-      @param mode    little or big endian counter (mode=0 or mode=1)
-      @param skey    The scheduled key context
-      @return CRYPT_OK if successful
-   */
-  int (*accel_ctr_encrypt)(const unsigned char *pt, unsigned char *ct,
-                           unsigned long blocks, unsigned char *IV, int mode,
-                           symmetric_key *skey);
-
-  /** Accelerated LRW
-      @param pt      Plaintext
-      @param ct      Ciphertext
-      @param blocks  The number of complete blocks to process
-      @param IV      The initial value (input/output)
-      @param tweak   The LRW tweak
-      @param skey    The scheduled key context
-      @return CRYPT_OK if successful
-   */
-  int (*accel_lrw_encrypt)(const unsigned char *pt, unsigned char *ct,
-                           unsigned long blocks, unsigned char *IV,
-                           const unsigned char *tweak, symmetric_key *skey);
-
-  /** Accelerated LRW
-      @param ct      Ciphertext
-      @param pt      Plaintext
-      @param blocks  The number of complete blocks to process
-      @param IV      The initial value (input/output)
-      @param tweak   The LRW tweak
-      @param skey    The scheduled key context
-      @return CRYPT_OK if successful
-   */
-  int (*accel_lrw_decrypt)(const unsigned char *ct, unsigned char *pt,
-                           unsigned long blocks, unsigned char *IV,
-                           const unsigned char *tweak, symmetric_key *skey);
-
-  /** Accelerated CCM packet (one-shot)
-      @param key        The secret key to use
-      @param keylen     The length of the secret key (octets)
-      @param uskey      A previously scheduled key [optional can be NULL]
-      @param nonce      The session nonce [use once]
-      @param noncelen   The length of the nonce
-      @param header     The header for the session
-      @param headerlen  The length of the header (octets)
-      @param pt         [out] The plaintext
-      @param ptlen      The length of the plaintext (octets)
-      @param ct         [out] The ciphertext
-      @param tag        [out] The destination tag
-      @param taglen     [in/out] The max size and resulting size of the
-     authentication tag
-      @param direction  Encrypt or Decrypt direction (0 or 1)
-      @return CRYPT_OK if successful
-   */
-  int (*accel_ccm_memory)(const unsigned char *key, unsigned long keylen,
-                          symmetric_key *uskey, const unsigned char *nonce,
-                          unsigned long noncelen, const unsigned char *header,
-                          unsigned long headerlen, unsigned char *pt,
-                          unsigned long ptlen, unsigned char *ct,
-                          unsigned char *tag, unsigned long *taglen,
-                          int direction);
-
-  /** Accelerated GCM packet (one shot)
-      @param key        The secret key
-      @param keylen     The length of the secret key
-      @param IV         The initial vector
-      @param IVlen      The length of the initial vector
-      @param adata      The additional authentication data (header)
-      @param adatalen   The length of the adata
-      @param pt         The plaintext
-      @param ptlen      The length of the plaintext (ciphertext length is the
-     same)
-      @param ct         The ciphertext
-      @param tag        [out] The MAC tag
-      @param taglen     [in/out] The MAC tag length
-      @param direction  Encrypt or Decrypt mode (GCM_ENCRYPT or GCM_DECRYPT)
-      @return CRYPT_OK on success
-   */
-  int (*accel_gcm_memory)(const unsigned char *key, unsigned long keylen,
-                          const unsigned char *IV, unsigned long IVlen,
-                          const unsigned char *adata, unsigned long adatalen,
-                          unsigned char *pt, unsigned long ptlen,
-                          unsigned char *ct, unsigned char *tag,
-                          unsigned long *taglen, int direction);
-
-  /** Accelerated one shot LTC_OMAC
-      @param key            The secret key
-      @param keylen         The key length (octets)
-      @param in             The message
-      @param inlen          Length of message (octets)
-      @param out            [out] Destination for tag
-      @param outlen         [in/out] Initial and final size of out
-      @return CRYPT_OK on success
-   */
-  int (*omac_memory)(const unsigned char *key, unsigned long keylen,
-                     const unsigned char *in, unsigned long inlen,
-                     unsigned char *out, unsigned long *outlen);
-
-  /** Accelerated one shot XCBC
-      @param key            The secret key
-      @param keylen         The key length (octets)
-      @param in             The message
-      @param inlen          Length of message (octets)
-      @param out            [out] Destination for tag
-      @param outlen         [in/out] Initial and final size of out
-      @return CRYPT_OK on success
-   */
-  int (*xcbc_memory)(const unsigned char *key, unsigned long keylen,
-                     const unsigned char *in, unsigned long inlen,
-                     unsigned char *out, unsigned long *outlen);
-
-  /** Accelerated one shot F9
-      @param key            The secret key
-      @param keylen         The key length (octets)
-      @param in             The message
-      @param inlen          Length of message (octets)
-      @param out            [out] Destination for tag
-      @param outlen         [in/out] Initial and final size of out
-      @return CRYPT_OK on success
-      @remark Requires manual padding
-   */
-  int (*f9_memory)(const unsigned char *key, unsigned long keylen,
-                   const unsigned char *in, unsigned long inlen,
-                   unsigned char *out, unsigned long *outlen);
 } cipher_descriptor[];
 
 #ifdef LTC_RIJNDAEL
@@ -12132,25 +12064,32 @@ extern struct ltc_cipher_descriptor {
 
 int rijndael_setup(const unsigned char *key, int keylen, int num_rounds,
                    symmetric_key *skey);
+
 int rijndael_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
                          symmetric_key *skey);
+
 int rijndael_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
                          symmetric_key *skey);
+
 int rijndael_test(void);
+
 void rijndael_done(symmetric_key *skey);
+
 int rijndael_keysize(int *keysize);
+
 int rijndael_enc_setup(const unsigned char *key, int keylen, int num_rounds,
                        symmetric_key *skey);
+
 int rijndael_enc_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
                              symmetric_key *skey);
+
 void rijndael_enc_done(symmetric_key *skey);
+
 int rijndael_enc_keysize(int *keysize);
 
-extern const struct ltc_cipher_descriptor rijndael_desc, aes_desc;
+extern const struct ltc_cipher_descriptor aes_desc;
 extern const struct ltc_cipher_descriptor rijndael_enc_desc, aes_enc_desc;
 #endif
-
-
 
 int find_cipher(const char *name);
 
@@ -12219,8 +12158,6 @@ typedef union Hash_state {
 extern struct ltc_hash_descriptor {
   /** name of hash */
   char *name;
-  /** internal ID */
-  unsigned char ID;
   /** Size of digest in octets */
   unsigned long hashsize;
   /** Input block size in octets */
@@ -12231,44 +12168,42 @@ extern struct ltc_hash_descriptor {
   unsigned long OIDlen;
 
   /** Init a hash state
-     @param hash   The hash to initialize
-     @return CRYPT_OK if successful
-   */
+   @param hash   The hash to initialize
+   @return CRYPT_OK if successful
+ */
   int (*init)(hash_state *hash);
 
   /** Process a block of data
-     @param hash   The hash state
-     @param in     The data to hash
-     @param inlen  The length of the data (octets)
-     @return CRYPT_OK if successful
-   */
+   @param hash   The hash state
+   @param in     The data to hash
+   @param inlen  The length of the data (octets)
+   @return CRYPT_OK if successful
+ */
   int (*process)(hash_state *hash, const unsigned char *in,
                  unsigned long inlen);
 
   /** Produce the digest and store it
-     @param hash   The hash state
-     @param out    [out] The destination of the digest
-     @return CRYPT_OK if successful
-   */
+   @param hash   The hash state
+   @param out    [out] The destination of the digest
+   @return CRYPT_OK if successful
+ */
   int (*done)(hash_state *hash, unsigned char *out);
 
   /** Self-test
-     @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
-   */
+   @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
+ */
   int (*test)(void);
-
-  /* accelerated hmac callback: if you need to-do multiple packets just use the
-   * generic hmac_memory and provide a hash callback */
-  int (*hmac_block)(const unsigned char *key, unsigned long keylen,
-                    const unsigned char *in, unsigned long inlen,
-                    unsigned char *out, unsigned long *outlen);
 } hash_descriptor[];
 
 #ifdef LTC_SHA512
+
 int sha512_init(hash_state *md);
+
 int sha512_process(hash_state *md, const unsigned char *in,
                    unsigned long inlen);
+
 int sha512_done(hash_state *md, unsigned char *hash);
+
 int sha512_test(void);
 
 extern const struct ltc_hash_descriptor sha512_desc;
@@ -12278,20 +12213,27 @@ extern const struct ltc_hash_descriptor sha512_desc;
 #ifndef LTC_SHA512
 #error LTC_SHA512 is required for LTC_SHA384
 #endif
+
 int sha384_init(hash_state *md);
 
 #define sha384_process sha512_process
+
 int sha384_done(hash_state *md, unsigned char *hash);
+
 int sha384_test(void);
 
 extern const struct ltc_hash_descriptor sha384_desc;
 #endif
 
 #ifdef LTC_SHA256
+
 int sha256_init(hash_state *md);
+
 int sha256_process(hash_state *md, const unsigned char *in,
                    unsigned long inlen);
+
 int sha256_done(hash_state *md, unsigned char *hash);
+
 int sha256_test(void);
 
 extern const struct ltc_hash_descriptor sha256_desc;
@@ -12299,18 +12241,26 @@ extern const struct ltc_hash_descriptor sha256_desc;
 #endif
 
 #ifdef LTC_SHA1
+
 int sha1_init(hash_state *md);
+
 int sha1_process(hash_state *md, const unsigned char *in, unsigned long inlen);
+
 int sha1_done(hash_state *md, unsigned char *hash);
+
 int sha1_test(void);
 
 extern const struct ltc_hash_descriptor sha1_desc;
 #endif
 
 #ifdef LTC_MD5
+
 int md5_init(hash_state *md);
+
 int md5_process(hash_state *md, const unsigned char *in, unsigned long inlen);
+
 int md5_done(hash_state *md, unsigned char *hash);
+
 int md5_test(void);
 
 extern const struct ltc_hash_descriptor md5_desc;
@@ -12372,25 +12322,24 @@ int hash_memory(int hash, const unsigned char *in, unsigned long inlen,
 typedef struct Hmac_state {
   hash_state md;
   int hash;
-  hash_state hashstate;
   unsigned char *key;
 } hmac_state;
 
 int hmac_init(hmac_state *hmac, int hash, const unsigned char *key,
               unsigned long keylen);
+
 int hmac_process(hmac_state *hmac, const unsigned char *in,
                  unsigned long inlen);
+
 int hmac_done(hmac_state *hmac, unsigned char *out, unsigned long *outlen);
 
 #endif
 
-
-
-
-
 #if defined(LRW_MODE) || defined(LTC_GCM_MODE)
+
 void gcm_gf_mult(const unsigned char *a, const unsigned char *b,
                  unsigned char *c);
+
 #endif
 
 /* table shared between GCM and LRW */
@@ -12457,16 +12406,6 @@ int gcm_done(gcm_state *gcm, unsigned char *tag, unsigned long *taglen);
 
 #ifdef LTC_XCBC
 
-/* add this to "keylen" to xcbc_init to use a pure three-key XCBC MAC */
-
-typedef struct {
-  unsigned char K[3][MAXBLOCKSIZE], IV[MAXBLOCKSIZE];
-
-  symmetric_key key;
-
-  int cipher, buflen, blocksize;
-} xcbc_state;
-
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_mac.h,v $ */
@@ -12474,9 +12413,6 @@ typedef struct {
 /* $Date: 2007/05/12 14:37:41 $ */
 
 /* ---- PRNG Stuff ---- */
-
-
-
 
 typedef union Prng_state {
   char dummy[1];
@@ -12486,8 +12422,6 @@ typedef union Prng_state {
 extern struct ltc_prng_descriptor {
   /** Name of the PRNG */
   char *name;
-  /** size in bytes of exported state */
-  int export_size;
 
   /** Start a PRNG state
       @param prng   [out] The state to initialize
@@ -12496,80 +12430,62 @@ extern struct ltc_prng_descriptor {
   int (*start)(prng_state *prng);
 
   /** Add entropy to the PRNG
-      @param in         The entropy
-      @param inlen      Length of the entropy (octets)\
-      @param prng       The PRNG state
-      @return CRYPT_OK if successful
-   */
+    @param in         The entropy
+    @param inlen      Length of the entropy (octets)\
+    @param prng       The PRNG state
+    @return CRYPT_OK if successful
+ */
   int (*add_entropy)(const unsigned char *in, unsigned long inlen,
                      prng_state *prng);
 
   /** Ready a PRNG state to read from
-      @param prng       The PRNG state to ready
-      @return CRYPT_OK if successful
-   */
+    @param prng       The PRNG state to ready
+    @return CRYPT_OK if successful
+ */
   int (*ready)(prng_state *prng);
 
   /** Read from the PRNG
-      @param out     [out] Where to store the data
-      @param outlen  Length of data desired (octets)
-      @param prng    The PRNG state to read from
-      @return Number of octets read
-   */
+    @param out     [out] Where to store the data
+    @param outlen  Length of data desired (octets)
+    @param prng    The PRNG state to read from
+    @return Number of octets read
+ */
   unsigned long (*read)(unsigned char *out, unsigned long outlen,
                         prng_state *prng);
 
   /** Terminate a PRNG state
-      @param prng   The PRNG state to terminate
-      @return CRYPT_OK if successful
-   */
+    @param prng   The PRNG state to terminate
+    @return CRYPT_OK if successful
+ */
   int (*done)(prng_state *prng);
-
-  /** Export a PRNG state
-      @param out     [out] The destination for the state
-      @param outlen  [in/out] The max size and resulting size of the PRNG state
-      @param prng    The PRNG to export
-      @return CRYPT_OK if successful
-   */
-  int (*pexport)(unsigned char *out, unsigned long *outlen, prng_state *prng);
-
-  /** Import a PRNG state
-      @param in      The data to import
-      @param inlen   The length of the data to import (octets)
-      @param prng    The PRNG to initialize/import
-      @return CRYPT_OK if successful
-   */
-  int (*pimport)(const unsigned char *in, unsigned long inlen,
-                 prng_state *prng);
-
-  /** Self-test the PRNG
-      @return CRYPT_OK if successful, CRYPT_NOP if self-testing has been
-     disabled
-   */
-  int (*test)(void);
 } prng_descriptor[];
 
-
-
-
 #ifdef LTC_SPRNG
+
 int sprng_start(prng_state *prng);
+
 int sprng_add_entropy(const unsigned char *in, unsigned long inlen,
                       prng_state *prng);
+
 int sprng_ready(prng_state *prng);
+
 unsigned long sprng_read(unsigned char *out, unsigned long outlen,
                          prng_state *prng);
+
 int sprng_done(prng_state *prng);
+
 int sprng_export(unsigned char *out, unsigned long *outlen, prng_state *prng);
+
 int sprng_import(const unsigned char *in, unsigned long inlen,
                  prng_state *prng);
+
 int sprng_test(void);
 
 extern const struct ltc_prng_descriptor sprng_desc;
 #endif
 
-
 int find_prng(const char *name);
+
 int register_prng(const struct ltc_prng_descriptor *prng);
 
 int prng_is_valid(int idx);
@@ -12658,6 +12574,7 @@ int rsa_verify_hash_ex(const unsigned char *sig, unsigned long siglen,
                        int *stat, rsa_key *key);
 
 int rsa_import(const unsigned char *in, unsigned long inlen, rsa_key *key);
+
 #endif
 
 /* ---- Katja ---- */
@@ -12786,10 +12703,8 @@ extern const ltc_ecc_set_type ltc_ecc_sets[];
 
 int ecc_make_key_ex(prng_state *prng, int wprng, ecc_key *key,
                     const ltc_ecc_set_type *dp);
-void ecc_free(ecc_key *key);
 
-int ecc_import_ex(const unsigned char *in, unsigned long inlen, ecc_key *key,
-                  const ltc_ecc_set_type *dp);
+void ecc_free(ecc_key *key);
 
 int ecc_ansi_x963_export(ecc_key *key, unsigned char *out,
                          unsigned long *outlen);
@@ -12810,11 +12725,14 @@ int ecc_verify_hash(const unsigned char *sig, unsigned long siglen,
 
 /* low level functions */
 ecc_point *ltc_ecc_new_point(void);
+
 void ltc_ecc_del_point(ecc_point *p);
+
 int ltc_ecc_is_valid_idx(int n);
 
 /* point ops (mp == montgomery digit) */
 #if !defined(LTC_MECC_ACCEL) || defined(LTM_LTC_DESC) || defined(GMP_LTC_DESC)
+
 /* R = 2P */
 int ltc_ecc_projective_dbl_point(ecc_point *P, ecc_point *R, void *modulus,
                                  void *mp);
@@ -12822,6 +12740,7 @@ int ltc_ecc_projective_dbl_point(ecc_point *P, ecc_point *R, void *modulus,
 /* R = P + Q */
 int ltc_ecc_projective_add_point(ecc_point *P, ecc_point *Q, ecc_point *R,
                                  void *modulus, void *mp);
+
 #endif
 
 #if defined(LTC_MECC_FP)
@@ -12844,6 +12763,7 @@ void ltc_ecc_fp_tablelock(int lock);
 int ltc_ecc_mulmod(void *k, ecc_point *G, ecc_point *R, void *modulus, int map);
 
 #ifdef LTC_ECC_SHAMIR
+
 /* kA*A + kB*B = C */
 int ltc_ecc_mul2add(ecc_point *A, void *kA, ecc_point *B, void *kB,
                     ecc_point *C, void *modulus);
@@ -12857,8 +12777,8 @@ int ltc_ecc_fp_mul2add(ecc_point *A, void *kA, ecc_point *B, void *kB,
 
 /* map P to affine from projective */
 int ltc_ecc_map(ecc_point *P, void *modulus, void *mp);
-#endif
 
+#endif
 
 #ifdef LTC_DER
 /* DER handling */
@@ -12937,6 +12857,7 @@ int der_encode_setof(ltc_asn1_list *list, unsigned long inlen,
 
 /* VA list handy helpers with triplets of <type, size, data> */
 int der_encode_sequence_multi(unsigned char *out, unsigned long *outlen, ...);
+
 int der_decode_sequence_multi(const unsigned char *in, unsigned long inlen,
                               ...);
 
@@ -12948,64 +12869,83 @@ void der_sequence_free(ltc_asn1_list *in);
 
 /* BOOLEAN */
 int der_length_boolean(unsigned long *outlen);
+
 int der_encode_boolean(int in, unsigned char *out, unsigned long *outlen);
+
 int der_decode_boolean(const unsigned char *in, unsigned long inlen, int *out);
 
 /* INTEGER */
 int der_encode_integer(void *num, unsigned char *out, unsigned long *outlen);
+
 int der_decode_integer(const unsigned char *in, unsigned long inlen, void *num);
+
 int der_length_integer(void *num, unsigned long *len);
 
 /* INTEGER -- handy for 0..2^32-1 values */
 int der_decode_short_integer(const unsigned char *in, unsigned long inlen,
                              unsigned long *num);
+
 int der_encode_short_integer(unsigned long num, unsigned char *out,
                              unsigned long *outlen);
+
 int der_length_short_integer(unsigned long num, unsigned long *outlen);
 
 /* BIT STRING */
 int der_encode_bit_string(const unsigned char *in, unsigned long inlen,
                           unsigned char *out, unsigned long *outlen);
+
 int der_decode_bit_string(const unsigned char *in, unsigned long inlen,
                           unsigned char *out, unsigned long *outlen);
+
 int der_length_bit_string(unsigned long nbits, unsigned long *outlen);
 
 /* OCTET STRING */
 int der_encode_octet_string(const unsigned char *in, unsigned long inlen,
                             unsigned char *out, unsigned long *outlen);
+
 int der_decode_octet_string(const unsigned char *in, unsigned long inlen,
                             unsigned char *out, unsigned long *outlen);
+
 int der_length_octet_string(unsigned long noctets, unsigned long *outlen);
 
 /* OBJECT IDENTIFIER */
 int der_encode_object_identifier(unsigned long *words, unsigned long nwords,
                                  unsigned char *out, unsigned long *outlen);
+
 int der_decode_object_identifier(const unsigned char *in, unsigned long inlen,
                                  unsigned long *words, unsigned long *outlen);
+
 int der_length_object_identifier(unsigned long *words, unsigned long nwords,
                                  unsigned long *outlen);
+
 unsigned long der_object_identifier_bits(unsigned long x);
 
 /* IA5 STRING */
 int der_encode_ia5_string(const unsigned char *in, unsigned long inlen,
                           unsigned char *out, unsigned long *outlen);
+
 int der_decode_ia5_string(const unsigned char *in, unsigned long inlen,
                           unsigned char *out, unsigned long *outlen);
+
 int der_length_ia5_string(const unsigned char *octets, unsigned long noctets,
                           unsigned long *outlen);
 
 int der_ia5_char_encode(int c);
+
 int der_ia5_value_decode(int v);
 
 /* Printable STRING */
 int der_encode_printable_string(const unsigned char *in, unsigned long inlen,
                                 unsigned char *out, unsigned long *outlen);
+
 int der_decode_printable_string(const unsigned char *in, unsigned long inlen,
                                 unsigned char *out, unsigned long *outlen);
+
 int der_length_printable_string(const unsigned char *octets,
                                 unsigned long noctets, unsigned long *outlen);
 
 int der_printable_char_encode(int c);
+
 int der_printable_value_decode(int v);
 
 /* UTF-8 */
@@ -13022,7 +12962,9 @@ int der_encode_utf8_string(const wchar_t *in, unsigned long inlen,
 
 int der_decode_utf8_string(const unsigned char *in, unsigned long inlen,
                            wchar_t *out, unsigned long *outlen);
+
 unsigned long der_utf8_charsize(const wchar_t c);
+
 int der_length_utf8_string(const wchar_t *in, unsigned long noctets,
                            unsigned long *outlen);
 
@@ -13050,6 +12992,7 @@ int der_decode_utctime(const unsigned char *in, unsigned long *inlen,
                        ltc_utctime *out);
 
 int der_length_utctime(ltc_utctime *utctime, unsigned long *outlen);
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_pk.h,v $ */
@@ -13084,398 +13027,398 @@ typedef struct {
   /* ---- init/deinit functions ---- */
 
   /** initialize a bignum
-     @param   a     The number to initialize
-     @return  CRYPT_OK on success
-   */
+   @param   a     The number to initialize
+   @return  CRYPT_OK on success
+ */
   int (*init)(void **a);
 
   /** init copy
-     @param  dst    The number to initialize and write to
-     @param  src    The number to copy from
-     @return CRYPT_OK on success
-   */
+   @param  dst    The number to initialize and write to
+   @param  src    The number to copy from
+   @return CRYPT_OK on success
+ */
   int (*init_copy)(void **dst, void *src);
 
   /** deinit
-     @param   a    The number to free
-     @return CRYPT_OK on success
-   */
+   @param   a    The number to free
+   @return CRYPT_OK on success
+ */
   void (*deinit)(void *a);
 
   /* ---- data movement ---- */
 
   /** negate
-     @param   src   The number to negate
-     @param   dst   The destination
-     @return CRYPT_OK on success
-   */
+   @param   src   The number to negate
+   @param   dst   The destination
+   @return CRYPT_OK on success
+ */
   int (*neg)(void *src, void *dst);
 
   /** copy
-     @param   src   The number to copy from
-     @param   dst   The number to write to
-     @return CRYPT_OK on success
-   */
+   @param   src   The number to copy from
+   @param   dst   The number to write to
+   @return CRYPT_OK on success
+ */
   int (*copy)(void *src, void *dst);
 
   /* ---- trivial low level functions ---- */
 
   /** set small constant
-     @param a    Number to write to
-     @param n    Source upto bits_per_digit (actually meant for very small
-     constants)
-     @return CRYPT_OK on succcess
-   */
+   @param a    Number to write to
+   @param n    Source upto bits_per_digit (actually meant for very small
+   constants)
+   @return CRYPT_OK on succcess
+ */
   int (*set_int)(void *a, unsigned long n);
 
   /** get small constant
-     @param a    Number to read, only fetches upto bits_per_digit from the
-     number
-     @return  The lower bits_per_digit of the integer (unsigned)
-   */
+   @param a    Number to read, only fetches upto bits_per_digit from the
+   number
+   @return  The lower bits_per_digit of the integer (unsigned)
+ */
   unsigned long (*get_int)(void *a);
 
   /** get digit n
-     @param a  The number to read from
-     @param n  The number of the digit to fetch
-     @return  The bits_per_digit  sized n'th digit of a
-   */
+   @param a  The number to read from
+   @param n  The number of the digit to fetch
+   @return  The bits_per_digit  sized n'th digit of a
+ */
   unsigned long (*get_digit)(void *a, int n);
 
   /** Get the number of digits that represent the number
-     @param a   The number to count
-     @return The number of digits used to represent the number
-   */
+   @param a   The number to count
+   @return The number of digits used to represent the number
+ */
   int (*get_digit_count)(void *a);
 
   /** compare two integers
-     @param a   The left side integer
-     @param b   The right side integer
-     @return LTC_MP_LT if a < b, LTC_MP_GT if a > b and LTC_MP_EQ otherwise.
-     (signed comparison)
-   */
+   @param a   The left side integer
+   @param b   The right side integer
+   @return LTC_MP_LT if a < b, LTC_MP_GT if a > b and LTC_MP_EQ otherwise.
+   (signed comparison)
+ */
   int (*compare)(void *a, void *b);
 
   /** compare against int
-     @param a   The left side integer
-     @param b   The right side integer (upto bits_per_digit)
-     @return LTC_MP_LT if a < b, LTC_MP_GT if a > b and LTC_MP_EQ otherwise.
-     (signed comparison)
-   */
+   @param a   The left side integer
+   @param b   The right side integer (upto bits_per_digit)
+   @return LTC_MP_LT if a < b, LTC_MP_GT if a > b and LTC_MP_EQ otherwise.
+   (signed comparison)
+ */
   int (*compare_d)(void *a, unsigned long n);
 
   /** Count the number of bits used to represent the integer
-     @param a   The integer to count
-     @return The number of bits required to represent the integer
-   */
+   @param a   The integer to count
+   @return The number of bits required to represent the integer
+ */
   int (*count_bits)(void *a);
 
   /** Count the number of LSB bits which are zero
-     @param a   The integer to count
-     @return The number of contiguous zero LSB bits
-   */
+   @param a   The integer to count
+   @return The number of contiguous zero LSB bits
+ */
   int (*count_lsb_bits)(void *a);
 
   /** Compute a power of two
-     @param a  The integer to store the power in
-     @param n  The power of two you want to store (a = 2^n)
-     @return CRYPT_OK on success
-   */
+   @param a  The integer to store the power in
+   @param n  The power of two you want to store (a = 2^n)
+   @return CRYPT_OK on success
+ */
   int (*twoexpt)(void *a, int n);
 
   /* ---- radix conversions ---- */
 
   /** read ascii string
-     @param a     The integer to store into
-     @param str   The string to read
-     @param radix The radix the integer has been represented in (2-64)
-     @return CRYPT_OK on success
-   */
+   @param a     The integer to store into
+   @param str   The string to read
+   @param radix The radix the integer has been represented in (2-64)
+   @return CRYPT_OK on success
+ */
   int (*read_radix)(void *a, const char *str, int radix);
 
   /** write number to string
-     @param a     The integer to store
-     @param str   The destination for the string
-     @param radix The radix the integer is to be represented in (2-64)
-     @return CRYPT_OK on success
-   */
+   @param a     The integer to store
+   @param str   The destination for the string
+   @param radix The radix the integer is to be represented in (2-64)
+   @return CRYPT_OK on success
+ */
   int (*write_radix)(void *a, char *str, int radix);
 
   /** get size as unsigned char string
-     @param a     The integer to get the size (when stored in array of octets)
-     @return The length of the integer
-   */
+   @param a     The integer to get the size (when stored in array of octets)
+   @return The length of the integer
+ */
   unsigned long (*unsigned_size)(void *a);
 
   /** store an integer as an array of octets
-     @param src   The integer to store
-     @param dst   The buffer to store the integer in
-     @return CRYPT_OK on success
-   */
+   @param src   The integer to store
+   @param dst   The buffer to store the integer in
+   @return CRYPT_OK on success
+ */
   int (*unsigned_write)(void *src, unsigned char *dst);
 
   /** read an array of octets and store as integer
-     @param dst   The integer to load
-     @param src   The array of octets
-     @param len   The number of octets
-     @return CRYPT_OK on success
-   */
+   @param dst   The integer to load
+   @param src   The array of octets
+   @param len   The number of octets
+   @return CRYPT_OK on success
+ */
   int (*unsigned_read)(void *dst, unsigned char *src, unsigned long len);
 
   /* ---- basic math ---- */
 
   /** add two integers
-     @param a   The first source integer
-     @param b   The second source integer
-     @param c   The destination of "a + b"
-     @return CRYPT_OK on success
-   */
+   @param a   The first source integer
+   @param b   The second source integer
+   @param c   The destination of "a + b"
+   @return CRYPT_OK on success
+ */
   int (*add)(void *a, void *b, void *c);
 
   /** add two integers
-     @param a   The first source integer
-     @param b   The second source integer (single digit of upto bits_per_digit
-     in length)
-     @param c   The destination of "a + b"
-     @return CRYPT_OK on success
-   */
+   @param a   The first source integer
+   @param b   The second source integer (single digit of upto bits_per_digit
+   in length)
+   @param c   The destination of "a + b"
+   @return CRYPT_OK on success
+ */
   int (*addi)(void *a, unsigned long b, void *c);
 
   /** subtract two integers
-     @param a   The first source integer
-     @param b   The second source integer
-     @param c   The destination of "a - b"
-     @return CRYPT_OK on success
-   */
+   @param a   The first source integer
+   @param b   The second source integer
+   @param c   The destination of "a - b"
+   @return CRYPT_OK on success
+ */
   int (*sub)(void *a, void *b, void *c);
 
   /** subtract two integers
-     @param a   The first source integer
-     @param b   The second source integer (single digit of upto bits_per_digit
-     in length)
-     @param c   The destination of "a - b"
-     @return CRYPT_OK on success
-   */
+   @param a   The first source integer
+   @param b   The second source integer (single digit of upto bits_per_digit
+   in length)
+   @param c   The destination of "a - b"
+   @return CRYPT_OK on success
+ */
   int (*subi)(void *a, unsigned long b, void *c);
 
   /** multiply two integers
-     @param a   The first source integer
-     @param b   The second source integer (single digit of upto bits_per_digit
-     in length)
-     @param c   The destination of "a * b"
-     @return CRYPT_OK on success
-   */
+   @param a   The first source integer
+   @param b   The second source integer (single digit of upto bits_per_digit
+   in length)
+   @param c   The destination of "a * b"
+   @return CRYPT_OK on success
+ */
   int (*mul)(void *a, void *b, void *c);
 
   /** multiply two integers
-     @param a   The first source integer
-     @param b   The second source integer (single digit of upto bits_per_digit
-     in length)
-     @param c   The destination of "a * b"
-     @return CRYPT_OK on success
-   */
+   @param a   The first source integer
+   @param b   The second source integer (single digit of upto bits_per_digit
+   in length)
+   @param c   The destination of "a * b"
+   @return CRYPT_OK on success
+ */
   int (*muli)(void *a, unsigned long b, void *c);
 
   /** Square an integer
-     @param a    The integer to square
-     @param b    The destination
-     @return CRYPT_OK on success
-   */
+   @param a    The integer to square
+   @param b    The destination
+   @return CRYPT_OK on success
+ */
   int (*sqr)(void *a, void *b);
 
   /** Divide an integer
-     @param a    The dividend
-     @param b    The divisor
-     @param c    The quotient (can be NULL to signify don't care)
-     @param d    The remainder (can be NULL to signify don't care)
-     @return CRYPT_OK on success
-   */
+   @param a    The dividend
+   @param b    The divisor
+   @param c    The quotient (can be NULL to signify don't care)
+   @param d    The remainder (can be NULL to signify don't care)
+   @return CRYPT_OK on success
+ */
   int (*mpdiv)(void *a, void *b, void *c, void *d);
 
   /** divide by two
-     @param  a   The integer to divide (shift right)
-     @param  b   The destination
-     @return CRYPT_OK on success
-   */
+   @param  a   The integer to divide (shift right)
+   @param  b   The destination
+   @return CRYPT_OK on success
+ */
   int (*div_2)(void *a, void *b);
 
   /** Get remainder (small value)
-     @param  a    The integer to reduce
-     @param  b    The modulus (upto bits_per_digit in length)
-     @param  c    The destination for the residue
-     @return CRYPT_OK on success
-   */
+   @param  a    The integer to reduce
+   @param  b    The modulus (upto bits_per_digit in length)
+   @param  c    The destination for the residue
+   @return CRYPT_OK on success
+ */
   int (*modi)(void *a, unsigned long b, unsigned long *c);
 
   /** gcd
-     @param  a     The first integer
-     @param  b     The second integer
-     @param  c     The destination for (a, b)
-     @return CRYPT_OK on success
-   */
+   @param  a     The first integer
+   @param  b     The second integer
+   @param  c     The destination for (a, b)
+   @return CRYPT_OK on success
+ */
   int (*gcd)(void *a, void *b, void *c);
 
   /** lcm
-     @param  a     The first integer
-     @param  b     The second integer
-     @param  c     The destination for [a, b]
-     @return CRYPT_OK on success
-   */
+   @param  a     The first integer
+   @param  b     The second integer
+   @param  c     The destination for [a, b]
+   @return CRYPT_OK on success
+ */
   int (*lcm)(void *a, void *b, void *c);
 
   /** Modular multiplication
-     @param  a     The first source
-     @param  b     The second source
-     @param  c     The modulus
-     @param  d     The destination (a*b mod c)
-     @return CRYPT_OK on success
-   */
+   @param  a     The first source
+   @param  b     The second source
+   @param  c     The modulus
+   @param  d     The destination (a*b mod c)
+   @return CRYPT_OK on success
+ */
   int (*mulmod)(void *a, void *b, void *c, void *d);
 
   /** Modular squaring
-     @param  a     The first source
-     @param  b     The modulus
-     @param  c     The destination (a*a mod b)
-     @return CRYPT_OK on success
-   */
+   @param  a     The first source
+   @param  b     The modulus
+   @param  c     The destination (a*a mod b)
+   @return CRYPT_OK on success
+ */
   int (*sqrmod)(void *a, void *b, void *c);
 
   /** Modular inversion
-     @param  a     The value to invert
-     @param  b     The modulus
-     @param  c     The destination (1/a mod b)
-     @return CRYPT_OK on success
-   */
+   @param  a     The value to invert
+   @param  b     The modulus
+   @param  c     The destination (1/a mod b)
+   @return CRYPT_OK on success
+ */
   int (*invmod)(void *, void *, void *);
 
   /* ---- reduction ---- */
 
   /** setup montgomery
-      @param a  The modulus
-      @param b  The destination for the reduction digit
-      @return CRYPT_OK on success
-   */
+    @param a  The modulus
+    @param b  The destination for the reduction digit
+    @return CRYPT_OK on success
+ */
   int (*montgomery_setup)(void *a, void **b);
 
   /** get normalization value
-      @param a   The destination for the normalization value
-      @param b   The modulus
-      @return  CRYPT_OK on success
-   */
+    @param a   The destination for the normalization value
+    @param b   The modulus
+    @return  CRYPT_OK on success
+ */
   int (*montgomery_normalization)(void *a, void *b);
 
   /** reduce a number
-      @param a   The number [and dest] to reduce
-      @param b   The modulus
-      @param c   The value "b" from montgomery_setup()
-      @return CRYPT_OK on success
-   */
+    @param a   The number [and dest] to reduce
+    @param b   The modulus
+    @param c   The value "b" from montgomery_setup()
+    @return CRYPT_OK on success
+ */
   int (*montgomery_reduce)(void *a, void *b, void *c);
 
   /** clean up  (frees memory)
-      @param a   The value "b" from montgomery_setup()
-      @return CRYPT_OK on success
-   */
+    @param a   The value "b" from montgomery_setup()
+    @return CRYPT_OK on success
+ */
   void (*montgomery_deinit)(void *a);
 
   /* ---- exponentiation ---- */
 
   /** Modular exponentiation
-      @param a    The base integer
-      @param b    The power (can be negative) integer
-      @param c    The modulus integer
-      @param d    The destination
-      @return CRYPT_OK on success
-   */
+    @param a    The base integer
+    @param b    The power (can be negative) integer
+    @param c    The modulus integer
+    @param d    The destination
+    @return CRYPT_OK on success
+ */
   int (*exptmod)(void *a, void *b, void *c, void *d);
 
   /** Primality testing
-      @param a     The integer to test
-      @param b     The destination of the result (FP_YES if prime)
-      @return CRYPT_OK on success
-   */
+    @param a     The integer to test
+    @param b     The destination of the result (FP_YES if prime)
+    @return CRYPT_OK on success
+ */
   int (*isprime)(void *a, int *b);
 
   /* ----  (optional) ecc point math ---- */
 
   /** ECC GF(p) point multiplication (from the NIST curves)
-      @param k   The integer to multiply the point by
-      @param G   The point to multiply
-      @param R   The destination for kG
-      @param modulus  The modulus for the field
-      @param map Boolean indicated whether to map back to affine or not (can be
-     ignored if you work in affine only)
-      @return CRYPT_OK on success
-   */
+    @param k   The integer to multiply the point by
+    @param G   The point to multiply
+    @param R   The destination for kG
+    @param modulus  The modulus for the field
+    @param map Boolean indicated whether to map back to affine or not (can be
+   ignored if you work in affine only)
+    @return CRYPT_OK on success
+ */
   int (*ecc_ptmul)(void *k, ecc_point *G, ecc_point *R, void *modulus, int map);
 
   /** ECC GF(p) point addition
-      @param P    The first point
-      @param Q    The second point
-      @param R    The destination of P + Q
-      @param modulus  The modulus
-      @param mp   The "b" value from montgomery_setup()
-      @return CRYPT_OK on success
-   */
+    @param P    The first point
+    @param Q    The second point
+    @param R    The destination of P + Q
+    @param modulus  The modulus
+    @param mp   The "b" value from montgomery_setup()
+    @return CRYPT_OK on success
+ */
   int (*ecc_ptadd)(ecc_point *P, ecc_point *Q, ecc_point *R, void *modulus,
                    void *mp);
 
   /** ECC GF(p) point double
-      @param P    The first point
-      @param R    The destination of 2P
-      @param modulus  The modulus
-      @param mp   The "b" value from montgomery_setup()
-      @return CRYPT_OK on success
-   */
+    @param P    The first point
+    @param R    The destination of 2P
+    @param modulus  The modulus
+    @param mp   The "b" value from montgomery_setup()
+    @return CRYPT_OK on success
+ */
   int (*ecc_ptdbl)(ecc_point *P, ecc_point *R, void *modulus, void *mp);
 
   /** ECC mapping from projective to affine, currently uses (x,y,z) => (x/z^2,
-     y/z^3, 1)
-      @param P     The point to map
-      @param modulus The modulus
-      @param mp    The "b" value from montgomery_setup()
-      @return CRYPT_OK on success
-      @remark  The mapping can be different but keep in mind a ecc_point only
-     has three integers (x,y,z) so if you use a different mapping you have to
-     make it fit.
-   */
+   y/z^3, 1)
+    @param P     The point to map
+    @param modulus The modulus
+    @param mp    The "b" value from montgomery_setup()
+    @return CRYPT_OK on success
+    @remark  The mapping can be different but keep in mind a ecc_point only
+   has three integers (x,y,z) so if you use a different mapping you have to
+   make it fit.
+ */
   int (*ecc_map)(ecc_point *P, void *modulus, void *mp);
 
   /** Computes kA*A + kB*B = C using Shamir's Trick
-      @param A        First point to multiply
-      @param kA       What to multiple A by
-      @param B        Second point to multiply
-      @param kB       What to multiple B by
-      @param C        [out] Destination point (can overlap with A or B
-      @param modulus  Modulus for curve
-      @return CRYPT_OK on success
-   */
+    @param A        First point to multiply
+    @param kA       What to multiple A by
+    @param B        Second point to multiply
+    @param kB       What to multiple B by
+    @param C        [out] Destination point (can overlap with A or B
+    @param modulus  Modulus for curve
+    @return CRYPT_OK on success
+ */
   int (*ecc_mul2add)(ecc_point *A, void *kA, ecc_point *B, void *kB,
                      ecc_point *C, void *modulus);
 
   /* ---- (optional) rsa optimized math (for internal CRT) ---- */
 
   /** RSA Key Generation
-      @param prng     An active PRNG state
-      @param wprng    The index of the PRNG desired
-      @param size     The size of the modulus (key size) desired (octets)
-      @param e        The "e" value (public key).  e==65537 is a good choice
-      @param key      [out] Destination of a newly created private key pair
-      @return CRYPT_OK if successful, upon error all allocated ram is freed
-   */
+    @param prng     An active PRNG state
+    @param wprng    The index of the PRNG desired
+    @param size     The size of the modulus (key size) desired (octets)
+    @param e        The "e" value (public key).  e==65537 is a good choice
+    @param key      [out] Destination of a newly created private key pair
+    @return CRYPT_OK if successful, upon error all allocated ram is freed
+ */
   int (*rsa_keygen)(prng_state *prng, int wprng, int size, long e,
                     rsa_key *key);
 
   /** RSA exponentiation
-     @param in       The octet array representing the base
-     @param inlen    The length of the input
-     @param out      The destination (to be stored in an octet array format)
-     @param outlen   The length of the output buffer and the resulting size
-     (zero padded to the size of the modulus)
-     @param which    PK_PUBLIC for public RSA and PK_PRIVATE for private RSA
-     @param key      The RSA key to use
-     @return CRYPT_OK on success
-   */
+   @param in       The octet array representing the base
+   @param inlen    The length of the input
+   @param out      The destination (to be stored in an octet array format)
+   @param outlen   The length of the output buffer and the resulting size
+   (zero padded to the size of the modulus)
+   @param which    PK_PUBLIC for public RSA and PK_PRIVATE for private RSA
+   @param key      The RSA key to use
+   @return CRYPT_OK on success
+ */
   int (*rsa_me)(const unsigned char *in, unsigned long inlen,
                 unsigned char *out, unsigned long *outlen, int which,
                 rsa_key *key);
@@ -13484,6 +13427,7 @@ typedef struct {
 extern ltc_math_descriptor ltc_mp;
 
 int ltc_init_multi(void **a, ...);
+
 void ltc_deinit_multi(void *a, ...);
 
 #ifdef LTM_DESC
@@ -13582,6 +13526,7 @@ extern const ltc_math_descriptor gmp_desc;
 
 /* ---- MEM routines ---- */
 void zeromem(void *dst, size_t len);
+
 void burn_stack(unsigned long len);
 
 /* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_misc.h,v $ */
@@ -13687,6 +13632,7 @@ int pkcs_1_pss_decode(const unsigned char *msghash, unsigned long msghashlen,
                       const unsigned char *sig, unsigned long siglen,
                       unsigned long saltlen, int hash_idx,
                       unsigned long modulus_bitlen, int *res);
+
 #endif /* LTC_PKCS_1 */
 
 /* ===> LTC_PKCS #5 -- Password Based Cryptography <=== */
@@ -13724,9 +13670,15 @@ int pkcs_1_pss_decode(const unsigned char *msghash, unsigned long msghashlen,
    Stores the cipher descriptor table, Tom St Denis
  */
 
-struct ltc_cipher_descriptor cipher_descriptor[TAB_SIZE] = {
-    {NULL, 0,    0,    0,    0,    0,    NULL, NULL, NULL, NULL, NULL, NULL,
-     NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL}};
+struct ltc_cipher_descriptor cipher_descriptor[TAB_SIZE] = {{
+    NULL,
+    0,
+    0,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+}};
 
 LTC_MUTEX_GLOBAL(ltc_cipher_mutex)
 
@@ -14026,8 +13978,17 @@ int find_prng(const char *name) {
    Stores the hash descriptor table, Tom St Denis
  */
 
-struct ltc_hash_descriptor hash_descriptor[TAB_SIZE] = {
-    {NULL, 0, 0, 0, {0}, 0, NULL, NULL, NULL, NULL, NULL}};
+struct ltc_hash_descriptor hash_descriptor[TAB_SIZE] = {{
+    NULL,
+    0,
+    0,
+    {0},
+    0,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+}};
 
 LTC_MUTEX_GLOBAL(ltc_hash_mutex)
 
@@ -14099,8 +14060,14 @@ ltc_math_descriptor ltc_mp;
    @file crypt_prng_descriptor.c
    Stores the PRNG descriptors, Tom St Denis
  */
-struct ltc_prng_descriptor prng_descriptor[TAB_SIZE] = {
-    {NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL}};
+struct ltc_prng_descriptor prng_descriptor[TAB_SIZE] = {{
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+}};
 
 LTC_MUTEX_GLOBAL(ltc_prng_mutex)
 
@@ -14467,6 +14434,7 @@ int der_decode_bit_string(const unsigned char *in, unsigned long inlen,
   *outlen = blen;
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -14512,6 +14480,7 @@ int der_decode_boolean(const unsigned char *in, unsigned long inlen, int *out) {
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -14693,6 +14662,7 @@ int der_decode_choice(const unsigned char *in, unsigned long *inlen,
 
   return CRYPT_INVALID_PACKET;
 }
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/choice/der_decode_choice.c,v
@@ -14787,6 +14757,7 @@ int der_decode_ia5_string(const unsigned char *in, unsigned long inlen,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -14898,6 +14869,7 @@ int der_decode_integer(const unsigned char *in, unsigned long inlen,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -14997,6 +14969,7 @@ int der_decode_object_identifier(const unsigned char *in, unsigned long inlen,
   *outlen = y;
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -15087,6 +15060,7 @@ int der_decode_octet_string(const unsigned char *in, unsigned long inlen,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -15182,6 +15156,7 @@ int der_decode_printable_string(const unsigned char *in, unsigned long inlen,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -15502,6 +15477,7 @@ int der_decode_sequence_ex(const unsigned char *in, unsigned long inlen,
 LBL_ERR:
   return err;
 }
+
 #endif
 
 /* $Source:
@@ -15656,7 +15632,7 @@ int der_decode_sequence_flexi(const unsigned char *in, unsigned long *inlen,
         /* init field */
         l->type = LTC_ASN1_BIT_STRING;
         l->size = len * 8; /* *8 because we store decoded bits one per char and
-                              they are encoded 8 per char.  */
+                      they are encoded 8 per char.  */
 
         if ((l->data = XCALLOC(1, l->size)) == NULL) {
           err = CRYPT_MEM;
@@ -15907,6 +15883,7 @@ error:
 
   return err;
 }
+
 #endif
 
 /* $Source:
@@ -16044,6 +16021,7 @@ LBL_ERR:
   XFREE(list);
   return err;
 }
+
 #endif
 
 /* $Source:
@@ -16111,6 +16089,7 @@ int der_decode_short_integer(const unsigned char *in, unsigned long inlen,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -16211,15 +16190,15 @@ int der_decode_utctime(const unsigned char *in, unsigned long *inlen,
   *inlen = 2 + x;
 
   /* possible encodings are
-     YYMMDDhhmmZ
-     YYMMDDhhmm+hh'mm'
-     YYMMDDhhmm-hh'mm'
-     YYMMDDhhmmssZ
-     YYMMDDhhmmss+hh'mm'
-     YYMMDDhhmmss-hh'mm'
+   YYMMDDhhmmZ
+   YYMMDDhhmm+hh'mm'
+   YYMMDDhhmm-hh'mm'
+   YYMMDDhhmmssZ
+   YYMMDDhhmmss+hh'mm'
+   YYMMDDhhmmss-hh'mm'
 
-     So let's do a trivial decode upto [including] mm
-   */
+   So let's do a trivial decode upto [including] mm
+ */
 
   x = 0;
   DECODE_V(out->YY, 100);
@@ -16256,6 +16235,7 @@ int der_decode_utctime(const unsigned char *in, unsigned long *inlen,
     return CRYPT_INVALID_PACKET;
   }
 }
+
 #endif
 
 /* $Source:
@@ -16368,6 +16348,7 @@ int der_decode_utf8_string(const unsigned char *in, unsigned long inlen,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -16456,6 +16437,7 @@ int der_encode_bit_string(const unsigned char *in, unsigned long inlen,
   *outlen = x;
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -16504,6 +16486,7 @@ int der_encode_boolean(int in, unsigned char *out, unsigned long *outlen) {
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -16589,6 +16572,7 @@ int der_encode_ia5_string(const unsigned char *in, unsigned long inlen,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -16723,6 +16707,7 @@ int der_encode_integer(void *num, unsigned char *out, unsigned long *outlen) {
   *outlen = tmplen;
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -16836,6 +16821,7 @@ int der_encode_object_identifier(unsigned long *words, unsigned long nwords,
   *outlen = x;
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -16922,6 +16908,7 @@ int der_encode_octet_string(const unsigned char *in, unsigned long inlen,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -17008,6 +16995,7 @@ int der_encode_printable_string(const unsigned char *in, unsigned long inlen,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -17356,6 +17344,7 @@ int der_encode_sequence_ex(ltc_asn1_list *list, unsigned long inlen,
 LBL_ERR:
   return err;
 }
+
 #endif
 
 /* LibTomCrypt, modular cryptographic library -- Tom St Denis
@@ -17485,6 +17474,7 @@ LBL_ERR:
   XFREE(list);
   return err;
 }
+
 #endif
 
 /* $Source:
@@ -17610,6 +17600,7 @@ int der_encode_set(ltc_asn1_list *list, unsigned long inlen, unsigned char *out,
 
   return err;
 }
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/set/der_encode_set.c,v $ */
@@ -17769,6 +17760,7 @@ int der_encode_setof(ltc_asn1_list *list, unsigned long inlen,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/set/der_encode_setof.c,v $
@@ -17866,6 +17858,7 @@ int der_encode_short_integer(unsigned long num, unsigned char *out,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -17950,6 +17943,7 @@ int der_encode_utctime(ltc_utctime *utctime, unsigned char *out,
   *outlen = x;
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -18071,6 +18065,7 @@ int der_encode_utf8_string(const wchar_t *in, unsigned long inlen,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -18125,6 +18120,7 @@ int der_length_bit_string(unsigned long nbits, unsigned long *outlen) {
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -18160,6 +18156,7 @@ int der_length_boolean(unsigned long *outlen) {
   *outlen = 3;
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -18267,6 +18264,7 @@ int der_length_ia5_string(const unsigned char *octets, unsigned long noctets,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -18351,6 +18349,7 @@ int der_length_integer(void *num, unsigned long *outlen) {
   *outlen = len;
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -18438,6 +18437,7 @@ int der_length_object_identifier(unsigned long *words, unsigned long nwords,
   *outlen = z;
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -18491,6 +18491,7 @@ int der_length_octet_string(unsigned long noctets, unsigned long *outlen) {
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -18598,6 +18599,7 @@ int der_length_printable_string(const unsigned char *octets,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -18767,6 +18769,7 @@ int der_length_sequence(ltc_asn1_list *list, unsigned long inlen,
 LBL_ERR:
   return err;
 }
+
 #endif
 
 /* $Source:
@@ -18836,6 +18839,7 @@ int der_length_short_integer(unsigned long num, unsigned long *outlen) {
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -18882,6 +18886,7 @@ int der_length_utctime(ltc_utctime *utctime, unsigned long *outlen) {
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -18963,6 +18968,7 @@ int der_length_utf8_string(const wchar_t *in, unsigned long noctets,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source:
@@ -19038,6 +19044,7 @@ void der_sequence_free(ltc_asn1_list *in) {
     in = l;
   }
 }
+
 #endif
 
 /* $Source:
@@ -19238,6 +19245,7 @@ int ecc_ansi_x963_export(ecc_key *key, unsigned char *out,
   *outlen = 1 + 2 * numlen;
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_ansi_x963_export.c,v $ */
@@ -19337,6 +19345,7 @@ error:
   mp_clear_multi(key->pubkey.x, key->pubkey.y, key->pubkey.z, key->k, NULL);
   return err;
 }
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_ansi_x963_import.c,v $ */
@@ -19463,6 +19472,7 @@ void ecc_free(ecc_key *key) {
   LTC_ARGCHKVD(key != NULL);
   mp_clear_multi(key->pubkey.x, key->pubkey.y, key->pubkey.z, key->k, NULL);
 }
+
 #endif
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_free.c,v $ */
 /* $Revision: 1.6 $ */
@@ -19521,165 +19531,6 @@ void ecc_free(ecc_key *key) {
 
 #ifdef LTC_MECC
 
-static int is_point(ecc_key *key) {
-  void *prime, *b, *t1, *t2;
-  int err;
-
-  if ((err = mp_init_multi(&prime, &b, &t1, &t2, NULL)) != CRYPT_OK) {
-    return err;
-  }
-
-  /* load prime and b */
-  if ((err = mp_read_radix(prime, key->dp->prime, 16)) != CRYPT_OK) {
-    goto error;
-  }
-  if ((err = mp_read_radix(b, key->dp->B, 16)) != CRYPT_OK) {
-    goto error;
-  }
-
-  /* compute y^2 */
-  if ((err = mp_sqr(key->pubkey.y, t1)) != CRYPT_OK) {
-    goto error;
-  }
-
-  /* compute x^3 */
-  if ((err = mp_sqr(key->pubkey.x, t2)) != CRYPT_OK) {
-    goto error;
-  }
-  if ((err = mp_mod(t2, prime, t2)) != CRYPT_OK) {
-    goto error;
-  }
-  if ((err = mp_mul(key->pubkey.x, t2, t2)) != CRYPT_OK) {
-    goto error;
-  }
-
-  /* compute y^2 - x^3 */
-  if ((err = mp_sub(t1, t2, t1)) != CRYPT_OK) {
-    goto error;
-  }
-
-  /* compute y^2 - x^3 + 3x */
-  if ((err = mp_add(t1, key->pubkey.x, t1)) != CRYPT_OK) {
-    goto error;
-  }
-  if ((err = mp_add(t1, key->pubkey.x, t1)) != CRYPT_OK) {
-    goto error;
-  }
-  if ((err = mp_add(t1, key->pubkey.x, t1)) != CRYPT_OK) {
-    goto error;
-  }
-  if ((err = mp_mod(t1, prime, t1)) != CRYPT_OK) {
-    goto error;
-  }
-  while (mp_cmp_d(t1, 0) == LTC_MP_LT) {
-    if ((err = mp_add(t1, prime, t1)) != CRYPT_OK) {
-      goto error;
-    }
-  }
-  while (mp_cmp(t1, prime) != LTC_MP_LT) {
-    if ((err = mp_sub(t1, prime, t1)) != CRYPT_OK) {
-      goto error;
-    }
-  }
-
-  /* compare to b */
-  if (mp_cmp(t1, b) != LTC_MP_EQ) {
-    err = CRYPT_INVALID_PACKET;
-  } else {
-    err = CRYPT_OK;
-  }
-
-error:
-  mp_clear_multi(prime, b, t1, t2, NULL);
-  return err;
-}
-
-/**
-   Import an ECC key from a binary packet, using user supplied domain params
-   rather than one of the NIST ones
-   @param in      The packet to import
-   @param inlen   The length of the packet
-   @param key     [out] The destination of the import
-   @param dp      pointer to user supplied params; must be the same as the
-   params used when exporting
-   @return CRYPT_OK if successful, upon error all allocated memory will be freed
- */
-int ecc_import_ex(const unsigned char *in, unsigned long inlen, ecc_key *key,
-                  const ltc_ecc_set_type *dp) {
-  unsigned long key_size;
-  unsigned char flags[1];
-  int err;
-
-  LTC_ARGCHK(in != NULL);
-  LTC_ARGCHK(key != NULL);
-  LTC_ARGCHK(ltc_mp.name != NULL);
-
-  /* init key */
-  if (mp_init_multi(&key->pubkey.x, &key->pubkey.y, &key->pubkey.z, &key->k,
-                    NULL) != CRYPT_OK) {
-    return CRYPT_MEM;
-  }
-
-  /* find out what type of key it is */
-  if ((err = der_decode_sequence_multi(in, inlen, LTC_ASN1_BIT_STRING, 1UL,
-                                       &flags, LTC_ASN1_EOL, 0UL, NULL)) !=
-      CRYPT_OK) {
-    goto done;
-  }
-
-  if (flags[0] == 1) {
-    /* private key */
-    key->type = PK_PRIVATE;
-    if ((err = der_decode_sequence_multi(
-             in, inlen, LTC_ASN1_BIT_STRING, 1UL, flags, LTC_ASN1_SHORT_INTEGER,
-             1UL, &key_size, LTC_ASN1_INTEGER, 1UL, key->pubkey.x,
-             LTC_ASN1_INTEGER, 1UL, key->pubkey.y, LTC_ASN1_INTEGER, 1UL,
-             key->k, LTC_ASN1_EOL, 0UL, NULL)) != CRYPT_OK) {
-      goto done;
-    }
-  } else {
-    /* public key */
-    key->type = PK_PUBLIC;
-    if ((err = der_decode_sequence_multi(
-             in, inlen, LTC_ASN1_BIT_STRING, 1UL, flags, LTC_ASN1_SHORT_INTEGER,
-             1UL, &key_size, LTC_ASN1_INTEGER, 1UL, key->pubkey.x,
-             LTC_ASN1_INTEGER, 1UL, key->pubkey.y, LTC_ASN1_EOL, 0UL, NULL)) !=
-        CRYPT_OK) {
-      goto done;
-    }
-  }
-
-  if (dp == NULL) {
-    /* find the idx */
-    for (key->idx = 0; ltc_ecc_sets[key->idx].size &&
-                       (unsigned long)ltc_ecc_sets[key->idx].size != key_size;
-         ++key->idx)
-      ;
-    if (ltc_ecc_sets[key->idx].size == 0) {
-      err = CRYPT_INVALID_PACKET;
-      goto done;
-    }
-    key->dp = &ltc_ecc_sets[key->idx];
-  } else {
-    key->idx = -1;
-    key->dp = dp;
-  }
-  /* set z */
-  if ((err = mp_set(key->pubkey.z, 1)) != CRYPT_OK) {
-    goto done;
-  }
-
-  /* is it a point on the curve?  */
-  if ((err = is_point(key)) != CRYPT_OK) {
-    goto done;
-  }
-
-  /* we're good */
-  return CRYPT_OK;
-done:
-  mp_clear_multi(key->pubkey.x, key->pubkey.y, key->pubkey.z, key->k, NULL);
-  return err;
-}
 #endif
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_import.c,v $ */
 /* $Revision: 1.13 $ */
@@ -19804,6 +19655,7 @@ ERR_BUF:
   XFREE(buf);
   return err;
 }
+
 #endif
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_make_key.c,v $ */
 /* $Revision: 1.13 $ */
@@ -19909,6 +19761,7 @@ done:
   ltc_ecc_del_point(result);
   return err;
 }
+
 #endif
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_shared_secret.c,v $ */
 /* $Revision: 1.10 $ */
@@ -20036,6 +19889,7 @@ errnokey:
   mp_clear_multi(r, s, p, e, NULL);
   return err;
 }
+
 #endif
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_sign_hash.c,v $ */
 /* $Revision: 1.11 $ */
@@ -20297,6 +20151,7 @@ error:
   }
   return err;
 }
+
 #endif
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_verify_hash.c,v $ */
 /* $Revision: 1.14 $ */
@@ -20503,6 +20358,7 @@ int ltc_ecc_is_valid_idx(int n) {
   }
   return 0;
 }
+
 #endif
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_is_valid_idx.c,v $ */
 /* $Revision: 1.7 $ */
@@ -20597,6 +20453,7 @@ done:
   mp_clear_multi(t1, t2, NULL);
   return err;
 }
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_map.c,v $ */
@@ -20822,7 +20679,7 @@ int ltc_ecc_mul2add(ecc_point *A, void *kA, ecc_point *B, void *kB,
   /* reduce to affine */
   err = ltc_ecc_map(C, modulus, mp);
 
-  /* clean up */
+/* clean up */
 ERR_MU:
   mp_clear(mu);
 ERR_MP:
@@ -20841,6 +20698,7 @@ ERR_T:
 
   return err;
 }
+
 #endif
 #endif
 
@@ -21107,6 +20965,7 @@ done:
   }
   return err;
 }
+
 #endif
 
 #undef WINSIZE
@@ -21143,15 +21002,15 @@ done:
 #ifdef LTC_ECC_TIMING_RESISTANT
 
 /**
-   Perform a point multiplication  (timing resistant)
-   @param k    The scalar to multiply by
-   @param G    The base point
-   @param R    [out] Destination for kG
-   @param modulus  The modulus of the field the ECC curve is in
-   @param map      Boolean whether to map back to affine or not (1==map, 0 ==
-   leave in projective)
-   @return CRYPT_OK on success
- */
+Perform a point multiplication  (timing resistant)
+@param k    The scalar to multiply by
+@param G    The base point
+@param R    [out] Destination for kG
+@param modulus  The modulus of the field the ECC curve is in
+@param map      Boolean whether to map back to affine or not (1==map, 0 ==
+leave in projective)
+@return CRYPT_OK on success
+*/
 int ltc_ecc_mulmod(void *k, ecc_point *G, ecc_point *R, void *modulus,
                    int map) {
   ecc_point *tG, *M[3];
@@ -21367,10 +21226,11 @@ void ltc_ecc_del_point(ecc_point *p) {
   /* prevents free'ing null arguments */
   if (p != NULL) {
     mp_clear_multi(p->x, p->y, p->z, NULL); /* note: p->z may be NULL but that's
-                                               ok with this function anyways */
+                                           ok with this function anyways */
     XFREE(p);
   }
 }
+
 #endif
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_points.c,v $ */
 /* $Revision: 1.7 $ */
@@ -21686,6 +21546,7 @@ done:
   mp_clear_multi(t1, t2, x, y, z, NULL);
   return err;
 }
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_projective_add_point.c,v
@@ -21916,6 +21777,7 @@ done:
   mp_clear_multi(t1, t2, NULL);
   return err;
 }
+
 #endif
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_projective_dbl_point.c,v
  * $ */
@@ -22546,6 +22408,7 @@ void ltc_deinit_multi(void *a, ...) {
   }
   va_end(args);
 }
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/math/multi.c,v $ */
@@ -22680,6 +22543,7 @@ LBL_ERR:
 
   return err;
 }
+
 #endif /* LTC_PKCS_1 */
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_mgf1.c,v $ */
@@ -22765,11 +22629,11 @@ int pkcs_1_oaep_decode(const unsigned char *msg, unsigned long msglen,
 
   /* ok so it's now in the form
 
-     0x00  || maskedseed || maskedDB
+   0x00  || maskedseed || maskedDB
 
-      1    ||   hLen     ||  modulus_len - hLen - 1
+    1    ||   hLen     ||  modulus_len - hLen - 1
 
-   */
+ */
 
   /* must have leading 0x00 byte */
   if (msg[0] != 0x00) {
@@ -22870,6 +22734,7 @@ LBL_ERR:
 
   return err;
 }
+
 #endif /* LTC_PKCS_1 */
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_oaep_decode.c,v $ */
@@ -23044,6 +22909,7 @@ LBL_ERR:
 
   return err;
 }
+
 #endif /* LTC_PKCS_1 */
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_oaep_encode.c,v $ */
@@ -23247,6 +23113,7 @@ LBL_ERR:
 
   return err;
 }
+
 #endif /* LTC_PKCS_1 */
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_pss_decode.c,v $ */
@@ -23423,6 +23290,7 @@ LBL_ERR:
 
   return err;
 }
+
 #endif /* LTC_PKCS_1 */
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_pss_encode.c,v $ */
@@ -23749,6 +23617,7 @@ int rand_prime(void *N, long len, prng_state *prng, int wprng) {
  */
 
 #ifdef LTC_DEVRANDOM
+
 /* on *NIX read /dev/random */
 static unsigned long rng_nix(unsigned char *buf, unsigned long len,
                              void (*callback)(void)) {
@@ -23778,6 +23647,7 @@ static unsigned long rng_nix(unsigned char *buf, unsigned long len,
   return x;
 #endif /* LTC_NO_FILE */
 }
+
 #endif /* LTC_DEVRANDOM */
 
 /* on ANSI C platforms with 100 < CLOCKS_PER_SEC < 10000 */
@@ -23813,6 +23683,7 @@ static unsigned long rng_ansic(unsigned char *buf, unsigned long len,
   acc = bits = a = b = 0;
   return l;
 }
+
 #endif
 
 /* Try the Microsoft CSP */
@@ -24053,6 +23924,7 @@ int rsa_decrypt_key_ex(const unsigned char *in, unsigned long inlen,
   XFREE(tmp);
   return err;
 }
+
 #endif /* LTC_MRSA */
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_decrypt_key.c,v $ */
@@ -24154,6 +24026,7 @@ int rsa_encrypt_key_ex(const unsigned char *in, unsigned long inlen,
   /* rsa exptmod the OAEP or LTC_PKCS #1 v1.5 pad */
   return ltc_mp.rsa_me(out, x, out, outlen, PK_PUBLIC, key);
 }
+
 #endif /* LTC_MRSA */
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_encrypt_key.c,v $ */
@@ -24287,6 +24160,7 @@ error:
   mp_clear_multi(tmp, tmpa, tmpb, NULL);
   return err;
 }
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_exptmod.c,v $ */
@@ -24320,6 +24194,7 @@ void rsa_free(rsa_key *key) {
   mp_clear_multi(key->e, key->d, key->N, key->dQ, key->dP, key->qP, key->p,
                  key->q, NULL);
 }
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_free.c,v $ */
@@ -24384,9 +24259,9 @@ int rsa_import(const unsigned char *in, unsigned long inlen, rsa_key *key) {
   LTC_SET_ASN1(ssl_pubkey_hashoid, 1, LTC_ASN1_NULL, NULL, 0);
 
   /* the actual format of the SSL DER key is odd, it stores a RSAPublicKey in a
-     **BIT** string ... so we have to extract it then proceed to convert bit to
-     octet
-   */
+   **BIT** string ... so we have to extract it then proceed to convert bit to
+   octet
+ */
   LTC_SET_ASN1(ssl_pubkey, 0, LTC_ASN1_SEQUENCE, &ssl_pubkey_hashoid, 2);
   LTC_SET_ASN1(ssl_pubkey, 1, LTC_ASN1_BIT_STRING, tmpbuf, MAX_RSA_SIZE * 8);
 
@@ -24457,6 +24332,7 @@ LBL_ERR:
                  key->q, NULL);
   return err;
 }
+
 #endif /* LTC_MRSA */
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_import.c,v $ */
@@ -24607,6 +24483,7 @@ cleanup:
   mp_clear_multi(tmp3, tmp2, tmp1, p, q, NULL);
   return err;
 }
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_make_key.c,v $ */
@@ -24700,13 +24577,13 @@ int rsa_sign_hash_ex(const unsigned char *in, unsigned long inlen,
     }
 
     /* construct the SEQUENCE
-       SEQUENCE {
-         SEQUENCE {hashoid OID
-                   blah    NULL
-         }
-         hash    OCTET STRING
-       }
-     */
+   SEQUENCE {
+     SEQUENCE {hashoid OID
+               blah    NULL
+     }
+     hash    OCTET STRING
+   }
+ */
     LTC_SET_ASN1(digestinfo, 0, LTC_ASN1_OBJECT_IDENTIFIER,
                  hash_descriptor[hash_idx].OID,
                  hash_descriptor[hash_idx].OIDlen);
@@ -24738,6 +24615,7 @@ int rsa_sign_hash_ex(const unsigned char *in, unsigned long inlen,
   /* RSA encode it */
   return ltc_mp.rsa_me(out, x, out, outlen, PK_PRIVATE, key);
 }
+
 #endif /* LTC_MRSA */
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_sign_hash.c,v $ */
@@ -24874,13 +24752,13 @@ int rsa_verify_hash_ex(const unsigned char *sig, unsigned long siglen,
      * test the hash */
 
     /* construct the SEQUENCE
-       SEQUENCE {
-         SEQUENCE {hashoid OID
-                   blah    NULL
-         }
-         hash    OCTET STRING
-       }
-     */
+   SEQUENCE {
+     SEQUENCE {hashoid OID
+               blah    NULL
+     }
+     hash    OCTET STRING
+   }
+ */
     LTC_SET_ASN1(digestinfo, 0, LTC_ASN1_OBJECT_IDENTIFIER, loid,
                  sizeof(loid) / sizeof(loid[0]));
     LTC_SET_ASN1(digestinfo, 1, LTC_ASN1_NULL, NULL, 0);
@@ -24915,6 +24793,7 @@ bail_2:
   XFREE(tmpbuf);
   return err;
 }
+
 #endif /* LTC_MRSA */
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_verify_hash.c,v $ */
@@ -24945,8 +24824,9 @@ bail_2:
 #ifdef LTC_SPRNG
 
 const struct ltc_prng_descriptor sprng_desc = {
-    "sprng",     0,           &sprng_start,  &sprng_add_entropy, &sprng_ready,
-    &sprng_read, &sprng_done, &sprng_export, &sprng_import,      &sprng_test};
+    "sprng",      &sprng_start, &sprng_add_entropy,
+    &sprng_ready, &sprng_read,  &sprng_done,
+};
 
 /**
    Start the PRNG
@@ -25025,6 +24905,7 @@ int sprng_import(const unsigned char *in, unsigned long inlen,
    @return CRYPT_OK if successful, CRYPT_NOP if self-testing has been disabled
  */
 int sprng_test(void) { return CRYPT_OK; }
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/prngs/sprng.c,v $ */
@@ -25083,27 +24964,28 @@ void zeromem(void *out, size_t outlen) {
 
 #ifdef LTC_SHA1
 
-const struct ltc_hash_descriptor sha1_desc = {"sha1",
-                                              2,
-                                              20,
-                                              64,
+const struct ltc_hash_descriptor sha1_desc = {
+    "sha1",
 
-                                              /* OID */
-                                              {
-                                                  1,
-                                                  3,
-                                                  14,
-                                                  3,
-                                                  2,
-                                                  26,
-                                              },
-                                              6,
+    20,
+    64,
 
-                                              &sha1_init,
-                                              &sha1_process,
-                                              &sha1_done,
-                                              &sha1_test,
-                                              NULL};
+    /* OID */
+    {
+        1,
+        3,
+        14,
+        3,
+        2,
+        26,
+    },
+    6,
+
+    &sha1_init,
+    &sha1_process,
+    &sha1_done,
+    &sha1_test,
+};
 
 #define F0(x, y, z) (z ^ (x & (y ^ z)))
 #define F1(x, y, z) (x ^ y ^ z)
@@ -25113,6 +24995,7 @@ const struct ltc_hash_descriptor sha1_desc = {"sha1",
 #ifdef LTC_CLEAN_STACK
 static int _sha1_compress(hash_state *md, unsigned char *buf)
 #else
+
 static int sha1_compress(hash_state *md, unsigned char *buf)
 #endif
 {
@@ -25340,9 +25223,8 @@ int sha1_done(hash_state *md, unsigned char *out) {
    Self-test the hash
    @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
  */
-int sha1_test(void) {
-  return CRYPT_NOP;
-}
+int sha1_test(void) { return CRYPT_NOP; }
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/hashes/sha1.c,v $ */
@@ -25367,30 +25249,30 @@ int sha1_test(void) {
 
 #ifdef LTC_SHA256
 
-const struct ltc_hash_descriptor sha256_desc = {"sha256",
-                                                0,
-                                                32,
-                                                64,
+const struct ltc_hash_descriptor sha256_desc = {
+    "sha256",
+    32,
+    64,
 
-                                                /* OID */
-                                                {
-                                                    2,
-                                                    16,
-                                                    840,
-                                                    1,
-                                                    101,
-                                                    3,
-                                                    4,
-                                                    2,
-                                                    1,
-                                                },
-                                                9,
+    /* OID */
+    {
+        2,
+        16,
+        840,
+        1,
+        101,
+        3,
+        4,
+        2,
+        1,
+    },
+    9,
 
-                                                &sha256_init,
-                                                &sha256_process,
-                                                &sha256_done,
-                                                &sha256_test,
-                                                NULL};
+    &sha256_init,
+    &sha256_process,
+    &sha256_done,
+    &sha256_test,
+};
 
 #ifdef LTC_SMALL_CODE
 /* the K array */
@@ -25424,6 +25306,7 @@ static const ulong32 K[64] = {
 #ifdef LTC_CLEAN_STACK
 static int _sha256_compress(hash_state *md, unsigned char *buf)
 #else
+
 static int sha256_compress(hash_state *md, unsigned char *buf)
 #endif
 {
@@ -25647,9 +25530,7 @@ int sha256_done(hash_state *md, unsigned char *out) {
   Self-test the hash
   @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
 */
-int sha256_test(void) {
-  return CRYPT_NOP;
-}
+int sha256_test(void) { return CRYPT_NOP; }
 
 #endif
 
@@ -25674,30 +25555,30 @@ int sha256_test(void) {
 
 #if defined(LTC_SHA384) && defined(LTC_SHA512)
 
-const struct ltc_hash_descriptor sha384_desc = {"sha384",
-                                                4,
-                                                48,
-                                                128,
+const struct ltc_hash_descriptor sha384_desc = {
+    "sha384",
+    48,
+    128,
 
-                                                /* OID */
-                                                {
-                                                    2,
-                                                    16,
-                                                    840,
-                                                    1,
-                                                    101,
-                                                    3,
-                                                    4,
-                                                    2,
-                                                    2,
-                                                },
-                                                9,
+    /* OID */
+    {
+        2,
+        16,
+        840,
+        1,
+        101,
+        3,
+        4,
+        2,
+        2,
+    },
+    9,
 
-                                                &sha384_init,
-                                                &sha512_process,
-                                                &sha384_done,
-                                                &sha384_test,
-                                                NULL};
+    &sha384_init,
+    &sha512_process,
+    &sha384_done,
+    &sha384_test,
+};
 
 /**
    Initialize the hash state
@@ -25748,9 +25629,7 @@ int sha384_done(hash_state *md, unsigned char *out) {
   Self-test the hash
   @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
 */
-int sha384_test(void) {
-  return CRYPT_NOP;
-}
+int sha384_test(void) { return CRYPT_NOP; }
 
 #endif /* defined(LTC_SHA384) && defined(LTC_SHA512) */
 
@@ -25776,30 +25655,30 @@ int sha384_test(void) {
 
 #ifdef LTC_SHA512
 
-const struct ltc_hash_descriptor sha512_desc = {"sha512",
-                                                5,
-                                                64,
-                                                128,
+const struct ltc_hash_descriptor sha512_desc = {
+    "sha512",
+    64,
+    128,
 
-                                                /* OID */
-                                                {
-                                                    2,
-                                                    16,
-                                                    840,
-                                                    1,
-                                                    101,
-                                                    3,
-                                                    4,
-                                                    2,
-                                                    3,
-                                                },
-                                                9,
+    /* OID */
+    {
+        2,
+        16,
+        840,
+        1,
+        101,
+        3,
+        4,
+        2,
+        3,
+    },
+    9,
 
-                                                &sha512_init,
-                                                &sha512_process,
-                                                &sha512_done,
-                                                &sha512_test,
-                                                NULL};
+    &sha512_init,
+    &sha512_process,
+    &sha512_done,
+    &sha512_test,
+};
 
 /* the K array */
 static const ulong64 K[80] = {
@@ -25865,6 +25744,7 @@ static const ulong64 K[80] = {
 #ifdef LTC_CLEAN_STACK
 static int _sha512_compress(hash_state *md, unsigned char *buf)
 #else
+
 static int sha512_compress(hash_state *md, unsigned char *buf)
 #endif
 {
@@ -26026,9 +25906,7 @@ int sha512_done(hash_state *md, unsigned char *out) {
   Self-test the hash
   @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
 */
-int sha512_test(void) {
-  return CRYPT_NOP;
-}
+int sha512_test(void) { return CRYPT_NOP; }
 
 #endif
 
@@ -27358,7 +27236,7 @@ static const ulong32 rcon[] = {
     0x01000000UL, 0x02000000UL, 0x04000000UL, 0x08000000UL,
     0x10000000UL, 0x20000000UL, 0x40000000UL, 0x80000000UL,
     0x1B000000UL, 0x36000000UL, /* for 128-bit blocks, Rijndael never uses more
-                                   than 10 rcon values */
+                               than 10 rcon values */
 };
 
 #endif /* __LTC_AES_TAB_C__ */
@@ -27411,9 +27289,8 @@ static const ulong32 rcon[] = {
 #define ECB_KS rijndael_keysize
 
 const struct ltc_cipher_descriptor aes_desc = {
-    "aes",   6,        16,       32,     16,   10,   SETUP, ECB_ENC,
-    ECB_DEC, ECB_TEST, ECB_DONE, ECB_KS, NULL, NULL, NULL,  NULL,
-    NULL,    NULL,     NULL,     NULL,   NULL, NULL, NULL,  NULL};
+    "aes", 6, 16, SETUP, ECB_ENC, ECB_TEST, ECB_DONE,
+};
 
 #else
 
@@ -27614,6 +27491,7 @@ int SETUP(const unsigned char *key, int keylen, int num_rounds,
 static int _rijndael_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
                                  symmetric_key *skey)
 #else
+
 int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey)
 #endif
 {
@@ -27737,6 +27615,7 @@ int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey) {
 static int _rijndael_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
                                  symmetric_key *skey)
 #else
+
 int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey)
 #endif
 {
@@ -27853,9 +27732,7 @@ int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey) {
   Performs a self-test of the AES block cipher
   @return CRYPT_OK if functional, CRYPT_NOP if self-test has been disabled
 */
-int ECB_TEST(void) {
-  return CRYPT_NOP;
-}
+int ECB_TEST(void) { return CRYPT_NOP; }
 
 #endif /* ENCRYPT_ONLY */
 
@@ -28469,6 +28346,7 @@ int gcm_process(gcm_state *gcm, unsigned char *pt, unsigned long ptlen,
 */
 
 #if defined(LTC_GCM_MODE)
+
 /**
   GCM multiply by H
   @param gcm   The GCM state which holds the H value
@@ -28503,6 +28381,7 @@ void gcm_mult_h(gcm_state *gcm, unsigned char *I) {
 #endif
   XMEMCPY(I, T, 16);
 }
+
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/encauth/gcm/gcm_mult_h.c,v $ */
@@ -28857,6 +28736,7 @@ int gcm_add_aad(gcm_state *gcm, const unsigned char *adata,
 
   return CRYPT_OK;
 }
+
 #endif
 
 /* $Source$ */
@@ -28926,27 +28806,27 @@ int gcm_reset(gcm_state *gcm) {
 
 #ifdef LTC_MD5
 
-const struct ltc_hash_descriptor md5_desc = {"md5",
-                                             3,
-                                             16,
-                                             64,
+const struct ltc_hash_descriptor md5_desc = {
+    "md5",
+    16,
+    64,
 
-                                             /* OID */
-                                             {
-                                                 1,
-                                                 2,
-                                                 840,
-                                                 113549,
-                                                 2,
-                                                 5,
-                                             },
-                                             6,
+    /* OID */
+    {
+        1,
+        2,
+        840,
+        113549,
+        2,
+        5,
+    },
+    6,
 
-                                             &md5_init,
-                                             &md5_process,
-                                             &md5_done,
-                                             &md5_test,
-                                             NULL};
+    &md5_init,
+    &md5_process,
+    &md5_done,
+    &md5_test,
+};
 
 #define F(x, y, z) (z ^ (x & (y ^ z)))
 #define G(x, y, z) (y ^ (z & (y ^ x)))
@@ -29021,6 +28901,7 @@ static const ulong32 Korder[64] = {
 #ifdef LTC_CLEAN_STACK
 static int _md5_compress(hash_state *md, unsigned char *buf)
 #else
+
 static int md5_compress(hash_state *md, unsigned char *buf)
 #endif
 {
@@ -29243,9 +29124,7 @@ int md5_done(hash_state *md, unsigned char *out) {
   Self-test the hash
   @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
 */
-int md5_test(void) {
-  return CRYPT_NOP;
-}
+int md5_test(void) { return CRYPT_NOP; }
 
 #endif
 
