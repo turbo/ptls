@@ -2633,7 +2633,6 @@ int mp_toradix(mp_int *a, char *str, int radix);
 
 int mp_radix_size(mp_int *a, int radix, int *size);
 
-
 #define mp_tohex(M, S) mp_toradix((M), (S), 16)
 
 #ifdef __cplusplus
@@ -11391,9 +11390,6 @@ void crypt_argchk(char *v, char *s, int d) {
 /* which descriptor of AES to use?  */
 /* 0 = rijndael_enc 1 = aes_enc, 2 = rijndael [full], 3 = aes [full] */
 
-#if defined(LTC_YARROW) && !defined(LTC_CTR_MODE)
-#error LTC_YARROW requires LTC_CTR_MODE chaining mode to be defined!
-#endif
 
 /* a PRNG that simply reads from an available system source */
 #define LTC_SPRNG
@@ -11576,9 +11572,9 @@ enum {
   CRYPT_INVALID_ARG,   /* Generic invalid argument */
   CRYPT_FILE_NOTFOUND, /* File Not Found */
 
-  CRYPT_PK_INVALID_TYPE,   /* Invalid type of PK key */
+  CRYPT_PK_INVALID_TYPE, /* Invalid type of PK key */
 
-  CRYPT_PK_INVALID_SIZE,   /* Invalid size input for PK parameters */
+  CRYPT_PK_INVALID_SIZE, /* Invalid size input for PK parameters */
 
   CRYPT_INVALID_PRIME_SIZE, /* Invalid size of prime requested */
   CRYPT_PK_INVALID_PADDING  /* Invalid padding on input */
@@ -12241,9 +12237,6 @@ static inline unsigned long ROR64c(unsigned long word, const int i) {
  * easier to use.
  */
 
-
-
-
 #ifdef LTC_RIJNDAEL
 struct rijndael_key {
   ulong32 eK[60], dK[60];
@@ -12252,40 +12245,12 @@ struct rijndael_key {
 #endif
 
 
-
-
-
-
-
-
-
-
-
-
-
-#ifdef LTC_MULTI2
-struct multi2_key {
-  int N;
-  ulong32 uk[8];
-};
-#endif
-
 typedef union Symmetric_key {
 #ifdef LTC_RIJNDAEL
   struct rijndael_key rijndael;
 #endif
-#ifdef LTC_MULTI2
-  struct multi2_key multi2;
-#endif
   void *data;
 } symmetric_key;
-
-
-
-
-
-
-
 
 /** cipher descriptor table, last entry has "name == NULL" to mark the end of
  * table */
@@ -12523,12 +12488,6 @@ extern struct ltc_cipher_descriptor {
                    unsigned char *out, unsigned long *outlen);
 } cipher_descriptor[];
 
-
-
-
-
-
-
 #ifdef LTC_RIJNDAEL
 
 /* make aes an alias */
@@ -12562,36 +12521,6 @@ int rijndael_enc_keysize(int *keysize);
 extern const struct ltc_cipher_descriptor rijndael_desc, aes_desc;
 extern const struct ltc_cipher_descriptor rijndael_enc_desc, aes_enc_desc;
 #endif
-
-
-
-
-
-
-
-
-
-
-
-#ifdef LTC_MULTI2
-int multi2_setup(const unsigned char *key, int keylen, int num_rounds,
-                 symmetric_key *skey);
-int multi2_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                       symmetric_key *skey);
-int multi2_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                       symmetric_key *skey);
-int multi2_test(void);
-void multi2_done(symmetric_key *skey);
-int multi2_keysize(int *keysize);
-
-extern const struct ltc_cipher_descriptor multi2_desc;
-#endif
-
-
-
-
-
-
 
 
 #ifdef LTC_XTS_MODE
@@ -12660,15 +12589,6 @@ struct md5_state {
 };
 #endif
 
-
-
-
-
-
-
-
-
-
 typedef union Hash_state {
   char dummy[1];
 #ifdef LTC_SHA512
@@ -12735,8 +12655,6 @@ extern struct ltc_hash_descriptor {
                     unsigned char *out, unsigned long *outlen);
 } hash_descriptor[];
 
-
-
 #ifdef LTC_SHA512
 int sha512_init(hash_state *md);
 int sha512_process(hash_state *md, const unsigned char *in,
@@ -12769,18 +12687,6 @@ int sha256_test(void);
 
 extern const struct ltc_hash_descriptor sha256_desc;
 
-#ifdef LTC_SHA224
-#ifndef LTC_SHA256
-#error LTC_SHA256 is required for LTC_SHA224
-#endif
-int sha224_init(hash_state *md);
-
-#define sha224_process sha256_process
-int sha224_done(hash_state *md, unsigned char *hash);
-int sha224_test(void);
-
-extern const struct ltc_hash_descriptor sha224_desc;
-#endif
 #endif
 
 #ifdef LTC_SHA1
@@ -12800,13 +12706,6 @@ int md5_test(void);
 
 extern const struct ltc_hash_descriptor md5_desc;
 #endif
-
-
-
-
-
-
-
 
 int find_hash(const char *name);
 int find_hash_id(unsigned char ID);
@@ -12892,141 +12791,9 @@ int hmac_file(int hash, const char *fname, const unsigned char *key,
               unsigned long keylen, unsigned char *dst, unsigned long *dstlen);
 #endif
 
-#ifdef LTC_OMAC
-
-typedef struct {
-  int cipher_idx, buflen, blklen;
-  unsigned char block[MAXBLOCKSIZE], prev[MAXBLOCKSIZE], Lu[2][MAXBLOCKSIZE];
-  symmetric_key key;
-} omac_state;
-
-int omac_init(omac_state *omac, int cipher, const unsigned char *key,
-              unsigned long keylen);
-int omac_process(omac_state *omac, const unsigned char *in,
-                 unsigned long inlen);
-int omac_done(omac_state *omac, unsigned char *out, unsigned long *outlen);
-int omac_memory(int cipher, const unsigned char *key, unsigned long keylen,
-                const unsigned char *in, unsigned long inlen,
-                unsigned char *out, unsigned long *outlen);
-int omac_memory_multi(int cipher, const unsigned char *key,
-                      unsigned long keylen, unsigned char *out,
-                      unsigned long *outlen, const unsigned char *in,
-                      unsigned long inlen, ...);
-int omac_file(int cipher, const unsigned char *key, unsigned long keylen,
-              const char *filename, unsigned char *out, unsigned long *outlen);
-int omac_test(void);
-#endif /* LTC_OMAC */
-
-#ifdef LTC_PMAC
-
-typedef struct {
-  unsigned char Ls[32][MAXBLOCKSIZE], /* L shifted by i bits to the left */
-      Li[MAXBLOCKSIZE],    /* value of Li [current value, we calc from previous
-                              recall] */
-      Lr[MAXBLOCKSIZE],    /* L * x^-1 */
-      block[MAXBLOCKSIZE], /* currently accumulated block */
-      checksum[MAXBLOCKSIZE]; /* current checksum */
-
-  symmetric_key key;         /* scheduled key for cipher */
-  unsigned long block_index; /* index # for current block */
-  int cipher_idx,            /* cipher idx */
-      block_len,             /* length of block */
-      buflen;                /* number of bytes in the buffer */
-} pmac_state;
-
-int pmac_init(pmac_state *pmac, int cipher, const unsigned char *key,
-              unsigned long keylen);
-int pmac_process(pmac_state *pmac, const unsigned char *in,
-                 unsigned long inlen);
-int pmac_done(pmac_state *pmac, unsigned char *out, unsigned long *outlen);
-
-int pmac_memory(int cipher, const unsigned char *key, unsigned long keylen,
-                const unsigned char *msg, unsigned long msglen,
-                unsigned char *out, unsigned long *outlen);
-
-int pmac_memory_multi(int cipher, const unsigned char *key,
-                      unsigned long keylen, unsigned char *out,
-                      unsigned long *outlen, const unsigned char *in,
-                      unsigned long inlen, ...);
-
-int pmac_file(int cipher, const unsigned char *key, unsigned long keylen,
-              const char *filename, unsigned char *out, unsigned long *outlen);
-
-int pmac_test(void);
-
-/* internal functions */
-int pmac_ntz(unsigned long x);
-void pmac_shift_xor(pmac_state *pmac);
-#endif /* PMAC */
 
 
-#ifdef LTC_OCB_MODE
-typedef struct {
-  unsigned char L[MAXBLOCKSIZE], /* L value */
-      Ls[32][MAXBLOCKSIZE],      /* L shifted by i bits to the left */
-      Li[MAXBLOCKSIZE], /* value of Li [current value, we calc from previous
-                           recall] */
-      Lr[MAXBLOCKSIZE], /* L * x^-1 */
-      R[MAXBLOCKSIZE],  /* R value */
-      checksum[MAXBLOCKSIZE]; /* current checksum */
 
-  symmetric_key key;         /* scheduled key for cipher */
-  unsigned long block_index; /* index # for current block */
-  int cipher,                /* cipher idx */
-      block_len;             /* length of block */
-} ocb_state;
-
-int ocb_init(ocb_state *ocb, int cipher, const unsigned char *key,
-             unsigned long keylen, const unsigned char *nonce);
-
-int ocb_encrypt(ocb_state *ocb, const unsigned char *pt, unsigned char *ct);
-int ocb_decrypt(ocb_state *ocb, const unsigned char *ct, unsigned char *pt);
-
-int ocb_done_encrypt(ocb_state *ocb, const unsigned char *pt,
-                     unsigned long ptlen, unsigned char *ct, unsigned char *tag,
-                     unsigned long *taglen);
-
-int ocb_done_decrypt(ocb_state *ocb, const unsigned char *ct,
-                     unsigned long ctlen, unsigned char *pt,
-                     const unsigned char *tag, unsigned long taglen, int *stat);
-
-int ocb_encrypt_authenticate_memory(int cipher, const unsigned char *key,
-                                    unsigned long keylen,
-                                    const unsigned char *nonce,
-                                    const unsigned char *pt,
-                                    unsigned long ptlen, unsigned char *ct,
-                                    unsigned char *tag, unsigned long *taglen);
-
-int ocb_decrypt_verify_memory(int cipher, const unsigned char *key,
-                              unsigned long keylen, const unsigned char *nonce,
-                              const unsigned char *ct, unsigned long ctlen,
-                              unsigned char *pt, const unsigned char *tag,
-                              unsigned long taglen, int *stat);
-
-int ocb_test(void);
-
-/* internal functions */
-void ocb_shift_xor(ocb_state *ocb, unsigned char *Z);
-int ocb_ntz(unsigned long x);
-int s_ocb_done(ocb_state *ocb, const unsigned char *pt, unsigned long ptlen,
-               unsigned char *ct, unsigned char *tag, unsigned long *taglen,
-               int mode);
-#endif /* LTC_OCB_MODE */
-
-#ifdef LTC_CCM_MODE
-
-#define CCM_ENCRYPT 0
-#define CCM_DECRYPT 1
-
-int ccm_memory(int cipher, const unsigned char *key, unsigned long keylen,
-               symmetric_key *uskey, const unsigned char *nonce,
-               unsigned long noncelen, const unsigned char *header,
-               unsigned long headerlen, unsigned char *pt, unsigned long ptlen,
-               unsigned char *ct, unsigned char *tag, unsigned long *taglen,
-               int direction);
-
-int ccm_test(void);
-#endif /* LTC_CCM_MODE */
 
 #if defined(LRW_MODE) || defined(LTC_GCM_MODE)
 void gcm_gf_mult(const unsigned char *a, const unsigned char *b,
@@ -13147,72 +12914,17 @@ int xcbc_file(int cipher, const unsigned char *key, unsigned long keylen,
 int xcbc_test(void);
 #endif
 
-
 /* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_mac.h,v $ */
 /* $Revision: 1.23 $ */
 /* $Date: 2007/05/12 14:37:41 $ */
 
 /* ---- PRNG Stuff ---- */
-#ifdef LTC_YARROW
-struct yarrow_prng {
-  int cipher, hash;
-  unsigned char pool[MAXBLOCKSIZE];
-  LTC_MUTEX_TYPE(prng_lock)
-};
-#endif
 
-#ifdef LTC_RC4
-struct rc4_prng {
-  int x, y;
-  unsigned char buf[256];
-};
-#endif
 
-#ifdef LTC_FORTUNA
-struct fortuna_prng {
-  hash_state pool[LTC_FORTUNA_POOLS]; /* the  pools */
 
-  symmetric_key skey;
-
-  unsigned char K[32], /* the current key */
-      IV[16];          /* IV for CTR mode */
-
-  unsigned long pool_idx, /* current pool we will add to */
-      pool0_len,          /* length of 0'th pool */
-      wd;
-
-  ulong64 reset_cnt; /* number of times we have reset */
-  LTC_MUTEX_TYPE(prng_lock)
-};
-#endif
-
-#ifdef LTC_SOBER128
-struct sober128_prng {
-  ulong32 R[17], /* Working storage for the shift register */
-      initR[17], /* saved register contents */
-      konst,     /* key dependent constant */
-      sbuf;      /* partial word encryption buffer */
-
-  int nbuf, /* number of part-word stream bits buffered */
-      flag, /* first add_entropy call or not? */
-      set;  /* did we call add_entropy to set key? */
-};
-#endif
 
 typedef union Prng_state {
   char dummy[1];
-#ifdef LTC_YARROW
-  struct yarrow_prng yarrow;
-#endif
-#ifdef LTC_RC4
-  struct rc4_prng rc4;
-#endif
-#ifdef LTC_FORTUNA
-  struct fortuna_prng fortuna;
-#endif
-#ifdef LTC_SOBER128
-  struct sober128_prng sober128;
-#endif
 } prng_state;
 
 /** PRNG descriptor */
@@ -13282,52 +12994,8 @@ extern struct ltc_prng_descriptor {
   int (*test)(void);
 } prng_descriptor[];
 
-#ifdef LTC_YARROW
-int yarrow_start(prng_state *prng);
-int yarrow_add_entropy(const unsigned char *in, unsigned long inlen,
-                       prng_state *prng);
-int yarrow_ready(prng_state *prng);
-unsigned long yarrow_read(unsigned char *out, unsigned long outlen,
-                          prng_state *prng);
-int yarrow_done(prng_state *prng);
-int yarrow_export(unsigned char *out, unsigned long *outlen, prng_state *prng);
-int yarrow_import(const unsigned char *in, unsigned long inlen,
-                  prng_state *prng);
-int yarrow_test(void);
 
-extern const struct ltc_prng_descriptor yarrow_desc;
-#endif
 
-#ifdef LTC_FORTUNA
-int fortuna_start(prng_state *prng);
-int fortuna_add_entropy(const unsigned char *in, unsigned long inlen,
-                        prng_state *prng);
-int fortuna_ready(prng_state *prng);
-unsigned long fortuna_read(unsigned char *out, unsigned long outlen,
-                           prng_state *prng);
-int fortuna_done(prng_state *prng);
-int fortuna_export(unsigned char *out, unsigned long *outlen, prng_state *prng);
-int fortuna_import(const unsigned char *in, unsigned long inlen,
-                   prng_state *prng);
-int fortuna_test(void);
-
-extern const struct ltc_prng_descriptor fortuna_desc;
-#endif
-
-#ifdef LTC_RC4
-int rc4_start(prng_state *prng);
-int rc4_add_entropy(const unsigned char *in, unsigned long inlen,
-                    prng_state *prng);
-int rc4_ready(prng_state *prng);
-unsigned long rc4_read(unsigned char *out, unsigned long outlen,
-                       prng_state *prng);
-int rc4_done(prng_state *prng);
-int rc4_export(unsigned char *out, unsigned long *outlen, prng_state *prng);
-int rc4_import(const unsigned char *in, unsigned long inlen, prng_state *prng);
-int rc4_test(void);
-
-extern const struct ltc_prng_descriptor rc4_desc;
-#endif
 
 #ifdef LTC_SPRNG
 int sprng_start(prng_state *prng);
@@ -13345,22 +13013,6 @@ int sprng_test(void);
 extern const struct ltc_prng_descriptor sprng_desc;
 #endif
 
-#ifdef LTC_SOBER128
-int sober128_start(prng_state *prng);
-int sober128_add_entropy(const unsigned char *in, unsigned long inlen,
-                         prng_state *prng);
-int sober128_ready(prng_state *prng);
-unsigned long sober128_read(unsigned char *out, unsigned long outlen,
-                            prng_state *prng);
-int sober128_done(prng_state *prng);
-int sober128_export(unsigned char *out, unsigned long *outlen,
-                    prng_state *prng);
-int sober128_import(const unsigned char *in, unsigned long inlen,
-                    prng_state *prng);
-int sober128_test(void);
-
-extern const struct ltc_prng_descriptor sober128_desc;
-#endif
 
 int find_prng(const char *name);
 int register_prng(const struct ltc_prng_descriptor *prng);
@@ -13690,71 +13342,6 @@ int ltc_ecc_fp_mul2add(ecc_point *A, void *kA, ecc_point *B, void *kB,
 int ltc_ecc_map(ecc_point *P, void *modulus, void *mp);
 #endif
 
-#ifdef LTC_MDSA
-
-/* Max diff between group and modulus size in bytes */
-#define LTC_MDSA_DELTA 512
-
-/* Max DSA group size in bytes (default allows 4k-bit groups) */
-#define LTC_MDSA_MAX_GROUP 512
-
-/** DSA key structure */
-typedef struct {
-  /** The key type, PK_PRIVATE or PK_PUBLIC */
-  int type;
-
-  /** The order of the sub-group used in octets */
-  int qord;
-
-  /** The generator  */
-  void *g;
-
-  /** The prime used to generate the sub-group */
-  void *q;
-
-  /** The large prime that generats the field the contains the sub-group */
-  void *p;
-
-  /** The private key */
-  void *x;
-
-  /** The public key */
-  void *y;
-} dsa_key;
-
-int dsa_make_key(prng_state *prng, int wprng, int group_size, int modulus_size,
-                 dsa_key *key);
-void dsa_free(dsa_key *key);
-
-int dsa_sign_hash_raw(const unsigned char *in, unsigned long inlen, void *r,
-                      void *s, prng_state *prng, int wprng, dsa_key *key);
-
-int dsa_sign_hash(const unsigned char *in, unsigned long inlen,
-                  unsigned char *out, unsigned long *outlen, prng_state *prng,
-                  int wprng, dsa_key *key);
-
-int dsa_verify_hash_raw(void *r, void *s, const unsigned char *hash,
-                        unsigned long hashlen, int *stat, dsa_key *key);
-
-int dsa_verify_hash(const unsigned char *sig, unsigned long siglen,
-                    const unsigned char *hash, unsigned long hashlen, int *stat,
-                    dsa_key *key);
-
-int dsa_encrypt_key(const unsigned char *in, unsigned long inlen,
-                    unsigned char *out, unsigned long *outlen, prng_state *prng,
-                    int wprng, int hash, dsa_key *key);
-
-int dsa_decrypt_key(const unsigned char *in, unsigned long inlen,
-                    unsigned char *out, unsigned long *outlen, dsa_key *key);
-
-int dsa_import(const unsigned char *in, unsigned long inlen, dsa_key *key);
-int dsa_export(unsigned char *out, unsigned long *outlen, int type,
-               dsa_key *key);
-int dsa_verify_key(dsa_key *key, int *stat);
-
-int dsa_shared_secret(void *private_key, void *base, dsa_key *public_key,
-                      unsigned char *out, unsigned long *outlen);
-#endif
 
 #ifdef LTC_DER
 /* DER handling */
@@ -14475,13 +14062,6 @@ extern const ltc_math_descriptor gmp_desc;
 /* $Date: 2007/05/12 14:32:35 $ */
 
 /* ---- LTC_BASE64 Routines ---- */
-#ifdef LTC_BASE64
-int base64_encode(const unsigned char *in, unsigned long len,
-                  unsigned char *out, unsigned long *outlen);
-
-int base64_decode(const unsigned char *in, unsigned long len,
-                  unsigned char *out, unsigned long *outlen);
-#endif
 
 /* ---- MEM routines ---- */
 void zeromem(void *dst, size_t len);
@@ -14501,7 +14081,6 @@ int crypt_fsa(void *mp, ...);
 /* Defines the LTC_ARGCHK macro used within the library */
 /* ARGTYPE is defined in mycrypt_cfg.h */
 #if ARGTYPE == 0
-
 
 /* this is the default LibTomCrypt macro  */
 void crypt_argchk(char *v, char *s, int d);
@@ -14604,19 +14183,6 @@ int pkcs_1_pss_decode(const unsigned char *msghash, unsigned long msghashlen,
 #endif /* LTC_PKCS_1 */
 
 /* ===> LTC_PKCS #5 -- Password Based Cryptography <=== */
-#ifdef LTC_PKCS_5
-
-/* Algorithm #1 (old) */
-int pkcs_5_alg1(const unsigned char *password, unsigned long password_len,
-                const unsigned char *salt, int iteration_count, int hash_idx,
-                unsigned char *out, unsigned long *outlen);
-
-/* Algorithm #2 (new) */
-int pkcs_5_alg2(const unsigned char *password, unsigned long password_len,
-                const unsigned char *salt, unsigned long salt_len,
-                int iteration_count, int hash_idx, unsigned char *out,
-                unsigned long *outlen);
-#endif /* LTC_PKCS_5 */
 
 /* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_pkcs.h,v $ */
 /* $Revision: 1.8 $ */
@@ -15051,7 +14617,6 @@ int find_prng(const char *name) {
  *
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
-
 
 /**
    @file crypt_fsa.c
@@ -16363,7 +15928,6 @@ int der_decode_printable_string(const unsigned char *in, unsigned long inlen,
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-
 /**
    @file der_decode_sequence_ex.c
    ASN.1 DER, decode a SEQUENCE, Tom St Denis
@@ -16385,7 +15949,7 @@ int der_decode_sequence_ex(const unsigned char *in, unsigned long inlen,
                            int ordered) {
   int err, type;
   unsigned long size, x, y, z, i, blksize;
-    blksize = 0;
+  blksize = 0;
   void *data;
 
   LTC_ARGCHK(in != NULL);
@@ -17088,7 +16652,6 @@ error:
  *
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
-
 
 /**
    @file der_decode_sequence_multi.c
@@ -18191,7 +17754,6 @@ int der_encode_printable_string(const unsigned char *in, unsigned long inlen,
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-
 /**
    @file der_encode_sequence_ex.c
    ASN.1 DER, encode a SEQUENCE, Tom St Denis
@@ -18533,7 +18095,6 @@ LBL_ERR:
  *
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
-
 
 /**
    @file der_encode_sequence_multi.c
@@ -22189,7 +21750,6 @@ LBL_ERR:
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-
 /**
    @file hash_memory_multi.c
    Hash (multiple buffers) memory helper, Tom St Denis
@@ -25623,7 +25183,7 @@ static unsigned long rng_ansic(unsigned char *buf, unsigned long len,
   clock_t t1;
   int l, acc, bits, a, b;
 
-    return 0;
+  return 0;
 
   l = len;
   bits = 8;
@@ -26381,7 +25941,7 @@ int rsa_make_key(prng_state *prng, int wprng, int size, long e, rsa_key *key) {
   if ((err = mp_sub_d(p, 1, tmp2)) != CRYPT_OK) {
     goto errkey;
   } /* tmp2 = p-1 */
-    /* tmp1 = q-1 (previous do/while loop) */
+  /* tmp1 = q-1 (previous do/while loop) */
   if ((err = mp_lcm(tmp1, tmp2, tmp1)) != CRYPT_OK) {
     goto errkey;
   } /* tmp1 = lcm(p-1, q-1) */
@@ -27174,34 +26734,7 @@ int sha1_done(hash_state *md, unsigned char *out) {
    @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
  */
 int sha1_test(void) {
-#ifndef LTC_TEST
   return CRYPT_NOP;
-#else
-  static const struct {
-    char *msg;
-    unsigned char hash[20];
-  } tests[] = {
-      {"abc", {0xa9, 0x99, 0x3e, 0x36, 0x47, 0x06, 0x81, 0x6a, 0xba, 0x3e,
-               0x25, 0x71, 0x78, 0x50, 0xc2, 0x6c, 0x9c, 0xd0, 0xd8, 0x9d}},
-      {"abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",
-       {0x84, 0x98, 0x3E, 0x44, 0x1C, 0x3B, 0xD2, 0x6E, 0xBA, 0xAE,
-        0x4A, 0xA1, 0xF9, 0x51, 0x29, 0xE5, 0xE5, 0x46, 0x70, 0xF1}}};
-
-  int i;
-  unsigned char tmp[20];
-  hash_state md;
-
-  for (i = 0; i < (int)(sizeof(tests) / sizeof(tests[0])); i++) {
-    sha1_init(&md);
-    sha1_process(&md, (unsigned char *)tests[i].msg,
-                 (unsigned long)strlen(tests[i].msg));
-    sha1_done(&md, tmp);
-    if (XMEMCMP(tmp, tests[i].hash, 20) != 0) {
-      return CRYPT_FAIL_TESTVECTOR;
-    }
-  }
-  return CRYPT_OK;
-#endif
 }
 #endif
 
@@ -27508,37 +27041,7 @@ int sha256_done(hash_state *md, unsigned char *out) {
   @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
 */
 int sha256_test(void) {
-#ifndef LTC_TEST
   return CRYPT_NOP;
-#else
-  static const struct {
-    char *msg;
-    unsigned char hash[32];
-  } tests[] = {
-      {"abc", {0xba, 0x78, 0x16, 0xbf, 0x8f, 0x01, 0xcf, 0xea, 0x41, 0x41, 0x40,
-               0xde, 0x5d, 0xae, 0x22, 0x23, 0xb0, 0x03, 0x61, 0xa3, 0x96, 0x17,
-               0x7a, 0x9c, 0xb4, 0x10, 0xff, 0x61, 0xf2, 0x00, 0x15, 0xad}},
-      {"abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",
-       {0x24, 0x8d, 0x6a, 0x61, 0xd2, 0x06, 0x38, 0xb8, 0xe5, 0xc0, 0x26,
-        0x93, 0x0c, 0x3e, 0x60, 0x39, 0xa3, 0x3c, 0xe4, 0x59, 0x64, 0xff,
-        0x21, 0x67, 0xf6, 0xec, 0xed, 0xd4, 0x19, 0xdb, 0x06, 0xc1}},
-  };
-
-  int i;
-  unsigned char tmp[32];
-  hash_state md;
-
-  for (i = 0; i < (int)(sizeof(tests) / sizeof(tests[0])); i++) {
-    sha256_init(&md);
-    sha256_process(&md, (unsigned char *)tests[i].msg,
-                   (unsigned long)strlen(tests[i].msg));
-    sha256_done(&md, tmp);
-    if (XMEMCMP(tmp, tests[i].hash, 32) != 0) {
-      return CRYPT_FAIL_TESTVECTOR;
-    }
-  }
-  return CRYPT_OK;
-#endif
 }
 
 #endif
@@ -27639,42 +27142,7 @@ int sha384_done(hash_state *md, unsigned char *out) {
   @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
 */
 int sha384_test(void) {
-#ifndef LTC_TEST
   return CRYPT_NOP;
-#else
-  static const struct {
-    char *msg;
-    unsigned char hash[48];
-  } tests[] = {
-      {"abc", {0xcb, 0x00, 0x75, 0x3f, 0x45, 0xa3, 0x5e, 0x8b, 0xb5, 0xa0,
-               0x3d, 0x69, 0x9a, 0xc6, 0x50, 0x07, 0x27, 0x2c, 0x32, 0xab,
-               0x0e, 0xde, 0xd1, 0x63, 0x1a, 0x8b, 0x60, 0x5a, 0x43, 0xff,
-               0x5b, 0xed, 0x80, 0x86, 0x07, 0x2b, 0xa1, 0xe7, 0xcc, 0x23,
-               0x58, 0xba, 0xec, 0xa1, 0x34, 0xc8, 0x25, 0xa7}},
-      {"abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmno"
-       "pjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu",
-       {0x09, 0x33, 0x0c, 0x33, 0xf7, 0x11, 0x47, 0xe8, 0x3d, 0x19,
-        0x2f, 0xc7, 0x82, 0xcd, 0x1b, 0x47, 0x53, 0x11, 0x1b, 0x17,
-        0x3b, 0x3b, 0x05, 0xd2, 0x2f, 0xa0, 0x80, 0x86, 0xe3, 0xb0,
-        0xf7, 0x12, 0xfc, 0xc7, 0xc7, 0x1a, 0x55, 0x7e, 0x2d, 0xb9,
-        0x66, 0xc3, 0xe9, 0xfa, 0x91, 0x74, 0x60, 0x39}},
-  };
-
-  int i;
-  unsigned char tmp[48];
-  hash_state md;
-
-  for (i = 0; i < (int)(sizeof(tests) / sizeof(tests[0])); i++) {
-    sha384_init(&md);
-    sha384_process(&md, (unsigned char *)tests[i].msg,
-                   (unsigned long)strlen(tests[i].msg));
-    sha384_done(&md, tmp);
-    if (XMEMCMP(tmp, tests[i].hash, 48) != 0) {
-      return CRYPT_FAIL_TESTVECTOR;
-    }
-  }
-  return CRYPT_OK;
-#endif
 }
 
 #endif /* defined(LTC_SHA384) && defined(LTC_SHA512) */
@@ -27952,44 +27420,7 @@ int sha512_done(hash_state *md, unsigned char *out) {
   @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
 */
 int sha512_test(void) {
-#ifndef LTC_TEST
   return CRYPT_NOP;
-#else
-  static const struct {
-    char *msg;
-    unsigned char hash[64];
-  } tests[] = {
-      {"abc", {0xdd, 0xaf, 0x35, 0xa1, 0x93, 0x61, 0x7a, 0xba, 0xcc, 0x41, 0x73,
-               0x49, 0xae, 0x20, 0x41, 0x31, 0x12, 0xe6, 0xfa, 0x4e, 0x89, 0xa9,
-               0x7e, 0xa2, 0x0a, 0x9e, 0xee, 0xe6, 0x4b, 0x55, 0xd3, 0x9a, 0x21,
-               0x92, 0x99, 0x2a, 0x27, 0x4f, 0xc1, 0xa8, 0x36, 0xba, 0x3c, 0x23,
-               0xa3, 0xfe, 0xeb, 0xbd, 0x45, 0x4d, 0x44, 0x23, 0x64, 0x3c, 0xe8,
-               0x0e, 0x2a, 0x9a, 0xc9, 0x4f, 0xa5, 0x4c, 0xa4, 0x9f}},
-      {"abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmno"
-       "pjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu",
-       {0x8e, 0x95, 0x9b, 0x75, 0xda, 0xe3, 0x13, 0xda, 0x8c, 0xf4, 0xf7,
-        0x28, 0x14, 0xfc, 0x14, 0x3f, 0x8f, 0x77, 0x79, 0xc6, 0xeb, 0x9f,
-        0x7f, 0xa1, 0x72, 0x99, 0xae, 0xad, 0xb6, 0x88, 0x90, 0x18, 0x50,
-        0x1d, 0x28, 0x9e, 0x49, 0x00, 0xf7, 0xe4, 0x33, 0x1b, 0x99, 0xde,
-        0xc4, 0xb5, 0x43, 0x3a, 0xc7, 0xd3, 0x29, 0xee, 0xb6, 0xdd, 0x26,
-        0x54, 0x5e, 0x96, 0xe5, 0x5b, 0x87, 0x4b, 0xe9, 0x09}},
-  };
-
-  int i;
-  unsigned char tmp[64];
-  hash_state md;
-
-  for (i = 0; i < (int)(sizeof(tests) / sizeof(tests[0])); i++) {
-    sha512_init(&md);
-    sha512_process(&md, (unsigned char *)tests[i].msg,
-                   (unsigned long)strlen(tests[i].msg));
-    sha512_done(&md, tmp);
-    if (XMEMCMP(tmp, tests[i].hash, 64) != 0) {
-      return CRYPT_FAIL_TESTVECTOR;
-    }
-  }
-  return CRYPT_OK;
-#endif
 }
 
 #endif
@@ -29821,80 +29252,7 @@ int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey) {
   @return CRYPT_OK if functional, CRYPT_NOP if self-test has been disabled
 */
 int ECB_TEST(void) {
-#ifndef LTC_TEST
   return CRYPT_NOP;
-#else
-  int err;
-  static const struct {
-    int keylen;
-    unsigned char key[32], pt[16], ct[16];
-  } tests[] = {
-      {16,
-       {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b,
-        0x0c, 0x0d, 0x0e, 0x0f},
-       {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb,
-        0xcc, 0xdd, 0xee, 0xff},
-       {0x69, 0xc4, 0xe0, 0xd8, 0x6a, 0x7b, 0x04, 0x30, 0xd8, 0xcd, 0xb7, 0x80,
-        0x70, 0xb4, 0xc5, 0x5a}},
-      {24,
-       {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b,
-        0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17},
-       {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb,
-        0xcc, 0xdd, 0xee, 0xff},
-       {0xdd, 0xa9, 0x7c, 0xa4, 0x86, 0x4c, 0xdf, 0xe0, 0x6e, 0xaf, 0x70, 0xa0,
-        0xec, 0x0d, 0x71, 0x91}},
-      {32,
-       {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
-        0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15,
-        0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f},
-       {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb,
-        0xcc, 0xdd, 0xee, 0xff},
-       {0x8e, 0xa2, 0xb7, 0xca, 0x51, 0x67, 0x45, 0xbf, 0xea, 0xfc, 0x49, 0x90,
-        0x4b, 0x49, 0x60, 0x89}}};
-
-  symmetric_key key;
-  unsigned char tmp[2][16];
-  int i, y;
-
-  for (i = 0; i < (int)(sizeof(tests) / sizeof(tests[0])); i++) {
-    zeromem(&key, sizeof(key));
-    if ((err = rijndael_setup(tests[i].key, tests[i].keylen, 0, &key)) !=
-        CRYPT_OK) {
-      return err;
-    }
-
-    rijndael_ecb_encrypt(tests[i].pt, tmp[0], &key);
-    rijndael_ecb_decrypt(tmp[0], tmp[1], &key);
-    if (XMEMCMP(tmp[0], tests[i].ct, 16) || XMEMCMP(tmp[1], tests[i].pt, 16)) {
-#if 0
-       printf("\n\nTest %d failed\n", i);
-       if (XMEMCMP(tmp[0], tests[i].ct, 16)) {
-          printf("CT: ");
-          for (i = 0; i < 16; i++) {
-             printf("%02x ", tmp[0][i]);
-          }
-          printf("\n");
-       } else {
-          printf("PT: ");
-          for (i = 0; i < 16; i++) {
-             printf("%02x ", tmp[1][i]);
-          }
-          printf("\n");
-       }
-#endif
-      return CRYPT_FAIL_TESTVECTOR;
-    }
-
-    /* now see if we can encrypt all zero bytes 1000 times, decrypt and come
-     * back where we started */
-    for (y = 0; y < 16; y++) tmp[0][y] = 0;
-    for (y = 0; y < 1000; y++) rijndael_ecb_encrypt(tmp[0], tmp[0], &key);
-    for (y = 0; y < 1000; y++) rijndael_ecb_decrypt(tmp[0], tmp[0], &key);
-    for (y = 0; y < 16; y++)
-      if (tmp[0][y] != 0) return CRYPT_FAIL_TESTVECTOR;
-  }
-  return CRYPT_OK;
-#endif
 }
 
 #endif /* ENCRYPT_ONLY */
@@ -29950,7 +29308,6 @@ int ECB_KS(int *keysize) {
    CBC implementation, encrypt block, Tom St Denis
 */
 
-
 /* $Source$ */
 /* $Revision$ */
 /* $Date$ */
@@ -29970,7 +29327,6 @@ int ECB_KS(int *keysize) {
    @file cbc_done.c
    CBC implementation, finish chain, Tom St Denis
 */
-
 
 /* $Source$ */
 /* $Revision$ */
@@ -29992,7 +29348,6 @@ int ECB_KS(int *keysize) {
    CBC implementation, encrypt block, Tom St Denis
 */
 
-
 /* $Source$ */
 /* $Revision$ */
 /* $Date$ */
@@ -30012,7 +29367,6 @@ int ECB_KS(int *keysize) {
    @file cbc_getiv.c
    CBC implementation, get IV, Tom St Denis
 */
-
 
 /* $Source$ */
 /* $Revision$ */
@@ -30034,7 +29388,6 @@ int ECB_KS(int *keysize) {
    CBC implementation, set IV, Tom St Denis
 */
 
-
 /* $Source$ */
 /* $Revision$ */
 /* $Date$ */
@@ -30054,7 +29407,6 @@ int ECB_KS(int *keysize) {
    @file cbc_start.c
    CBC implementation, start chain, Tom St Denis
 */
-
 
 /* $Source$ */
 /* $Revision$ */
@@ -31290,52 +30642,7 @@ int md5_done(hash_state *md, unsigned char *out) {
   @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
 */
 int md5_test(void) {
-#ifndef LTC_TEST
   return CRYPT_NOP;
-#else
-  static const struct {
-    char *msg;
-    unsigned char hash[16];
-  } tests[] = {
-      {"",
-       {0xd4, 0x1d, 0x8c, 0xd9, 0x8f, 0x00, 0xb2, 0x04, 0xe9, 0x80, 0x09, 0x98,
-        0xec, 0xf8, 0x42, 0x7e}},
-      {"a",
-       {0x0c, 0xc1, 0x75, 0xb9, 0xc0, 0xf1, 0xb6, 0xa8, 0x31, 0xc3, 0x99, 0xe2,
-        0x69, 0x77, 0x26, 0x61}},
-      {"abc",
-       {0x90, 0x01, 0x50, 0x98, 0x3c, 0xd2, 0x4f, 0xb0, 0xd6, 0x96, 0x3f, 0x7d,
-        0x28, 0xe1, 0x7f, 0x72}},
-      {"message digest",
-       {0xf9, 0x6b, 0x69, 0x7d, 0x7c, 0xb7, 0x93, 0x8d, 0x52, 0x5a, 0x2f, 0x31,
-        0xaa, 0xf1, 0x61, 0xd0}},
-      {"abcdefghijklmnopqrstuvwxyz",
-       {0xc3, 0xfc, 0xd3, 0xd7, 0x61, 0x92, 0xe4, 0x00, 0x7d, 0xfb, 0x49, 0x6c,
-        0xca, 0x67, 0xe1, 0x3b}},
-      {"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
-       {0xd1, 0x74, 0xab, 0x98, 0xd2, 0x77, 0xd9, 0xf5, 0xa5, 0x61, 0x1c, 0x2c,
-        0x9f, 0x41, 0x9d, 0x9f}},
-      {"12345678901234567890123456789012345678901234567890123456789012345678901"
-       "234567890",
-       {0x57, 0xed, 0xf4, 0xa2, 0x2b, 0xe3, 0xc9, 0x55, 0xac, 0x49, 0xda, 0x2e,
-        0x21, 0x07, 0xb6, 0x7a}},
-      {NULL, {0}}};
-
-  int i;
-  unsigned char tmp[16];
-  hash_state md;
-
-  for (i = 0; tests[i].msg != NULL; i++) {
-    md5_init(&md);
-    md5_process(&md, (unsigned char *)tests[i].msg,
-                (unsigned long)strlen(tests[i].msg));
-    md5_done(&md, tmp);
-    if (XMEMCMP(tmp, tests[i].hash, 16) != 0) {
-      return CRYPT_FAIL_TESTVECTOR;
-    }
-  }
-  return CRYPT_OK;
-#endif
 }
 
 #endif
@@ -31360,7 +30667,6 @@ int md5_test(void) {
   CTR implementation, encrypt data, Tom St Denis
 */
 
-
 /* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_encrypt.c,v $ */
 /* $Revision: 1.22 $ */
 /* $Date: 2007/02/22 20:26:05 $ */
@@ -31380,7 +30686,6 @@ int md5_test(void) {
    @file ctr_done.c
    CTR implementation, finish chain, Tom St Denis
 */
-
 
 /* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_done.c,v $ */
 /* $Revision: 1.7 $ */
@@ -31402,7 +30707,6 @@ int md5_test(void) {
   CTR implementation, decrypt data, Tom St Denis
 */
 
-
 /* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_decrypt.c,v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
@@ -31422,7 +30726,6 @@ int md5_test(void) {
    @file ctr_start.c
    CTR implementation, start chain, Tom St Denis
 */
-
 
 /* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_start.c,v $ */
 /* $Revision: 1.15 $ */
@@ -31444,7 +30747,6 @@ int md5_test(void) {
   CTR implementation, set IV, Tom St Denis
 */
 
-
 /* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_setiv.c,v $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
@@ -31465,8 +30767,6 @@ int md5_test(void) {
    CTR implementation, get IV, Tom St Denis
 */
 
-
 /* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_getiv.c,v $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
