@@ -36,31 +36,21 @@
 #define TLS_AES_128_CCM_SHA256 0x1304
 #define TLS_AES_128_CCM_8_SHA256 0x1305
 
-#define TLS_RSA_WITH_AES_128_CBC_SHA 0x002F
-#define TLS_RSA_WITH_AES_256_CBC_SHA 0x0035
-#define TLS_RSA_WITH_AES_128_CBC_SHA256 0x003C
-#define TLS_RSA_WITH_AES_256_CBC_SHA256 0x003D
 #define TLS_RSA_WITH_AES_128_GCM_SHA256 0x009C
 #define TLS_RSA_WITH_AES_256_GCM_SHA384 0x009D
 
 // forward secrecy
 #define TLS_DHE_RSA_WITH_AES_128_CBC_SHA 0x0033
-#define TLS_DHE_RSA_WITH_AES_256_CBC_SHA 0x0039
-#define TLS_DHE_RSA_WITH_AES_128_CBC_SHA256 0x0067
-#define TLS_DHE_RSA_WITH_AES_256_CBC_SHA256 0x006B
 #define TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 0x009E
 #define TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 0x009F
 
 #define TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA 0xC013
 #define TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA 0xC014
-#define TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256 0xC027
 #define TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 0xC02F
 #define TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 0xC030
 
 #define TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA 0xC009
 #define TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA 0xC00A
-#define TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256 0xC023
-#define TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384 0xC024
 #define TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 0xC02B
 #define TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 0xC02C
 
@@ -186,7 +176,7 @@ int tls_packet_append(struct TLSPacket *packet, const unsigned char *buf,
                       unsigned int len);
 int tls_packet_uint8(struct TLSPacket *packet, unsigned char i);
 int tls_packet_uint16(struct TLSPacket *packet, unsigned short i);
-int tls_packet_uint32(struct TLSPacket *packet, unsigned int i);
+
 int tls_packet_uint24(struct TLSPacket *packet, unsigned int i);
 int tls_random(unsigned char *key, int len);
 
@@ -273,7 +263,7 @@ int tls_certificate_chain_is_valid_root(struct TLSContext *context,
   certificates in the buffer, or the number of loaded certificates on success.
  */
 int tls_load_certificates(struct TLSContext *context,
-                          const unsigned char *pem_buffer, int pem_size);
+                          const unsigned char *pem_buffer, unsigned long pem_size);
 
 /*
   Add a private key to the given context, in PEM form. Returns a negative value
@@ -281,7 +271,7 @@ int tls_load_certificates(struct TLSContext *context,
   buffer, or 1 on success.
  */
 int tls_load_private_key(struct TLSContext *context,
-                         const unsigned char *pem_buffer, int pem_size);
+                         const unsigned char *pem_buffer, unsigned long pem_size);
 struct TLSPacket *tls_build_certificate(struct TLSContext *context);
 struct TLSPacket *tls_build_finished(struct TLSContext *context);
 struct TLSPacket *tls_build_change_cipher_spec(struct TLSContext *context);
@@ -315,50 +305,31 @@ int tls_consume_stream(struct TLSContext *context, const unsigned char *buf,
 void tls_close_notify(struct TLSContext *context);
 void tls_alert(struct TLSContext *context, unsigned char critical, int code);
 
-/* Whether tls_consume_stream() has data in its buffer that is not processed
- * yet. */
-int tls_pending(struct TLSContext *context);
-
-/*
-  Set the context as serializable or not. Must be called before negotiation.
-  Exportable contexts use a bit more memory, to be able to hold the keys.
-
-  Note that imported keys are not reexportable unless TLS_REEXPORTABLE is set.
- */
-void tls_make_exportable(struct TLSContext *context,
-                         unsigned char exportable_flag);
-
 int tls_export_context(struct TLSContext *context, unsigned char *buffer,
                        unsigned int buf_len, unsigned char small_version);
 struct TLSContext *tls_import_context(const unsigned char *buffer,
                                       unsigned int buf_len);
-int tls_is_broken(struct TLSContext *context);
-int tls_request_client_certificate(struct TLSContext *context);
+
 int tls_client_verified(struct TLSContext *context);
 const char *tls_sni(struct TLSContext *context);
 int tls_sni_set(struct TLSContext *context, const char *sni);
 int tls_load_root_certificates(struct TLSContext *context,
                                const unsigned char *pem_buffer, int pem_size);
-int tls_default_verify(struct TLSContext *context,
-                       struct TLSCertificate **certificate_chain, int len);
+
 void tls_print_certificate(const char *fname);
-int tls_add_alpn(struct TLSContext *context, const char *alpn);
+//int tls_add_alpn(struct TLSContext *context, const char *alpn);
 int tls_alpn_contains(struct TLSContext *context, const char *alpn,
                       unsigned char alpn_size);
 const char *tls_alpn(struct TLSContext *context);
 // useful when renewing certificates for servers, without the need to restart
 // the server
 int tls_clear_certificates(struct TLSContext *context);
-int tls_make_ktls(struct TLSContext *context, int socket);
-int tls_unmake_ktls(struct TLSContext *context, int socket);
 /*
   Creates a new DTLS random cookie secret to be used in HelloVerifyRequest
   (server-side). It is recommended to call this function from time to time, to
   protect against some DoS attacks.
 */
 void dtls_reset_cookie_secret();
-
-int tls_remote_error(struct TLSContext *context);
 
 #ifdef __cplusplus
 }  // extern "C"

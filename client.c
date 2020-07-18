@@ -2,7 +2,6 @@
 #include <netinet/in.h>
 #include <stdio.h>
 #include <sys/socket.h>
-#include <sys/types.h>
 #include "nutls.c"
 
 void error(char *msg) {
@@ -110,10 +109,8 @@ int SSL_CTX_root_ca(struct TLSContext *context, const char *pem_filename) {
 }
 
 int main(int argc, char *argv[]) {
-  int sockfd, portno, n;
-  // tls_print_certificate("testcert/server.certificate");
-  // tls_print_certificate("000.certificate");
-  // exit(0);
+  int sockfd, portno;
+
   struct sockaddr_in serv_addr;
   struct hostent *server;
 
@@ -137,10 +134,7 @@ int main(int argc, char *argv[]) {
   char msg_buffer[0xFF];
   snprintf(msg_buffer, sizeof(msg_buffer), msg, req_file, argv[1], portno);
 
-  char buffer[256];
-
   signal(SIGPIPE, SIG_IGN);
-  // portno = atoi(argv[2]);
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
   if (sockfd < 0) error("ERROR opening socket");
   server = gethostbyname(argv[1]);
@@ -163,10 +157,6 @@ int main(int argc, char *argv[]) {
     int res = SSL_CTX_root_ca(context, "./ca-certificates.pem");
     fprintf(stderr, "Loaded %i certificates\n", res);
   }
-
-  // the next line is needed only if you want to serialize the connection
-  // context or kTLS is used
-  tls_make_exportable(context, 1);
 
   // set sni
   tls_sni_set(context, argv[1]);
@@ -192,8 +182,8 @@ int main(int argc, char *argv[]) {
       }
 
       unsigned char read_buffer[0xFFFF];
-      int read_size = tls_read(context, read_buffer, 0xFFFF - 1);
-      if (read_size > 0) fwrite(read_buffer, read_size, 1, stdout);
+      int readSize = tls_read(context, read_buffer, 0xFFFF - 1);
+      if (readSize > 0) fwrite(read_buffer, readSize, 1, stdout);
     }
   }
   return 0;
