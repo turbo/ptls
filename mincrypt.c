@@ -3,2062 +3,46 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "ArgumentSelectionDefects"
 #define CRYPT 0x0117
-#define LTC_NO_ROLC
-
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://math.libtomcrypt.com
- */
-#ifndef BN_H_
-#define BN_H_
 
 #include <limits.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#if !(defined(LTM1) && defined(LTM2) && defined(LTM3))
-
 #define LTM1
 
 #define BN_ERROR_C
-#define BN_FAST_MP_INVMOD_C
-#define BN_FAST_MP_MONTGOMERY_REDUCE_C
-#define BN_FAST_S_MP_MUL_DIGS_C
-#define BN_FAST_S_MP_MUL_HIGH_DIGS_C
-#define BN_FAST_S_MP_SQR_C
-#define BN_MP_2EXPT_C
-#define BN_MP_ABS_C
-#define BN_MP_ADD_C
-#define BN_MP_ADD_D_C
-#define BN_MP_ADDMOD_C
-#define BN_MP_AND_C
-#define BN_MP_CLAMP_C
-#define BN_MP_CLEAR_C
-#define BN_MP_CLEAR_MULTI_C
-#define BN_MP_CMP_C
-#define BN_MP_CMP_D_C
-#define BN_MP_CMP_MAG_C
-#define BN_MP_CNT_LSB_C
-#define BN_MP_COPY_C
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_DIV_C
-#define BN_MP_DIV_2_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_DIV_3_C
-#define BN_MP_DIV_D_C
-#define BN_MP_DR_IS_MODULUS_C
-#define BN_MP_DR_REDUCE_C
-#define BN_MP_DR_SETUP_C
-#define BN_MP_EXCH_C
-#define BN_MP_EXPORT_C
-#define BN_MP_EXPT_D_C
-#define BN_MP_EXPT_D_EX_C
-#define BN_MP_EXPTMOD_C
-#define BN_MP_EXPTMOD_FAST_C
-#define BN_MP_EXTEUCLID_C
-#define BN_MP_FREAD_C
-#define BN_MP_FWRITE_C
-#define BN_MP_GCD_C
-#define BN_MP_GET_INT_C
-#define BN_MP_GET_LONG_C
-#define BN_MP_GET_LONG_LONG_C
-#define BN_MP_GROW_C
-#define BN_MP_IMPORT_C
-#define BN_MP_INIT_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_INIT_SET_C
-#define BN_MP_INIT_SET_INT_C
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_INVMOD_C
-#define BN_MP_INVMOD_SLOW_C
-#define BN_MP_IS_SQUARE_C
-#define BN_MP_JACOBI_C
-#define BN_MP_KARATSUBA_MUL_C
-#define BN_MP_KARATSUBA_SQR_C
-#define BN_MP_LCM_C
-#define BN_MP_LSHD_C
-#define BN_MP_MOD_C
-#define BN_MP_MOD_2D_C
-#define BN_MP_MOD_D_C
-#define BN_MP_MONTGOMERY_CALC_NORMALIZATION_C
-#define BN_MP_MONTGOMERY_REDUCE_C
-#define BN_MP_MONTGOMERY_SETUP_C
-#define BN_MP_MUL_C
-#define BN_MP_MUL_2_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_MUL_D_C
-#define BN_MP_MULMOD_C
-#define BN_MP_N_ROOT_C
-#define BN_MP_N_ROOT_EX_C
-#define BN_MP_NEG_C
-#define BN_MP_OR_C
-#define BN_MP_PRIME_FERMAT_C
-#define BN_MP_PRIME_IS_DIVISIBLE_C
-#define BN_MP_PRIME_IS_PRIME_C
-#define BN_MP_PRIME_MILLER_RABIN_C
-#define BN_MP_PRIME_NEXT_PRIME_C
-#define BN_MP_PRIME_RABIN_MILLER_TRIALS_C
-#define BN_MP_PRIME_RANDOM_EX_C
-#define BN_MP_RADIX_SIZE_C
+
 #define BN_MP_RADIX_SMAP_C
-#define BN_MP_RAND_C
-#define BN_MP_READ_RADIX_C
-#define BN_MP_READ_SIGNED_BIN_C
-#define BN_MP_READ_UNSIGNED_BIN_C
-#define BN_MP_REDUCE_C
-#define BN_MP_REDUCE_2K_C
+
 #define BN_MP_REDUCE_2K_L_C
-#define BN_MP_REDUCE_2K_SETUP_C
-#define BN_MP_REDUCE_2K_SETUP_L_C
-#define BN_MP_REDUCE_IS_2K_C
+
 #define BN_MP_REDUCE_IS_2K_L_C
-#define BN_MP_REDUCE_SETUP_C
-#define BN_MP_RSHD_C
-#define BN_MP_SET_C
-#define BN_MP_SET_INT_C
-#define BN_MP_SET_LONG_C
-#define BN_MP_SET_LONG_LONG_C
-#define BN_MP_SHRINK_C
-#define BN_MP_SIGNED_BIN_SIZE_C
-#define BN_MP_SQR_C
-#define BN_MP_SQRMOD_C
-#define BN_MP_SQRT_C
-#define BN_MP_SQRTMOD_PRIME_C
-#define BN_MP_SUB_C
-#define BN_MP_SUB_D_C
-#define BN_MP_SUBMOD_C
-#define BN_MP_TO_SIGNED_BIN_C
-#define BN_MP_TO_SIGNED_BIN_N_C
-#define BN_MP_TO_UNSIGNED_BIN_C
-#define BN_MP_TO_UNSIGNED_BIN_N_C
-#define BN_MP_TOOM_MUL_C
-#define BN_MP_TOOM_SQR_C
-#define BN_MP_TORADIX_C
-#define BN_MP_TORADIX_N_C
-#define BN_MP_UNSIGNED_BIN_SIZE_C
-#define BN_MP_XOR_C
-#define BN_MP_ZERO_C
-#define BN_PRIME_TAB_C
-#define BN_REVERSE_C
-#define BN_S_MP_ADD_C
+
 #define BN_S_MP_EXPTMOD_C
-#define BN_S_MP_MUL_DIGS_C
-#define BN_S_MP_MUL_HIGH_DIGS_C
-#define BN_S_MP_SQR_C
-#define BN_S_MP_SUB_C
-#define BNCORE_C
 
-#if defined(BN_ERROR_C)
-#endif
-
-#if defined(BN_FAST_MP_INVMOD_C)
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_COPY_C
-#define BN_MP_MOD_C
-#define BN_MP_SET_C
-#define BN_MP_DIV_2_C
-#define BN_MP_SUB_C
-#define BN_MP_CMP_C
-#define BN_MP_CMP_D_C
-#define BN_MP_ADD_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_MULTI_C
-#endif
-
-#define BN_MP_GROW_C
-#define BN_MP_RSHD_C
-#define BN_MP_CLAMP_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-
-#if defined(BN_FAST_S_MP_MUL_DIGS_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_FAST_S_MP_MUL_HIGH_DIGS_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_FAST_S_MP_SQR_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_2EXPT_C)
-#define BN_MP_ZERO_C
-#define BN_MP_GROW_C
-#endif
-
-#if defined(BN_MP_ABS_C)
-#define BN_MP_COPY_C
-#endif
-
-#if defined(BN_MP_ADD_C)
-#define BN_S_MP_ADD_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-#endif
-
-#if defined(BN_MP_ADD_D_C)
-#define BN_MP_GROW_C
-#define BN_MP_SUB_D_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_ADDMOD_C)
-#define BN_MP_INIT_C
-#define BN_MP_ADD_C
-#define BN_MP_CLEAR_C
-#define BN_MP_MOD_C
-#endif
-
-#if defined(BN_MP_AND_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_CLAMP_C)
-#endif
-
-#if defined(BN_MP_CLEAR_C)
-#endif
-
-#if defined(BN_MP_CLEAR_MULTI_C)
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_CMP_C)
-#define BN_MP_CMP_MAG_C
-#endif
-
-#if defined(BN_MP_CMP_D_C)
-#endif
-
-#if defined(BN_MP_CMP_MAG_C)
-#endif
-
-#if defined(BN_MP_CNT_LSB_C)
-#endif
-
-#if defined(BN_MP_COPY_C)
-#define BN_MP_GROW_C
-#endif
-
-#if defined(BN_MP_COUNT_BITS_C)
-#endif
-
-#if defined(BN_MP_DIV_C)
-#define BN_MP_CMP_MAG_C
-#define BN_MP_COPY_C
-#define BN_MP_ZERO_C
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_SET_C
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_ABS_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_CMP_C
-#define BN_MP_SUB_C
-#define BN_MP_ADD_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_MULTI_C
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_INIT_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_LSHD_C
-#define BN_MP_RSHD_C
-#define BN_MP_MUL_D_C
-#define BN_MP_CLAMP_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_DIV_2_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_DIV_2D_C)
-#define BN_MP_COPY_C
-#define BN_MP_ZERO_C
-#define BN_MP_INIT_C
-#define BN_MP_MOD_2D_C
-#define BN_MP_CLEAR_C
-#define BN_MP_RSHD_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#endif
-
-#if defined(BN_MP_DIV_3_C)
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_DIV_D_C)
-#define BN_MP_COPY_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_DIV_3_C
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_DR_IS_MODULUS_C)
-#endif
-
-#if defined(BN_MP_DR_REDUCE_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-#endif
-
-#if defined(BN_MP_DR_SETUP_C)
-#endif
-
-#if defined(BN_MP_EXCH_C)
-#endif
-
-#if defined(BN_MP_EXPORT_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_EXPT_D_C)
-#define BN_MP_EXPT_D_EX_C
-#endif
-
-#if defined(BN_MP_EXPT_D_EX_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_SET_C
-#define BN_MP_MUL_C
-#define BN_MP_CLEAR_C
-#define BN_MP_SQR_C
-#endif
-
-#if defined(BN_MP_EXPTMOD_C)
-#define BN_MP_INIT_C
-#define BN_MP_INVMOD_C
-#define BN_MP_CLEAR_C
-#define BN_MP_ABS_C
-#define BN_MP_CLEAR_MULTI_C
-#define BN_MP_REDUCE_IS_2K_L_C
 #define BN_S_MP_EXPTMOD_C
-#define BN_MP_DR_IS_MODULUS_C
-#define BN_MP_REDUCE_IS_2K_C
-#define BN_MP_EXPTMOD_FAST_C
-#endif
 
-#if defined(BN_MP_EXPTMOD_FAST_C)
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_INIT_C
-#define BN_MP_CLEAR_C
-#define BN_MP_MONTGOMERY_SETUP_C
-#define BN_FAST_MP_MONTGOMERY_REDUCE_C
-#define BN_MP_MONTGOMERY_REDUCE_C
-#define BN_MP_DR_SETUP_C
-#define BN_MP_DR_REDUCE_C
-#define BN_MP_REDUCE_2K_SETUP_C
-#define BN_MP_REDUCE_2K_C
-#define BN_MP_MONTGOMERY_CALC_NORMALIZATION_C
-#define BN_MP_MULMOD_C
-#define BN_MP_SET_C
-#define BN_MP_MOD_C
-#define BN_MP_COPY_C
-#define BN_MP_SQR_C
-#define BN_MP_MUL_C
-#define BN_MP_EXCH_C
-#endif
-
-#if defined(BN_MP_EXTEUCLID_C)
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_SET_C
-#define BN_MP_COPY_C
-#define BN_MP_DIV_C
-#define BN_MP_MUL_C
-#define BN_MP_SUB_C
-#define BN_MP_NEG_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_MULTI_C
-#endif
-
-#if defined(BN_MP_FREAD_C)
-#define BN_MP_ZERO_C
-#define BN_MP_MUL_D_C
-#define BN_MP_ADD_D_C
-#define BN_MP_CMP_D_C
-#endif
-
-#if defined(BN_MP_FWRITE_C)
-#define BN_MP_RADIX_SIZE_C
-#define BN_MP_TORADIX_C
-#endif
-
-#if defined(BN_MP_GCD_C)
-#define BN_MP_ABS_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_CNT_LSB_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_CMP_MAG_C
-#define BN_MP_EXCH_C
-#define BN_S_MP_SUB_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_GET_INT_C)
-#endif
-
-#if defined(BN_MP_GET_LONG_C)
-#endif
-
-#if defined(BN_MP_GET_LONG_LONG_C)
-#endif
-
-#if defined(BN_MP_GROW_C)
-#endif
-
-#if defined(BN_MP_IMPORT_C)
-#define BN_MP_ZERO_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_INIT_C)
-#endif
-
-#if defined(BN_MP_INIT_COPY_C)
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_COPY_C
-#endif
-
-#if defined(BN_MP_INIT_MULTI_C)
-#define BN_MP_INIT_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_INIT_SET_C)
-#define BN_MP_INIT_C
-#define BN_MP_SET_C
-#endif
-
-#if defined(BN_MP_INIT_SET_INT_C)
-#define BN_MP_INIT_C
-#define BN_MP_SET_INT_C
-#endif
-
-#if defined(BN_MP_INIT_SIZE_C)
-#define BN_MP_INIT_C
-#endif
-
-#if defined(BN_MP_INVMOD_C)
-#define BN_FAST_MP_INVMOD_C
-#define BN_MP_INVMOD_SLOW_C
-#endif
-
-#if defined(BN_MP_INVMOD_SLOW_C)
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_MOD_C
-#define BN_MP_COPY_C
-#define BN_MP_SET_C
-#define BN_MP_DIV_2_C
-#define BN_MP_ADD_C
-#define BN_MP_SUB_C
-#define BN_MP_CMP_C
-#define BN_MP_CMP_D_C
-#define BN_MP_CMP_MAG_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_MULTI_C
-#endif
-
-#if defined(BN_MP_IS_SQUARE_C)
-#define BN_MP_MOD_D_C
-#define BN_MP_INIT_SET_INT_C
-#define BN_MP_MOD_C
-#define BN_MP_GET_INT_C
-#define BN_MP_SQRT_C
-#define BN_MP_SQR_C
-#define BN_MP_CMP_MAG_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_JACOBI_C)
-#define BN_MP_CMP_D_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_CNT_LSB_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_MOD_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_KARATSUBA_MUL_C)
-#define BN_MP_MUL_C
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_CLAMP_C
-#define BN_S_MP_ADD_C
-#define BN_MP_ADD_C
-#define BN_S_MP_SUB_C
-#define BN_MP_LSHD_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_KARATSUBA_SQR_C)
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_CLAMP_C
-#define BN_MP_SQR_C
-#define BN_S_MP_ADD_C
-#define BN_S_MP_SUB_C
-#define BN_MP_LSHD_C
-#define BN_MP_ADD_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_LCM_C)
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_GCD_C
-#define BN_MP_CMP_MAG_C
-#define BN_MP_DIV_C
-#define BN_MP_MUL_C
-#define BN_MP_CLEAR_MULTI_C
-#endif
-
-#if defined(BN_MP_LSHD_C)
-#define BN_MP_GROW_C
-#define BN_MP_RSHD_C
-#endif
-
-#if defined(BN_MP_MOD_C)
-#define BN_MP_INIT_C
-#define BN_MP_DIV_C
-#define BN_MP_CLEAR_C
-#define BN_MP_EXCH_C
-#define BN_MP_ADD_C
-#endif
-
-#if defined(BN_MP_MOD_2D_C)
-#define BN_MP_ZERO_C
-#define BN_MP_COPY_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_MOD_D_C)
-#define BN_MP_DIV_D_C
-#endif
-
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_2EXPT_C
-#define BN_MP_SET_C
-#define BN_MP_MUL_2_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-
-#define BN_FAST_MP_MONTGOMERY_REDUCE_C
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#define BN_MP_RSHD_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-
-
-#if defined(BN_MP_MUL_C)
-#define BN_MP_TOOM_MUL_C
-#define BN_MP_KARATSUBA_MUL_C
-#define BN_FAST_S_MP_MUL_DIGS_C
-#define BN_S_MP_MUL_DIGS_C
-#endif
-
-#if defined(BN_MP_MUL_2_C)
-#define BN_MP_GROW_C
-#endif
-
-#if defined(BN_MP_MUL_2D_C)
-#define BN_MP_COPY_C
-#define BN_MP_GROW_C
-#define BN_MP_LSHD_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_MUL_D_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_MULMOD_C)
-#define BN_MP_INIT_C
-#define BN_MP_MUL_C
-#define BN_MP_CLEAR_C
-#define BN_MP_MOD_C
-#endif
-
-#if defined(BN_MP_N_ROOT_C)
-#define BN_MP_N_ROOT_EX_C
-#endif
-
-#if defined(BN_MP_N_ROOT_EX_C)
-#define BN_MP_INIT_C
-#define BN_MP_SET_C
-#define BN_MP_COPY_C
-#define BN_MP_EXPT_D_EX_C
-#define BN_MP_MUL_C
-#define BN_MP_SUB_C
-#define BN_MP_MUL_D_C
-#define BN_MP_DIV_C
-#define BN_MP_CMP_C
-#define BN_MP_SUB_D_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_NEG_C)
-#define BN_MP_COPY_C
-#endif
-
-#if defined(BN_MP_OR_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_PRIME_FERMAT_C)
-#define BN_MP_CMP_D_C
-#define BN_MP_INIT_C
-#define BN_MP_EXPTMOD_C
-#define BN_MP_CMP_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_PRIME_IS_DIVISIBLE_C)
-#define BN_MP_MOD_D_C
-#endif
-
-#if defined(BN_MP_PRIME_IS_PRIME_C)
-#define BN_MP_CMP_D_C
-#define BN_MP_PRIME_IS_DIVISIBLE_C
-#define BN_MP_INIT_C
-#define BN_MP_SET_C
-#define BN_MP_PRIME_MILLER_RABIN_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_PRIME_MILLER_RABIN_C)
-#define BN_MP_CMP_D_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_SUB_D_C
-#define BN_MP_CNT_LSB_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_EXPTMOD_C
-#define BN_MP_CMP_C
-#define BN_MP_SQRMOD_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_PRIME_NEXT_PRIME_C)
-#define BN_MP_CMP_D_C
-#define BN_MP_SET_C
-#define BN_MP_SUB_D_C
-#define BN_MP_MOD_D_C
-#define BN_MP_INIT_C
-#define BN_MP_ADD_D_C
-#define BN_MP_PRIME_MILLER_RABIN_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_PRIME_RABIN_MILLER_TRIALS_C)
-#endif
-
-#if defined(BN_MP_PRIME_RANDOM_EX_C)
-#define BN_MP_READ_UNSIGNED_BIN_C
-#define BN_MP_PRIME_IS_PRIME_C
-#define BN_MP_SUB_D_C
-#define BN_MP_DIV_2_C
-#define BN_MP_MUL_2_C
-#define BN_MP_ADD_D_C
-#endif
-
-#if defined(BN_MP_RADIX_SIZE_C)
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_DIV_D_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_RAND_C)
-#define BN_MP_ZERO_C
-#define BN_MP_ADD_D_C
-#define BN_MP_LSHD_C
-#endif
-
-#if defined(BN_MP_READ_RADIX_C)
-#define BN_MP_ZERO_C
-#define BN_MP_MUL_D_C
-#define BN_MP_ADD_D_C
-#endif
-
-#if defined(BN_MP_READ_SIGNED_BIN_C)
-#define BN_MP_READ_UNSIGNED_BIN_C
-#endif
-
-#if defined(BN_MP_READ_UNSIGNED_BIN_C)
-#define BN_MP_GROW_C
-#define BN_MP_ZERO_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_REDUCE_C)
-#define BN_MP_REDUCE_SETUP_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_RSHD_C
-#define BN_MP_MUL_C
-#define BN_S_MP_MUL_HIGH_DIGS_C
-#define BN_FAST_S_MP_MUL_HIGH_DIGS_C
-#define BN_MP_MOD_2D_C
-#define BN_S_MP_MUL_DIGS_C
-#define BN_MP_SUB_C
-#define BN_MP_CMP_D_C
-#define BN_MP_SET_C
-#define BN_MP_LSHD_C
-#define BN_MP_ADD_C
-#define BN_MP_CMP_C
-#define BN_S_MP_SUB_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_REDUCE_2K_C)
-#define BN_MP_INIT_C
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_MUL_D_C
-#define BN_S_MP_ADD_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_REDUCE_2K_L_C)
-#define BN_MP_INIT_C
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_MUL_C
-#define BN_S_MP_ADD_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_REDUCE_2K_SETUP_C)
-#define BN_MP_INIT_C
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_2EXPT_C
-#define BN_MP_CLEAR_C
-#define BN_S_MP_SUB_C
-#endif
-
-#if defined(BN_MP_REDUCE_2K_SETUP_L_C)
-#define BN_MP_INIT_C
-#define BN_MP_2EXPT_C
-#define BN_MP_COUNT_BITS_C
-#define BN_S_MP_SUB_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_REDUCE_IS_2K_C)
-#define BN_MP_REDUCE_2K_C
-#define BN_MP_COUNT_BITS_C
-#endif
-
-#if defined(BN_MP_REDUCE_IS_2K_L_C)
-#endif
-
-#if defined(BN_MP_REDUCE_SETUP_C)
-#define BN_MP_2EXPT_C
-#define BN_MP_DIV_C
-#endif
-
-#if defined(BN_MP_RSHD_C)
-#define BN_MP_ZERO_C
-#endif
-
-#if defined(BN_MP_SET_C)
-#define BN_MP_ZERO_C
-#endif
-
-#if defined(BN_MP_SET_INT_C)
-#define BN_MP_ZERO_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_SET_LONG_C)
-#endif
-
-#if defined(BN_MP_SET_LONG_LONG_C)
-#endif
-
-#if defined(BN_MP_SHRINK_C)
-#endif
-
-#if defined(BN_MP_SIGNED_BIN_SIZE_C)
-#define BN_MP_UNSIGNED_BIN_SIZE_C
-#endif
-
-#if defined(BN_MP_SQR_C)
-#define BN_MP_TOOM_SQR_C
-#define BN_MP_KARATSUBA_SQR_C
-#define BN_FAST_S_MP_SQR_C
-#define BN_S_MP_SQR_C
-#endif
-
-#if defined(BN_MP_SQRMOD_C)
-#define BN_MP_INIT_C
-#define BN_MP_SQR_C
-#define BN_MP_CLEAR_C
-#define BN_MP_MOD_C
-#endif
-
-#if defined(BN_MP_SQRT_C)
-#define BN_MP_N_ROOT_C
-#define BN_MP_ZERO_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_RSHD_C
-#define BN_MP_DIV_C
-#define BN_MP_ADD_C
-#define BN_MP_DIV_2_C
-#define BN_MP_CMP_MAG_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_SQRTMOD_PRIME_C)
-#define BN_MP_CMP_D_C
-#define BN_MP_ZERO_C
-#define BN_MP_JACOBI_C
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_MOD_D_C
-#define BN_MP_ADD_D_C
-#define BN_MP_DIV_2_C
-#define BN_MP_EXPTMOD_C
-#define BN_MP_COPY_C
-#define BN_MP_SUB_D_C
-#define BN_MP_SET_INT_C
-#define BN_MP_SQRMOD_C
-#define BN_MP_MULMOD_C
-#define BN_MP_SET_C
-#define BN_MP_CLEAR_MULTI_C
-#endif
-
-#if defined(BN_MP_SUB_C)
-#define BN_S_MP_ADD_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-#endif
-
-#if defined(BN_MP_SUB_D_C)
-#define BN_MP_GROW_C
-#define BN_MP_ADD_D_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_SUBMOD_C)
-#define BN_MP_INIT_C
-#define BN_MP_SUB_C
-#define BN_MP_CLEAR_C
-#define BN_MP_MOD_C
-#endif
-
-#if defined(BN_MP_TO_SIGNED_BIN_C)
-#define BN_MP_TO_UNSIGNED_BIN_C
-#endif
-
-#if defined(BN_MP_TO_SIGNED_BIN_N_C)
-#define BN_MP_SIGNED_BIN_SIZE_C
-#define BN_MP_TO_SIGNED_BIN_C
-#endif
-
-#if defined(BN_MP_TO_UNSIGNED_BIN_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_TO_UNSIGNED_BIN_N_C)
-#define BN_MP_UNSIGNED_BIN_SIZE_C
-#define BN_MP_TO_UNSIGNED_BIN_C
-#endif
-
-#if defined(BN_MP_TOOM_MUL_C)
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_MOD_2D_C
-#define BN_MP_COPY_C
-#define BN_MP_RSHD_C
-#define BN_MP_MUL_C
-#define BN_MP_MUL_2_C
-#define BN_MP_ADD_C
-#define BN_MP_SUB_C
-#define BN_MP_DIV_2_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_MUL_D_C
-#define BN_MP_DIV_3_C
-#define BN_MP_LSHD_C
-#define BN_MP_CLEAR_MULTI_C
-#endif
-
-#if defined(BN_MP_TOOM_SQR_C)
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_MOD_2D_C
-#define BN_MP_COPY_C
-#define BN_MP_RSHD_C
-#define BN_MP_SQR_C
-#define BN_MP_MUL_2_C
-#define BN_MP_ADD_C
-#define BN_MP_SUB_C
-#define BN_MP_DIV_2_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_MUL_D_C
-#define BN_MP_DIV_3_C
-#define BN_MP_LSHD_C
-#define BN_MP_CLEAR_MULTI_C
-#endif
-
-#if defined(BN_MP_TORADIX_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_DIV_D_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_TORADIX_N_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_DIV_D_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_UNSIGNED_BIN_SIZE_C)
-#define BN_MP_COUNT_BITS_C
-#endif
-
-#if defined(BN_MP_XOR_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_ZERO_C)
-#endif
-
-#if defined(BN_PRIME_TAB_C)
-#endif
-
-#if defined(BN_REVERSE_C)
-#endif
-
-#if defined(BN_S_MP_ADD_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_S_MP_EXPTMOD_C)
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_INIT_C
-#define BN_MP_CLEAR_C
-#define BN_MP_REDUCE_SETUP_C
-#define BN_MP_REDUCE_C
-#define BN_MP_REDUCE_2K_SETUP_L_C
 #define BN_MP_REDUCE_2K_L_C
-#define BN_MP_MOD_C
-#define BN_MP_COPY_C
-#define BN_MP_SQR_C
-#define BN_MP_MUL_C
-#define BN_MP_SET_C
-#define BN_MP_EXCH_C
-#endif
 
-#if defined(BN_S_MP_MUL_DIGS_C)
-#define BN_FAST_S_MP_MUL_DIGS_C
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_S_MP_MUL_HIGH_DIGS_C)
-#define BN_FAST_S_MP_MUL_HIGH_DIGS_C
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_S_MP_SQR_C)
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_S_MP_SUB_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BNCORE_C)
-#endif
-
-#ifdef LTM3
-#define LTM_LAST
-#endif
-/* super class file for PK algos */
-
-/* default ... include all MPI */
-
-/* RSA only (does not support DH/DSA/ECC) */
-/* #define SC_RSA_1 */
-
-/* For reference.... On an Athlon64 optimizing for speed...
-
-   LTM's mpi.o with all functions [striped] is 142KiB in size.
-
- */
-
-/* Works for RSA only, mpi.o is 68KiB */
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-#if !(defined(LTM1) && defined(LTM2) && defined(LTM3))
-#if defined(LTM2)
-#define LTM3
-#endif
-#if defined(LTM1)
 #define LTM2
-#endif
 #define LTM1
 
 #define BN_ERROR_C
-#define BN_FAST_MP_INVMOD_C
-#define BN_FAST_MP_MONTGOMERY_REDUCE_C
-#define BN_FAST_S_MP_MUL_DIGS_C
-#define BN_FAST_S_MP_MUL_HIGH_DIGS_C
-#define BN_FAST_S_MP_SQR_C
-#define BN_MP_2EXPT_C
-#define BN_MP_ABS_C
-#define BN_MP_ADD_C
-#define BN_MP_ADD_D_C
-#define BN_MP_ADDMOD_C
-#define BN_MP_AND_C
-#define BN_MP_CLAMP_C
-#define BN_MP_CLEAR_C
-#define BN_MP_CLEAR_MULTI_C
-#define BN_MP_CMP_C
-#define BN_MP_CMP_D_C
-#define BN_MP_CMP_MAG_C
-#define BN_MP_CNT_LSB_C
-#define BN_MP_COPY_C
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_DIV_C
-#define BN_MP_DIV_2_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_DIV_3_C
-#define BN_MP_DIV_D_C
-#define BN_MP_DR_IS_MODULUS_C
-#define BN_MP_DR_REDUCE_C
-#define BN_MP_DR_SETUP_C
-#define BN_MP_EXCH_C
-#define BN_MP_EXPORT_C
-#define BN_MP_EXPT_D_C
-#define BN_MP_EXPT_D_EX_C
-#define BN_MP_EXPTMOD_C
-#define BN_MP_EXPTMOD_FAST_C
-#define BN_MP_EXTEUCLID_C
-#define BN_MP_FREAD_C
-#define BN_MP_FWRITE_C
-#define BN_MP_GCD_C
-#define BN_MP_GET_INT_C
-#define BN_MP_GET_LONG_C
-#define BN_MP_GET_LONG_LONG_C
-#define BN_MP_GROW_C
-#define BN_MP_IMPORT_C
-#define BN_MP_INIT_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_INIT_SET_C
-#define BN_MP_INIT_SET_INT_C
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_INVMOD_C
-#define BN_MP_INVMOD_SLOW_C
-#define BN_MP_IS_SQUARE_C
-#define BN_MP_JACOBI_C
-#define BN_MP_KARATSUBA_MUL_C
-#define BN_MP_KARATSUBA_SQR_C
-#define BN_MP_LCM_C
-#define BN_MP_LSHD_C
-#define BN_MP_MOD_C
-#define BN_MP_MOD_2D_C
-#define BN_MP_MOD_D_C
-#define BN_MP_MONTGOMERY_CALC_NORMALIZATION_C
-#define BN_MP_MONTGOMERY_REDUCE_C
-#define BN_MP_MONTGOMERY_SETUP_C
-#define BN_MP_MUL_C
-#define BN_MP_MUL_2_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_MUL_D_C
-#define BN_MP_MULMOD_C
-#define BN_MP_N_ROOT_C
-#define BN_MP_N_ROOT_EX_C
-#define BN_MP_NEG_C
-#define BN_MP_OR_C
-#define BN_MP_PRIME_FERMAT_C
-#define BN_MP_PRIME_IS_DIVISIBLE_C
-#define BN_MP_PRIME_IS_PRIME_C
-#define BN_MP_PRIME_MILLER_RABIN_C
-#define BN_MP_PRIME_NEXT_PRIME_C
-#define BN_MP_PRIME_RABIN_MILLER_TRIALS_C
-#define BN_MP_PRIME_RANDOM_EX_C
-#define BN_MP_RADIX_SIZE_C
+
 #define BN_MP_RADIX_SMAP_C
-#define BN_MP_RAND_C
-#define BN_MP_READ_RADIX_C
-#define BN_MP_READ_SIGNED_BIN_C
-#define BN_MP_READ_UNSIGNED_BIN_C
-#define BN_MP_REDUCE_C
-#define BN_MP_REDUCE_2K_C
+
 #define BN_MP_REDUCE_2K_L_C
-#define BN_MP_REDUCE_2K_SETUP_C
-#define BN_MP_REDUCE_2K_SETUP_L_C
-#define BN_MP_REDUCE_IS_2K_C
+
 #define BN_MP_REDUCE_IS_2K_L_C
-#define BN_MP_REDUCE_SETUP_C
-#define BN_MP_RSHD_C
-#define BN_MP_SET_C
-#define BN_MP_SET_INT_C
-#define BN_MP_SET_LONG_C
-#define BN_MP_SET_LONG_LONG_C
-#define BN_MP_SHRINK_C
-#define BN_MP_SIGNED_BIN_SIZE_C
-#define BN_MP_SQR_C
-#define BN_MP_SQRMOD_C
-#define BN_MP_SQRT_C
-#define BN_MP_SQRTMOD_PRIME_C
-#define BN_MP_SUB_C
-#define BN_MP_SUB_D_C
-#define BN_MP_SUBMOD_C
-#define BN_MP_TO_SIGNED_BIN_C
-#define BN_MP_TO_SIGNED_BIN_N_C
-#define BN_MP_TO_UNSIGNED_BIN_C
-#define BN_MP_TO_UNSIGNED_BIN_N_C
-#define BN_MP_TOOM_MUL_C
-#define BN_MP_TOOM_SQR_C
-#define BN_MP_TORADIX_C
-#define BN_MP_TORADIX_N_C
-#define BN_MP_UNSIGNED_BIN_SIZE_C
-#define BN_MP_XOR_C
-#define BN_MP_ZERO_C
-#define BN_PRIME_TAB_C
-#define BN_REVERSE_C
-#define BN_S_MP_ADD_C
+
 #define BN_S_MP_EXPTMOD_C
-#define BN_S_MP_MUL_DIGS_C
-#define BN_S_MP_MUL_HIGH_DIGS_C
-#define BN_S_MP_SQR_C
-#define BN_S_MP_SUB_C
-#define BNCORE_C
 
-#if defined(BN_ERROR_C)
-#endif
-
-#if defined(BN_FAST_MP_INVMOD_C)
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_COPY_C
-#define BN_MP_MOD_C
-#define BN_MP_SET_C
-#define BN_MP_DIV_2_C
-#define BN_MP_SUB_C
-#define BN_MP_CMP_C
-#define BN_MP_CMP_D_C
-#define BN_MP_ADD_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_MULTI_C
-#endif
-
-#define BN_MP_GROW_C
-#define BN_MP_RSHD_C
-#define BN_MP_CLAMP_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-
-#if defined(BN_FAST_S_MP_MUL_DIGS_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_FAST_S_MP_MUL_HIGH_DIGS_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_FAST_S_MP_SQR_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_2EXPT_C)
-#define BN_MP_ZERO_C
-#define BN_MP_GROW_C
-#endif
-
-#if defined(BN_MP_ABS_C)
-#define BN_MP_COPY_C
-#endif
-
-#if defined(BN_MP_ADD_C)
-#define BN_S_MP_ADD_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-#endif
-
-#if defined(BN_MP_ADD_D_C)
-#define BN_MP_GROW_C
-#define BN_MP_SUB_D_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_ADDMOD_C)
-#define BN_MP_INIT_C
-#define BN_MP_ADD_C
-#define BN_MP_CLEAR_C
-#define BN_MP_MOD_C
-#endif
-
-#if defined(BN_MP_AND_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_CLAMP_C)
-#endif
-
-#if defined(BN_MP_CLEAR_C)
-#endif
-
-#if defined(BN_MP_CLEAR_MULTI_C)
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_CMP_C)
-#define BN_MP_CMP_MAG_C
-#endif
-
-#if defined(BN_MP_CMP_D_C)
-#endif
-
-#if defined(BN_MP_CMP_MAG_C)
-#endif
-
-#if defined(BN_MP_COPY_C)
-#define BN_MP_GROW_C
-#endif
-
-#if defined(BN_MP_COUNT_BITS_C)
-#endif
-
-#if defined(BN_MP_DIV_C)
-#define BN_MP_CMP_MAG_C
-#define BN_MP_COPY_C
-#define BN_MP_ZERO_C
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_SET_C
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_ABS_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_CMP_C
-#define BN_MP_SUB_C
-#define BN_MP_ADD_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_MULTI_C
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_INIT_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_LSHD_C
-#define BN_MP_RSHD_C
-#define BN_MP_MUL_D_C
-#define BN_MP_CLAMP_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_DIV_2_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_DIV_2D_C)
-#define BN_MP_COPY_C
-#define BN_MP_ZERO_C
-#define BN_MP_INIT_C
-#define BN_MP_MOD_2D_C
-#define BN_MP_CLEAR_C
-#define BN_MP_RSHD_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#endif
-
-#if defined(BN_MP_DIV_3_C)
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_DIV_D_C)
-#define BN_MP_COPY_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_DIV_3_C
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_DR_IS_MODULUS_C)
-#endif
-
-#if defined(BN_MP_DR_REDUCE_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-#endif
-
-#if defined(BN_MP_DR_SETUP_C)
-#endif
-
-#if defined(BN_MP_EXCH_C)
-#endif
-
-#if defined(BN_MP_EXPORT_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_EXPT_D_C)
-#define BN_MP_EXPT_D_EX_C
-#endif
-
-#if defined(BN_MP_EXPT_D_EX_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_SET_C
-#define BN_MP_MUL_C
-#define BN_MP_CLEAR_C
-#define BN_MP_SQR_C
-#endif
-
-#if defined(BN_MP_EXPTMOD_C)
-#define BN_MP_INIT_C
-#define BN_MP_INVMOD_C
-#define BN_MP_CLEAR_C
-#define BN_MP_ABS_C
-#define BN_MP_CLEAR_MULTI_C
 #define BN_MP_REDUCE_IS_2K_L_C
-#define BN_S_MP_EXPTMOD_C
-#define BN_MP_DR_IS_MODULUS_C
-#define BN_MP_REDUCE_IS_2K_C
-#define BN_MP_EXPTMOD_FAST_C
-#endif
 
-#if defined(BN_MP_EXPTMOD_FAST_C)
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_INIT_C
-#define BN_MP_CLEAR_C
-#define BN_MP_MONTGOMERY_SETUP_C
-#define BN_FAST_MP_MONTGOMERY_REDUCE_C
-#define BN_MP_MONTGOMERY_REDUCE_C
-#define BN_MP_DR_SETUP_C
-#define BN_MP_DR_REDUCE_C
-#define BN_MP_REDUCE_2K_SETUP_C
-#define BN_MP_REDUCE_2K_C
-#define BN_MP_MONTGOMERY_CALC_NORMALIZATION_C
-#define BN_MP_MULMOD_C
-#define BN_MP_SET_C
-#define BN_MP_MOD_C
-#define BN_MP_COPY_C
-#define BN_MP_SQR_C
-#define BN_MP_MUL_C
-#define BN_MP_EXCH_C
-#endif
-
-#if defined(BN_MP_EXTEUCLID_C)
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_SET_C
-#define BN_MP_COPY_C
-#define BN_MP_DIV_C
-#define BN_MP_MUL_C
-#define BN_MP_SUB_C
-#define BN_MP_NEG_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_MULTI_C
-#endif
-
-#if defined(BN_MP_FREAD_C)
-#define BN_MP_ZERO_C
-#define BN_MP_MUL_D_C
-#define BN_MP_ADD_D_C
-#define BN_MP_CMP_D_C
-#endif
-
-#if defined(BN_MP_FWRITE_C)
-#define BN_MP_RADIX_SIZE_C
-#define BN_MP_TORADIX_C
-#endif
-
-#if defined(BN_MP_GCD_C)
-#define BN_MP_ABS_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_CNT_LSB_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_CMP_MAG_C
-#define BN_MP_EXCH_C
-#define BN_S_MP_SUB_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_GET_INT_C)
-#endif
-
-#if defined(BN_MP_GET_LONG_C)
-#endif
-
-#if defined(BN_MP_GET_LONG_LONG_C)
-#endif
-
-#if defined(BN_MP_GROW_C)
-#endif
-
-#if defined(BN_MP_IMPORT_C)
-#define BN_MP_ZERO_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_INIT_C)
-#endif
-
-#if defined(BN_MP_INIT_COPY_C)
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_COPY_C
-#endif
-
-#if defined(BN_MP_INIT_MULTI_C)
-#define BN_MP_INIT_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_INIT_SET_C)
-#define BN_MP_INIT_C
-#define BN_MP_SET_C
-#endif
-
-#if defined(BN_MP_INIT_SET_INT_C)
-#define BN_MP_INIT_C
-#define BN_MP_SET_INT_C
-#endif
-
-#if defined(BN_MP_INIT_SIZE_C)
-#define BN_MP_INIT_C
-#endif
-
-#if defined(BN_MP_INVMOD_C)
-#define BN_FAST_MP_INVMOD_C
-#define BN_MP_INVMOD_SLOW_C
-#endif
-
-#if defined(BN_MP_INVMOD_SLOW_C)
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_MOD_C
-#define BN_MP_COPY_C
-#define BN_MP_SET_C
-#define BN_MP_DIV_2_C
-#define BN_MP_ADD_C
-#define BN_MP_SUB_C
-#define BN_MP_CMP_C
-#define BN_MP_CMP_D_C
-#define BN_MP_CMP_MAG_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_MULTI_C
-#endif
-
-#if defined(BN_MP_IS_SQUARE_C)
-#define BN_MP_MOD_D_C
-#define BN_MP_INIT_SET_INT_C
-#define BN_MP_MOD_C
-#define BN_MP_GET_INT_C
-#define BN_MP_SQRT_C
-#define BN_MP_SQR_C
-#define BN_MP_CMP_MAG_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_JACOBI_C)
-#define BN_MP_CMP_D_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_CNT_LSB_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_MOD_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_KARATSUBA_MUL_C)
-#define BN_MP_MUL_C
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_CLAMP_C
-#define BN_S_MP_ADD_C
-#define BN_MP_ADD_C
-#define BN_S_MP_SUB_C
-#define BN_MP_LSHD_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_KARATSUBA_SQR_C)
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_CLAMP_C
-#define BN_MP_SQR_C
-#define BN_S_MP_ADD_C
-#define BN_S_MP_SUB_C
-#define BN_MP_LSHD_C
-#define BN_MP_ADD_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_LCM_C)
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_GCD_C
-#define BN_MP_CMP_MAG_C
-#define BN_MP_DIV_C
-#define BN_MP_MUL_C
-#define BN_MP_CLEAR_MULTI_C
-#endif
-
-#if defined(BN_MP_LSHD_C)
-#define BN_MP_GROW_C
-#define BN_MP_RSHD_C
-#endif
-
-#if defined(BN_MP_MOD_C)
-#define BN_MP_INIT_C
-#define BN_MP_DIV_C
-#define BN_MP_CLEAR_C
-#define BN_MP_EXCH_C
-#define BN_MP_ADD_C
-#endif
-
-#if defined(BN_MP_MOD_2D_C)
-#define BN_MP_ZERO_C
-#define BN_MP_COPY_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_MOD_D_C)
-#define BN_MP_DIV_D_C
-#endif
-
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_2EXPT_C
-#define BN_MP_SET_C
-#define BN_MP_MUL_2_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-
-#define BN_FAST_MP_MONTGOMERY_REDUCE_C
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#define BN_MP_RSHD_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-
-
-#if defined(BN_MP_MUL_C)
-#define BN_MP_TOOM_MUL_C
-#define BN_MP_KARATSUBA_MUL_C
-#define BN_FAST_S_MP_MUL_DIGS_C
-#define BN_S_MP_MUL_DIGS_C
-#endif
-
-#if defined(BN_MP_MUL_2_C)
-#define BN_MP_GROW_C
-#endif
-
-#if defined(BN_MP_MUL_2D_C)
-#define BN_MP_COPY_C
-#define BN_MP_GROW_C
-#define BN_MP_LSHD_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_MUL_D_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_MULMOD_C)
-#define BN_MP_INIT_C
-#define BN_MP_MUL_C
-#define BN_MP_CLEAR_C
-#define BN_MP_MOD_C
-#endif
-
-#if defined(BN_MP_N_ROOT_C)
-#define BN_MP_N_ROOT_EX_C
-#endif
-
-#if defined(BN_MP_N_ROOT_EX_C)
-#define BN_MP_INIT_C
-#define BN_MP_SET_C
-#define BN_MP_COPY_C
-#define BN_MP_EXPT_D_EX_C
-#define BN_MP_MUL_C
-#define BN_MP_SUB_C
-#define BN_MP_MUL_D_C
-#define BN_MP_DIV_C
-#define BN_MP_CMP_C
-#define BN_MP_SUB_D_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_NEG_C)
-#define BN_MP_COPY_C
-#endif
-
-#if defined(BN_MP_OR_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_PRIME_FERMAT_C)
-#define BN_MP_CMP_D_C
-#define BN_MP_INIT_C
-#define BN_MP_EXPTMOD_C
-#define BN_MP_CMP_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_PRIME_IS_DIVISIBLE_C)
-#define BN_MP_MOD_D_C
-#endif
-
-#if defined(BN_MP_PRIME_IS_PRIME_C)
-#define BN_MP_CMP_D_C
-#define BN_MP_PRIME_IS_DIVISIBLE_C
-#define BN_MP_INIT_C
-#define BN_MP_SET_C
-#define BN_MP_PRIME_MILLER_RABIN_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_PRIME_MILLER_RABIN_C)
-#define BN_MP_CMP_D_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_SUB_D_C
-#define BN_MP_CNT_LSB_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_EXPTMOD_C
-#define BN_MP_CMP_C
-#define BN_MP_SQRMOD_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_PRIME_NEXT_PRIME_C)
-#define BN_MP_CMP_D_C
-#define BN_MP_SET_C
-#define BN_MP_SUB_D_C
-#define BN_MP_MOD_D_C
-#define BN_MP_INIT_C
-#define BN_MP_ADD_D_C
-#define BN_MP_PRIME_MILLER_RABIN_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_PRIME_RABIN_MILLER_TRIALS_C)
-#endif
-
-#if defined(BN_MP_PRIME_RANDOM_EX_C)
-#define BN_MP_READ_UNSIGNED_BIN_C
-#define BN_MP_PRIME_IS_PRIME_C
-#define BN_MP_SUB_D_C
-#define BN_MP_DIV_2_C
-#define BN_MP_MUL_2_C
-#define BN_MP_ADD_D_C
-#endif
-
-#if defined(BN_MP_RADIX_SIZE_C)
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_DIV_D_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_RADIX_SMAP_C)
-#endif
-
-#if defined(BN_MP_RAND_C)
-#define BN_MP_ZERO_C
-#define BN_MP_ADD_D_C
-#define BN_MP_LSHD_C
-#endif
-
-#if defined(BN_MP_READ_RADIX_C)
-#define BN_MP_ZERO_C
-#define BN_MP_MUL_D_C
-#define BN_MP_ADD_D_C
-#endif
-
-#if defined(BN_MP_READ_SIGNED_BIN_C)
-#define BN_MP_READ_UNSIGNED_BIN_C
-#endif
-
-#if defined(BN_MP_READ_UNSIGNED_BIN_C)
-#define BN_MP_GROW_C
-#define BN_MP_ZERO_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_REDUCE_C)
-#define BN_MP_REDUCE_SETUP_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_RSHD_C
-#define BN_MP_MUL_C
-#define BN_S_MP_MUL_HIGH_DIGS_C
-#define BN_FAST_S_MP_MUL_HIGH_DIGS_C
-#define BN_MP_MOD_2D_C
-#define BN_S_MP_MUL_DIGS_C
-#define BN_MP_SUB_C
-#define BN_MP_CMP_D_C
-#define BN_MP_SET_C
-#define BN_MP_LSHD_C
-#define BN_MP_ADD_C
-#define BN_MP_CMP_C
-#define BN_S_MP_SUB_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_REDUCE_2K_C)
-#define BN_MP_INIT_C
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_MUL_D_C
-#define BN_S_MP_ADD_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_REDUCE_2K_L_C)
-#define BN_MP_INIT_C
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_MUL_C
-#define BN_S_MP_ADD_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_REDUCE_2K_SETUP_C)
-#define BN_MP_INIT_C
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_2EXPT_C
-#define BN_MP_CLEAR_C
-#define BN_S_MP_SUB_C
-#endif
-
-#if defined(BN_MP_REDUCE_2K_SETUP_L_C)
-#define BN_MP_INIT_C
-#define BN_MP_2EXPT_C
-#define BN_MP_COUNT_BITS_C
-#define BN_S_MP_SUB_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_REDUCE_IS_2K_C)
-#define BN_MP_REDUCE_2K_C
-#define BN_MP_COUNT_BITS_C
-#endif
-
-#if defined(BN_MP_REDUCE_IS_2K_L_C)
-#endif
-
-#if defined(BN_MP_REDUCE_SETUP_C)
-#define BN_MP_2EXPT_C
-#define BN_MP_DIV_C
-#endif
-
-#if defined(BN_MP_RSHD_C)
-#define BN_MP_ZERO_C
-#endif
-
-#if defined(BN_MP_SET_C)
-#define BN_MP_ZERO_C
-#endif
-
-#if defined(BN_MP_SET_INT_C)
-#define BN_MP_ZERO_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_SET_LONG_C)
-#endif
-
-#if defined(BN_MP_SET_LONG_LONG_C)
-#endif
-
-#if defined(BN_MP_SHRINK_C)
-#endif
-
-#if defined(BN_MP_SIGNED_BIN_SIZE_C)
-#define BN_MP_UNSIGNED_BIN_SIZE_C
-#endif
-
-#if defined(BN_MP_SQR_C)
-#define BN_MP_TOOM_SQR_C
-#define BN_MP_KARATSUBA_SQR_C
-#define BN_FAST_S_MP_SQR_C
-#define BN_S_MP_SQR_C
-#endif
-
-#if defined(BN_MP_SQRMOD_C)
-#define BN_MP_INIT_C
-#define BN_MP_SQR_C
-#define BN_MP_CLEAR_C
-#define BN_MP_MOD_C
-#endif
-
-#if defined(BN_MP_SQRT_C)
-#define BN_MP_N_ROOT_C
-#define BN_MP_ZERO_C
-#define BN_MP_INIT_COPY_C
-#define BN_MP_RSHD_C
-#define BN_MP_DIV_C
-#define BN_MP_ADD_C
-#define BN_MP_DIV_2_C
-#define BN_MP_CMP_MAG_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_SQRTMOD_PRIME_C)
-#define BN_MP_CMP_D_C
-#define BN_MP_ZERO_C
-#define BN_MP_JACOBI_C
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_MOD_D_C
-#define BN_MP_ADD_D_C
-#define BN_MP_DIV_2_C
-#define BN_MP_EXPTMOD_C
-#define BN_MP_COPY_C
-#define BN_MP_SUB_D_C
-#define BN_MP_SET_INT_C
-#define BN_MP_SQRMOD_C
-#define BN_MP_MULMOD_C
-#define BN_MP_SET_C
-#define BN_MP_CLEAR_MULTI_C
-#endif
-
-#if defined(BN_MP_SUB_C)
-#define BN_S_MP_ADD_C
-#define BN_MP_CMP_MAG_C
-#define BN_S_MP_SUB_C
-#endif
-
-#if defined(BN_MP_SUB_D_C)
-#define BN_MP_GROW_C
-#define BN_MP_ADD_D_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_MP_SUBMOD_C)
-#define BN_MP_INIT_C
-#define BN_MP_SUB_C
-#define BN_MP_CLEAR_C
-#define BN_MP_MOD_C
-#endif
-
-#if defined(BN_MP_TO_SIGNED_BIN_C)
-#define BN_MP_TO_UNSIGNED_BIN_C
-#endif
-
-#if defined(BN_MP_TO_SIGNED_BIN_N_C)
-#define BN_MP_SIGNED_BIN_SIZE_C
-#define BN_MP_TO_SIGNED_BIN_C
-#endif
-
-#if defined(BN_MP_TO_UNSIGNED_BIN_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_DIV_2D_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_TO_UNSIGNED_BIN_N_C)
-#define BN_MP_UNSIGNED_BIN_SIZE_C
-#define BN_MP_TO_UNSIGNED_BIN_C
-#endif
-
-#if defined(BN_MP_TOOM_MUL_C)
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_MOD_2D_C
-#define BN_MP_COPY_C
-#define BN_MP_RSHD_C
-#define BN_MP_MUL_C
-#define BN_MP_MUL_2_C
-#define BN_MP_ADD_C
-#define BN_MP_SUB_C
-#define BN_MP_DIV_2_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_MUL_D_C
-#define BN_MP_DIV_3_C
-#define BN_MP_LSHD_C
-#define BN_MP_CLEAR_MULTI_C
-#endif
-
-#if defined(BN_MP_TOOM_SQR_C)
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_MOD_2D_C
-#define BN_MP_COPY_C
-#define BN_MP_RSHD_C
-#define BN_MP_SQR_C
-#define BN_MP_MUL_2_C
-#define BN_MP_ADD_C
-#define BN_MP_SUB_C
-#define BN_MP_DIV_2_C
-#define BN_MP_MUL_2D_C
-#define BN_MP_MUL_D_C
-#define BN_MP_DIV_3_C
-#define BN_MP_LSHD_C
-#define BN_MP_CLEAR_MULTI_C
-#endif
-
-#if defined(BN_MP_TORADIX_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_DIV_D_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_TORADIX_N_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_DIV_D_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_UNSIGNED_BIN_SIZE_C)
-#define BN_MP_COUNT_BITS_C
-#endif
-
-#if defined(BN_MP_XOR_C)
-#define BN_MP_INIT_COPY_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_ZERO_C)
-#endif
-
-#if defined(BN_PRIME_TAB_C)
-#endif
-
-#if defined(BN_REVERSE_C)
-#endif
-
-#if defined(BN_S_MP_ADD_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BN_S_MP_EXPTMOD_C)
-#define BN_MP_COUNT_BITS_C
-#define BN_MP_INIT_C
-#define BN_MP_CLEAR_C
-#define BN_MP_REDUCE_SETUP_C
-#define BN_MP_REDUCE_C
-#define BN_MP_REDUCE_2K_SETUP_L_C
 #define BN_MP_REDUCE_2K_L_C
-#define BN_MP_MOD_C
-#define BN_MP_COPY_C
-#define BN_MP_SQR_C
-#define BN_MP_MUL_C
-#define BN_MP_SET_C
-#define BN_MP_EXCH_C
-#endif
 
-#if defined(BN_S_MP_MUL_DIGS_C)
-#define BN_FAST_S_MP_MUL_DIGS_C
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_S_MP_MUL_HIGH_DIGS_C)
-#define BN_FAST_S_MP_MUL_HIGH_DIGS_C
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_S_MP_SQR_C)
-#define BN_MP_INIT_SIZE_C
-#define BN_MP_CLAMP_C
-#define BN_MP_EXCH_C
-#define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_S_MP_SUB_C)
-#define BN_MP_GROW_C
-#define BN_MP_CLAMP_C
-#endif
-
-#if defined(BNCORE_C)
-#endif
-
-#ifdef LTM3
 #define LTM_LAST
-#endif
-#else
-#define LTM_LAST
-#endif
-#else
-#define LTM_LAST
-#endif
-
 
 /* detect 64-bit mode if possible */
 
@@ -2071,44 +55,19 @@
  * [any size beyond that is ok provided it doesn't overflow the data type]
  */
 /* for GCC only on supported platforms */
-#ifndef CRYPT
-typedef unsigned long long ulong64;
-typedef signed long long long64;
-#endif
 
 typedef uint64_t mp_digit;
-#if   defined(__GNUC__)
 typedef unsigned long mp_word __attribute__((mode(TI)));
-#else
-
-/* it seems you have a problem
- * but we assume you can somewhere define your own uint128_t */
-typedef uint128_t mp_word;
-#endif
 
 #define DIGIT_BIT 60
 
 /* otherwise the bits per digit is calculated automatically from the size of a
  * mp_digit */
-#ifndef DIGIT_BIT
-#define DIGIT_BIT (((CHAR_BIT * MP_SIZEOF_MP_DIGIT) - 1)) /* bits per digit */
-typedef uint_least32_t mp_min_u32;
-#else
-typedef mp_digit mp_min_u32;
-#endif
 
-/* platforms that can use a better rand function */
-#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || \
-    defined(__DragonFly__)
-#define MP_USE_ALT_RAND 1
-#endif
+typedef mp_digit mp_min_u32;
 
 /* use arc4random on platforms that support it */
-#ifdef MP_USE_ALT_RAND
-#define MP_GEN_RANDOM() arc4random()
-#else
 #define MP_GEN_RANDOM() rand()
-#endif
 
 #define MP_DIGIT_BIT DIGIT_BIT
 #define MP_MASK ((((mp_digit)1) << ((mp_digit)DIGIT_BIT)) - ((mp_digit)1))
@@ -2137,9 +96,7 @@ extern int KARATSUBA_MUL_CUTOFF, KARATSUBA_SQR_CUTOFF, TOOM_MUL_CUTOFF,
 /* #define MP_LOW_MEM */
 
 /* default precision */
-#ifndef MP_PREC
 #define MP_PREC 32 /* default digits of precision */
-#endif
 
 /* size of comba arrays, should be at least 2 * 2**(BITS_PER_WORD -
  * BITS_PER_DIGIT*2) */
@@ -2418,53 +375,19 @@ int mp_toradix(mp_int *a, char *str, int radix);
 
 #define mp_tohex(M, S) mp_toradix((M), (S), 16)
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://math.libtomcrypt.com
- */
-#ifndef TOMMATH_PRIV_H_
-#define TOMMATH_PRIV_H_
-
 #include <ctype.h>
 
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 
-
 /* C on the other hand doesn't care */
 #define OPT_CAST(x)
 
-/* define heap macros */
-#ifndef XMALLOC
-/* default to libc stuff */
 #define XMALLOC malloc
 #define XFREE free
 #define XREALLOC realloc
 #define XCALLOC calloc
-#else
-/* prototypes for our heap functions */
-extern void *XMALLOC(size_t n);
-extern void *XREALLOC(void *p, size_t n);
-extern void *XCALLOC(size_t n, size_t s);
-extern void XFREE(void *p);
-#endif
 
 /* lowlevel functions, do not call! */
 int s_mp_add(mp_int *a, mp_int *b, mp_int *c);
@@ -2539,17 +462,6 @@ extern const char *mp_s_rmap;
     mp_clamp(a);                                           \
     return MP_OKAY;                                        \
   }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#define BN_FAST_MP_INVMOD_C
-#ifdef BN_FAST_MP_INVMOD_C
-
-
 
 /* computes the modular inverse via binary extended euclidean algorithm,
  * that is c = 1/a mod b
@@ -2677,15 +589,6 @@ LBL_ERR:
   mp_clear_multi(&x, &y, &u, &v, &B, &D, NULL);
   return res;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
-
 
 /* computes xR**-1 == x (mod N) via Montgomery Reduction
  *
@@ -2837,15 +740,6 @@ int fast_mp_montgomery_reduce(mp_int *x, mp_int *n, mp_digit rho) {
   return MP_OKAY;
 }
 
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_FAST_S_MP_MUL_DIGS_C
-
-
-
 /* Fast (comba) multiplier
  *
  * This is the fast column-array [comba] multiplier.  It is
@@ -2930,16 +824,6 @@ int fast_s_mp_mul_digs(mp_int *a, mp_int *b, mp_int *c, int digs) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_FAST_S_MP_MUL_HIGH_DIGS_C
-
-
-
 /* this is a modified version of fast_s_mul_digs that only produces
  * output digits *above* digs.  See the comments for fast_s_mul_digs
  * to see how it works.
@@ -3015,16 +899,6 @@ int fast_s_mp_mul_high_digs(mp_int *a, mp_int *b, mp_int *c, int digs) {
   mp_clamp(c);
   return MP_OKAY;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_FAST_S_MP_SQR_C
-
-
 
 /* the jist of squaring...
  * you do like mult except the offset of the tmpx [one that
@@ -3118,16 +992,6 @@ int fast_s_mp_sqr(mp_int *a, mp_int *b) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_2EXPT_C
-
-
-
 /* computes a = 2**b
  *
  * Simple algorithm which zeroes the int, grows it then just sets one bit
@@ -3153,16 +1017,6 @@ int mp_2expt(mp_int *a, int b) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_ABS_C
-
-
-
 /* b = |a|
  *
  * Simple function copies the input and fixes the sign to positive
@@ -3182,16 +1036,6 @@ int mp_abs(mp_int *a, mp_int *b) {
 
   return MP_OKAY;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_ADD_C
-
-
 
 /* high level addition (handles signs) */
 int mp_add(mp_int *a, mp_int *b, mp_int *c) {
@@ -3222,16 +1066,6 @@ int mp_add(mp_int *a, mp_int *b, mp_int *c) {
   }
   return res;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_ADD_D_C
-
-
 
 /* single digit addition */
 int mp_add_d(mp_int *a, mp_digit b, mp_int *c) {
@@ -3321,36 +1155,6 @@ int mp_add_d(mp_int *a, mp_digit b, mp_int *c) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_ADDMOD_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_AND_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_CLAMP_C
-
-
-
 /* trim unused digits
  *
  * This is used to ensure that leading zero digits are
@@ -3371,16 +1175,6 @@ void mp_clamp(mp_int *a) {
     a->sign = MP_ZPOS;
   }
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_CLEAR_C
-
-
 
 /* clear one (frees)  */
 void mp_clear(mp_int *a) {
@@ -3403,15 +1197,6 @@ void mp_clear(mp_int *a) {
   }
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_CLEAR_MULTI_C
-
-
 #include <stdarg.h>
 
 void mp_clear_multi(mp_int *mp, ...) {
@@ -3425,16 +1210,6 @@ void mp_clear_multi(mp_int *mp, ...) {
   }
   va_end(args);
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_CMP_C
-
-
 
 /* compare two ints (signed)*/
 int mp_cmp(mp_int *a, mp_int *b) {
@@ -3455,16 +1230,6 @@ int mp_cmp(mp_int *a, mp_int *b) {
     return mp_cmp_mag(a, b);
   }
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_CMP_D_C
-
-
 
 /* compare a digit */
 int mp_cmp_d(mp_int *a, mp_digit b) {
@@ -3487,16 +1252,6 @@ int mp_cmp_d(mp_int *a, mp_digit b) {
     return MP_EQ;
   }
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_CMP_MAG_C
-
-
 
 /* compare maginitude of two ints (unsigned) */
 int mp_cmp_mag(mp_int *a, mp_int *b) {
@@ -3531,16 +1286,6 @@ int mp_cmp_mag(mp_int *a, mp_int *b) {
   return MP_EQ;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_CNT_LSB_C
-
-
-
 static const int lnz[16] = {4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0};
 
 /* Counts the number of lsbs which are zero before the first zero bit */
@@ -3569,16 +1314,6 @@ int mp_cnt_lsb(mp_int *a) {
   }
   return x;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_COPY_C
-
-
 
 /* copy, b = a */
 int mp_copy(mp_int *a, mp_int *b) {
@@ -3625,16 +1360,6 @@ int mp_copy(mp_int *a, mp_int *b) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_COUNT_BITS_C
-
-
-
 /* returns the number of bits in an int */
 int mp_count_bits(mp_int *a) {
   int r;
@@ -3656,86 +1381,6 @@ int mp_count_bits(mp_int *a) {
   }
   return r;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_DIV_C
-
-
-
-#ifdef BN_MP_DIV_SMALL
-
-/* slower bit-bang division... also smaller */
-int mp_div(mp_int *a, mp_int *b, mp_int *c, mp_int *d) {
-  mp_int ta, tb, tq, q;
-  int res, n, n2;
-
-  /* is divisor zero ? */
-  if (mp_iszero(b) == MP_YES) {
-    return MP_VAL;
-  }
-
-  /* if a < b then q=0, r = a */
-  if (mp_cmp_mag(a, b) == MP_LT) {
-    if (d != NULL) {
-      res = mp_copy(a, d);
-    } else {
-      res = MP_OKAY;
-    }
-    if (c != NULL) {
-      mp_zero(c);
-    }
-    return res;
-  }
-
-  /* init our temps */
-  if ((res = mp_init_multi(&ta, &tb, &tq, &q, NULL)) != MP_OKAY) {
-    return res;
-  }
-
-  mp_set(&tq, 1);
-  n = mp_count_bits(a) - mp_count_bits(b);
-  if (((res = mp_abs(a, &ta)) != MP_OKAY) ||
-      ((res = mp_abs(b, &tb)) != MP_OKAY) ||
-      ((res = mp_mul_2d(&tb, n, &tb)) != MP_OKAY) ||
-      ((res = mp_mul_2d(&tq, n, &tq)) != MP_OKAY)) {
-    goto LBL_ERR;
-  }
-
-  while (n-- >= 0) {
-    if (mp_cmp(&tb, &ta) != MP_GT) {
-      if (((res = mp_sub(&ta, &tb, &ta)) != MP_OKAY) ||
-          ((res = mp_add(&q, &tq, &q)) != MP_OKAY)) {
-        goto LBL_ERR;
-      }
-    }
-    if (((res = mp_div_2d(&tb, 1, &tb, NULL)) != MP_OKAY) ||
-        ((res = mp_div_2d(&tq, 1, &tq, NULL)) != MP_OKAY)) {
-      goto LBL_ERR;
-    }
-  }
-
-  /* now q == quotient and ta == remainder */
-  n = a->sign;
-  n2 = (a->sign == b->sign) ? MP_ZPOS : MP_NEG;
-  if (c != NULL) {
-    mp_exch(c, &q);
-    c->sign = (mp_iszero(c) == MP_YES) ? MP_ZPOS : n2;
-  }
-  if (d != NULL) {
-    mp_exch(d, &ta);
-    d->sign = (mp_iszero(d) == MP_YES) ? MP_ZPOS : n;
-  }
-LBL_ERR:
-  mp_clear_multi(&ta, &tb, &tq, &q, NULL);
-  return res;
-}
-
-#else
 
 /* integer signed division.
  * c*b + d == a [e.g. a/b, c=quotient, d=remainder]
@@ -3940,17 +1585,6 @@ LBL_Q:
   return res;
 }
 
-#endif
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_DIV_2_C
-
-
-
 /* b = a/2 */
 int mp_div_2(mp_int *a, mp_int *b) {
   int x, res, oldused;
@@ -3996,16 +1630,6 @@ int mp_div_2(mp_int *a, mp_int *b) {
   mp_clamp(b);
   return MP_OKAY;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_DIV_2D_C
-
-
 
 /* shift right by a certain bit count (store quotient in c, optional remainder
  * in d) */
@@ -4083,16 +1707,6 @@ int mp_div_2d(mp_int *a, int b, mp_int *c, mp_int *d) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_DIV_3_C
-
-
-
 /* divide by three (based on routine from MPI and the GMP manual) */
 int mp_div_3(mp_int *a, mp_int *c, mp_digit *d) {
   mp_int q;
@@ -4148,16 +1762,6 @@ int mp_div_3(mp_int *a, mp_int *c, mp_digit *d) {
   return res;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_DIV_D_C
-
-
-
 static int s_is_power_of_two(mp_digit b, int *p) {
   int x;
 
@@ -4209,12 +1813,10 @@ int mp_div_d(mp_int *a, mp_digit b, mp_int *c, mp_digit *d) {
     return MP_OKAY;
   }
 
-#ifdef BN_MP_DIV_3_C
   /* three? */
   if (b == 3) {
     return mp_div_3(a, c, d);
   }
-#endif
 
   /* no easy answer [c'est la vie].  Just division */
   if ((res = mp_init_size(&q, a->used)) != MP_OKAY) {
@@ -4249,16 +1851,6 @@ int mp_div_d(mp_int *a, mp_digit b, mp_int *c, mp_digit *d) {
   return res;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_DR_IS_MODULUS_C
-
-
-
 /* determines if a number is a valid DR modulus */
 int mp_dr_is_modulus(mp_int *a) {
   int ix;
@@ -4278,16 +1870,6 @@ int mp_dr_is_modulus(mp_int *a) {
   }
   return 1;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_DR_REDUCE_C
-
-
 
 /* reduce "x" in place modulo "n" using the Diminished Radix algorithm.
  *
@@ -4362,16 +1944,6 @@ top:
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_DR_SETUP_C
-
-
-
 /* determines the setup value */
 void mp_dr_setup(mp_int *a, mp_digit *d) {
   /* the casts are required if DIGIT_BIT is one less than
@@ -4379,16 +1951,6 @@ void mp_dr_setup(mp_int *a, mp_digit *d) {
    */
   *d = (mp_digit)((((mp_word)1) << ((mp_word)DIGIT_BIT)) - ((mp_word)a->dp[0]));
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_EXCH_C
-
-
 
 /* swap the elements of two integers, for cases where you can't simply swap the
  * mp_int pointers around
@@ -4400,46 +1962,6 @@ void mp_exch(mp_int *a, mp_int *b) {
   *a = *b;
   *b = t;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_EXPORT_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_EXPT_D_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_EXPT_D_EX_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_EXPTMOD_C
-
-
 
 /* this is a shell function that calls either the normal or Montgomery
  * exptmod functions.  Originally the call to the montgomery code was
@@ -4456,7 +1978,6 @@ int mp_exptmod(mp_int *G, mp_int *X, mp_int *P, mp_int *Y) {
 
   /* if exponent X is negative we have to recurse */
   if (X->sign == MP_NEG) {
-#ifdef BN_MP_INVMOD_C
     mp_int tmpG, tmpX;
     int err;
 
@@ -4483,10 +2004,6 @@ int mp_exptmod(mp_int *G, mp_int *X, mp_int *P, mp_int *Y) {
     err = mp_exptmod(&tmpG, &tmpX, P, Y);
     mp_clear_multi(&tmpG, &tmpX, NULL);
     return err;
-#else
-    /* no invmod */
-    return MP_VAL;
-#endif
   }
 
   /* modified diminished radix reduction */
@@ -4497,48 +2014,22 @@ int mp_exptmod(mp_int *G, mp_int *X, mp_int *P, mp_int *Y) {
   }
 #endif
 
-#ifdef BN_MP_DR_IS_MODULUS_C
   /* is it a DR modulus? */
   dr = mp_dr_is_modulus(P);
-#else
-  /* default to no */
-  dr = 0;
-#endif
 
-#ifdef BN_MP_REDUCE_IS_2K_C
   /* if not, is it a unrestricted DR modulus? */
   if (dr == 0) {
     dr = mp_reduce_is_2k(P) << 1;
   }
-#endif
 
   /* if the modulus is odd or dr != 0 use the montgomery method */
-#ifdef BN_MP_EXPTMOD_FAST_C
   if ((mp_isodd(P) == MP_YES) || (dr != 0)) {
     return mp_exptmod_fast(G, X, P, Y, dr);
   } else {
-#endif
-#ifdef BN_S_MP_EXPTMOD_C
     /* otherwise use the generic Barrett reduction technique */
     return s_mp_exptmod(G, X, P, Y, 0);
-#else
-  /* no exptmod for evens */
-  return MP_VAL;
-#endif
-#ifdef BN_MP_EXPTMOD_FAST_C
   }
-#endif
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_EXPTMOD_FAST_C
-
-
 
 /* computes Y == G**X mod P, HAC pp.616, Algorithm 14.85
  *
@@ -4579,7 +2070,6 @@ int mp_exptmod_fast(mp_int *G, mp_int *X, mp_int *P, mp_int *Y, int redmode) {
     winsize = 8;
   }
 
-
   /* init M array */
   /* init first cell */
   if ((err = mp_init(&M[1])) != MP_OKAY) {
@@ -4609,31 +2099,20 @@ int mp_exptmod_fast(mp_int *G, mp_int *X, mp_int *P, mp_int *Y, int redmode) {
     if ((((P->used * 2) + 1) < MP_WARRAY) &&
         (P->used < (1 << ((CHAR_BIT * sizeof(mp_word)) - (2 * DIGIT_BIT))))) {
       redux = fast_mp_montgomery_reduce;
-    } else
-    {
+    } else {
       /* use slower baseline Montgomery method */
       redux = mp_montgomery_reduce;
     }
   } else if (redmode == 1) {
-#if defined(BN_MP_DR_SETUP_C) && defined(BN_MP_DR_REDUCE_C)
     /* setup DR reduction for moduli of the form B**k - b */
     mp_dr_setup(P, &mp);
     redux = mp_dr_reduce;
-#else
-    err = MP_VAL;
-    goto LBL_M;
-#endif
   } else {
-#if defined(BN_MP_REDUCE_2K_SETUP_C) && defined(BN_MP_REDUCE_2K_C)
     /* setup DR reduction for moduli of the form 2**k - b */
     if ((err = mp_reduce_2k_setup(P, &mp)) != MP_OKAY) {
       goto LBL_M;
     }
     redux = mp_reduce_2k;
-#else
-    err = MP_VAL;
-    goto LBL_M;
-#endif
   }
 
   /* setup result */
@@ -4816,13 +2295,6 @@ LBL_M:
   return err;
 }
 
-#endif
-
-
-#ifdef BN_MP_GCD_C
-
-
-
 /* Greatest Common Divisor using the binary method */
 int mp_gcd(mp_int *a, mp_int *b, mp_int *c) {
   mp_int u, v;
@@ -4908,16 +2380,6 @@ LBL_U:
   return res;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_GET_INT_C
-
-
-
 /* get the lower 32-bits of an mp_int */
 unsigned long mp_get_int(mp_int *a) {
   int i;
@@ -4943,28 +2405,6 @@ unsigned long mp_get_int(mp_int *a) {
    */
   return res & 0xFFFFFFFFUL;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_GET_LONG_C
-
-
-
-#endif
-
-#ifdef BN_MP_GET_LONG_LONG_C
-
-
-
-#endif
-
-#ifdef BN_MP_GROW_C
-
-
 
 /* grow as required */
 int mp_grow(mp_int *a, int size) {
@@ -5001,26 +2441,6 @@ int mp_grow(mp_int *a, int size) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_IMPORT_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_INIT_C
-
-
-
 /* init a new mp_int */
 int mp_init(mp_int *a) {
   int i;
@@ -5045,16 +2465,6 @@ int mp_init(mp_int *a) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_INIT_COPY_C
-
-
-
 /* creates "a" then copies b into it */
 int mp_init_copy(mp_int *a, mp_int *b) {
   int res;
@@ -5064,16 +2474,6 @@ int mp_init_copy(mp_int *a, mp_int *b) {
   }
   return mp_copy(b, a);
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_INIT_MULTI_C
-
-
 
 int mp_init_multi(mp_int *mp, ...) {
   mp_err res = MP_OKAY; /* Assume ok until proven otherwise */
@@ -5110,36 +2510,6 @@ int mp_init_multi(mp_int *mp, ...) {
   return res; /* Assumed ok, if error flagged above. */
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_INIT_SET_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_INIT_SET_INT_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_INIT_SIZE_C
-
-
-
 /* init an mp_init for a given size */
 int mp_init_size(mp_int *a, int size) {
   int x;
@@ -5166,16 +2536,6 @@ int mp_init_size(mp_int *a, int size) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_INVMOD_C
-
-
-
 /* hac 14.61, pp608 */
 int mp_invmod(mp_int *a, mp_int *b, mp_int *c) {
   /* b cannot be negative */
@@ -5183,29 +2543,13 @@ int mp_invmod(mp_int *a, mp_int *b, mp_int *c) {
     return MP_VAL;
   }
 
-#ifdef BN_FAST_MP_INVMOD_C
   /* if the modulus is odd we can use a faster routine instead */
   if (mp_isodd(b) == MP_YES) {
     return fast_mp_invmod(a, b, c);
   }
-#endif
 
-#ifdef BN_MP_INVMOD_SLOW_C
   return mp_invmod_slow(a, b, c);
-#else
-  return MP_VAL;
-#endif
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_INVMOD_SLOW_C
-
-
 
 /* hac 14.61, pp608 */
 int mp_invmod_slow(mp_int *a, mp_int *b, mp_int *c) {
@@ -5359,26 +2703,6 @@ LBL_ERR:
   return res;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_IS_SQUARE_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_JACOBI_C
-
-
-
 /* computes the jacobi c = (a | n) (or Legendre if n is prime)
  * HAC pp. 73 Algorithm 2.149
  * HAC is wrong here, as the special case of (0 | 1) is not
@@ -5470,16 +2794,6 @@ LBL_A1:
   mp_clear(&a1);
   return res;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_KARATSUBA_MUL_C
-
-
 
 /* c = |a| * |b| using Karatsuba Multiplication using
  * three half size multiplications
@@ -5618,16 +2932,6 @@ ERR:
   return err;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_KARATSUBA_SQR_C
-
-
-
 /* Karatsuba squaring, computes b = a*a using three
  * half size squarings
  *
@@ -5719,16 +3023,6 @@ ERR:
   return err;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_LCM_C
-
-
-
 /* computes least common multiple as |a*b|/(a, b) */
 int mp_lcm(mp_int *a, mp_int *b, mp_int *c) {
   int res;
@@ -5765,16 +3059,6 @@ LBL_T:
   mp_clear_multi(&t1, &t2, NULL);
   return res;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_LSHD_C
-
-
 
 /* shift left a certain amount of digits */
 int mp_lshd(mp_int *a, int b) {
@@ -5821,16 +3105,6 @@ int mp_lshd(mp_int *a, int b) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_MOD_C
-
-
-
 /* c = a mod b, 0 <= c < b if b > 0, b < c <= 0 if b < 0 */
 int mp_mod(mp_int *a, mp_int *b, mp_int *c) {
   mp_int t;
@@ -5855,16 +3129,6 @@ int mp_mod(mp_int *a, mp_int *b, mp_int *c) {
   mp_clear(&t);
   return res;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_MOD_2D_C
-
-
 
 /* calc a value mod 2**b */
 int mp_mod_2d(mp_int *a, int b, mp_int *c) {
@@ -5899,28 +3163,9 @@ int mp_mod_2d(mp_int *a, int b, mp_int *c) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_MOD_D_C
-
-
-
 int mp_mod_d(mp_int *a, mp_digit b, mp_digit *c) {
   return mp_div_d(a, b, NULL, c);
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
-
 
 /*
  * shifts with subtractions when the result is greater than b.
@@ -5958,14 +3203,6 @@ int mp_montgomery_calc_normalization(mp_int *a, mp_int *b) {
 
   return MP_OKAY;
 }
-
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
-
 
 /* computes xR**-1 == x (mod N) via Montgomery Reduction */
 int mp_montgomery_reduce(mp_int *x, mp_int *n, mp_digit rho) {
@@ -6059,14 +3296,6 @@ int mp_montgomery_reduce(mp_int *x, mp_int *n, mp_digit rho) {
   return MP_OKAY;
 }
 
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
-
-
 /* setups the montgomery reduction stuff */
 int mp_montgomery_setup(mp_int *n, mp_digit *rho) {
   mp_digit x, b;
@@ -6087,24 +3316,15 @@ int mp_montgomery_setup(mp_int *n, mp_digit *rho) {
 
   x = (((b + 2) & 4) << 1) + b; /* here x*a==1 mod 2**4 */
   x *= 2 - (b * x);             /* here x*a==1 mod 2**8 */
-  x *= 2 - (b * x); /* here x*a==1 mod 2**16 */
-  x *= 2 - (b * x); /* here x*a==1 mod 2**32 */
-  x *= 2 - (b * x); /* here x*a==1 mod 2**64 */
+  x *= 2 - (b * x);             /* here x*a==1 mod 2**16 */
+  x *= 2 - (b * x);             /* here x*a==1 mod 2**32 */
+  x *= 2 - (b * x);             /* here x*a==1 mod 2**64 */
 
   /* rho = -1/m mod b */
   *rho = (mp_digit)(((mp_word)1 << ((mp_word)DIGIT_BIT)) - x) & MP_MASK;
 
   return MP_OKAY;
 }
-
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_MUL_C
-
-
 
 /* high level multiplication (handles sign) */
 int mp_mul(mp_int *a, mp_int *b, mp_int *c) {
@@ -6113,18 +3333,13 @@ int mp_mul(mp_int *a, mp_int *b, mp_int *c) {
   neg = (a->sign == b->sign) ? MP_ZPOS : MP_NEG;
 
   /* use Toom-Cook? */
-#ifdef BN_MP_TOOM_MUL_C
   if (MIN(a->used, b->used) >= TOOM_MUL_CUTOFF) {
     res = mp_toom_mul(a, b, c);
   } else
-#endif
-#ifdef BN_MP_KARATSUBA_MUL_C
       /* use Karatsuba? */
       if (MIN(a->used, b->used) >= KARATSUBA_MUL_CUTOFF) {
     res = mp_karatsuba_mul(a, b, c);
-  } else
-#endif
-  {
+  } else {
     /* can we use the fast multiplier?
      *
      * The fast multiplier can be used if the output will
@@ -6133,34 +3348,17 @@ int mp_mul(mp_int *a, mp_int *b, mp_int *c) {
      */
     int digs = a->used + b->used + 1;
 
-#ifdef BN_FAST_S_MP_MUL_DIGS_C
     if ((digs < MP_WARRAY) &&
         (MIN(a->used, b->used) <=
          (1 << ((CHAR_BIT * sizeof(mp_word)) - (2 * DIGIT_BIT))))) {
       res = fast_s_mp_mul_digs(a, b, c, digs);
-    } else
-#endif
-    {
-#ifdef BN_S_MP_MUL_DIGS_C
+    } else {
       res = s_mp_mul(a, b, c); /* uses s_mp_mul_digs */
-#else
-      res = MP_VAL;
-#endif
     }
   }
   c->sign = (c->used > 0) ? neg : MP_ZPOS;
   return res;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_MUL_2_C
-
-
 
 /* b = a*2 */
 int mp_mul_2(mp_int *a, mp_int *b) {
@@ -6220,16 +3418,6 @@ int mp_mul_2(mp_int *a, mp_int *b) {
   b->sign = a->sign;
   return MP_OKAY;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_MUL_2D_C
-
-
 
 /* shift left by a certain bit count */
 int mp_mul_2d(mp_int *a, int b, mp_int *c) {
@@ -6294,16 +3482,6 @@ int mp_mul_2d(mp_int *a, int b, mp_int *c) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_MUL_D_C
-
-
-
 /* multiply by a digit */
 int mp_mul_d(mp_int *a, mp_digit b, mp_int *c) {
   mp_digit u, *tmpa, *tmpc;
@@ -6360,16 +3538,6 @@ int mp_mul_d(mp_int *a, mp_digit b, mp_int *c) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_MULMOD_C
-
-
-
 /* d = a * b (mod c) */
 int mp_mulmod(mp_int *a, mp_int *b, mp_int *c, mp_int *d) {
   int res;
@@ -6387,36 +3555,6 @@ int mp_mulmod(mp_int *a, mp_int *b, mp_int *c, mp_int *d) {
   mp_clear(&t);
   return res;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_N_ROOT_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_N_ROOT_EX_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_NEG_C
-
-
 
 /* b = -a */
 int mp_neg(mp_int *a, mp_int *b) {
@@ -6436,36 +3574,6 @@ int mp_neg(mp_int *a, mp_int *b) {
 
   return MP_OKAY;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_OR_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_PRIME_FERMAT_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_PRIME_IS_DIVISIBLE_C
-
-
 
 /* determines if an integers is divisible by one
  * of the first PRIME_SIZE primes or not
@@ -6494,16 +3602,6 @@ int mp_prime_is_divisible(mp_int *a, int *result) {
 
   return MP_OKAY;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_PRIME_IS_PRIME_C
-
-
 
 /* performs a variable number of rounds of Miller-Rabin
  *
@@ -6566,16 +3664,6 @@ LBL_B:
   mp_clear(&b);
   return err;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_PRIME_MILLER_RABIN_C
-
-
 
 /* Miller-Rabin test of "a" to the base of "b" as described in
  * HAC pp. 139 Algorithm 4.24
@@ -6661,40 +3749,10 @@ LBL_N1:
   return err;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_PRIME_NEXT_PRIME_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_PRIME_RABIN_MILLER_TRIALS_C
-
-
-
 static const struct {
   int k, t;
 } sizes[] = {{128, 28}, {256, 16}, {384, 10}, {512, 7},
              {640, 6},  {768, 5},  {896, 4},  {1024, 4}};
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_PRIME_RANDOM_EX_C
-
-
 
 /* makes a truly random prime of a given size (bits),
  *
@@ -6710,48 +3768,12 @@ static const struct {
  *
  */
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_RADIX_SIZE_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
 #ifdef BN_MP_RADIX_SMAP_C
-
-
 
 /* chars used in radix conversions */
 const char *mp_s_rmap =
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/";
 #endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_RAND_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_READ_RADIX_C
-
-
 
 /* read a string [ASCII] in a given radix */
 int mp_read_radix(mp_int *a, const char *str, int radix) {
@@ -6816,26 +3838,6 @@ int mp_read_radix(mp_int *a, const char *str, int radix) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_READ_SIGNED_BIN_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_READ_UNSIGNED_BIN_C
-
-
-
 /* reads a unsigned char array, assumes the msb is stored first [big endian] */
 int mp_read_unsigned_bin(mp_int *a, const unsigned char *b, int c) {
   int res;
@@ -6863,16 +3865,6 @@ int mp_read_unsigned_bin(mp_int *a, const unsigned char *b, int c) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_REDUCE_C
-
-
-
 /* reduces x mod m, assumes 0 < x < m**2, mu is
  * precomputed via mp_reduce_setup.
  * From HAC pp.604 Algorithm 14.42
@@ -6895,20 +3887,9 @@ int mp_reduce(mp_int *x, mp_int *m, mp_int *mu) {
       goto CLEANUP;
     }
   } else {
-#ifdef BN_S_MP_MUL_HIGH_DIGS_C
     if ((res = s_mp_mul_high_digs(&q, mu, &q, um)) != MP_OKAY) {
       goto CLEANUP;
     }
-#elif defined(BN_FAST_S_MP_MUL_HIGH_DIGS_C)
-    if ((res = fast_s_mp_mul_high_digs(&q, mu, &q, um)) != MP_OKAY) {
-      goto CLEANUP;
-    }
-#else
-    {
-      res = MP_VAL;
-      goto CLEANUP;
-    }
-#endif
   }
 
   /* q3 = q2 / b**(k+1) */
@@ -6949,16 +3930,6 @@ CLEANUP:
   return res;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_REDUCE_2K_C
-
-
-
 /* reduces a modulo n where n is of the form 2**p - d */
 int mp_reduce_2k(mp_int *a, mp_int *n, mp_digit d) {
   mp_int q;
@@ -6998,16 +3969,6 @@ ERR:
   mp_clear(&q);
   return res;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_REDUCE_2K_L_C
-
-
 
 /* reduces a modulo n where n is of the form 2**p - d
    This differs from reduce_2k since "d" can be larger
@@ -7050,16 +4011,6 @@ ERR:
   return res;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_REDUCE_2K_SETUP_C
-
-
-
 /* determines the setup value */
 int mp_reduce_2k_setup(mp_int *a, mp_digit *d) {
   int res, p;
@@ -7085,16 +4036,6 @@ int mp_reduce_2k_setup(mp_int *a, mp_digit *d) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_REDUCE_2K_SETUP_L_C
-
-
-
 /* determines the setup value */
 int mp_reduce_2k_setup_l(mp_int *a, mp_int *d) {
   int res;
@@ -7116,16 +4057,6 @@ ERR:
   mp_clear(&tmp);
   return res;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_REDUCE_IS_2K_C
-
-
 
 /* determines if mp_reduce_2k can be used */
 int mp_reduce_is_2k(mp_int *a) {
@@ -7156,16 +4087,6 @@ int mp_reduce_is_2k(mp_int *a) {
   return MP_YES;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_REDUCE_IS_2K_L_C
-
-
-
 /* determines if reduce_2k_l can be used */
 int mp_reduce_is_2k_l(mp_int *a) {
   int ix, iy;
@@ -7186,16 +4107,6 @@ int mp_reduce_is_2k_l(mp_int *a) {
   return MP_NO;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_REDUCE_SETUP_C
-
-
-
 /* pre-calculate the value required for Barrett reduction
  * For a given modulus "b" it calulates the value required in "a"
  */
@@ -7207,16 +4118,6 @@ int mp_reduce_setup(mp_int *a, mp_int *b) {
   }
   return mp_div(a, b, a, NULL);
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_RSHD_C
-
-
 
 /* shift right a certain amount of digits */
 void mp_rshd(mp_int *a, int b) {
@@ -7268,32 +4169,12 @@ void mp_rshd(mp_int *a, int b) {
   a->used -= b;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_SET_C
-
-
-
 /* set to a digit */
 void mp_set(mp_int *a, mp_digit b) {
   mp_zero(a);
   a->dp[0] = b & MP_MASK;
   a->used = (a->dp[0] != 0) ? 1 : 0;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_SET_INT_C
-
-
 
 /* set a 32-bit const */
 int mp_set_int(mp_int *a, unsigned long b) {
@@ -7321,108 +4202,35 @@ int mp_set_int(mp_int *a, unsigned long b) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_SET_LONG_C
-
-
-
 /* set a platform dependent unsigned long int */
 MP_SET_XLONG(mp_set_long, unsigned long)
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_SET_LONG_LONG_C
-
-
-
 /* set a platform dependent unsigned long long int */
 MP_SET_XLONG(mp_set_long_long, unsigned long long)
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_SHRINK_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_SIGNED_BIN_SIZE_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_SQR_C
-
-
 
 /* computes b = a*a */
 int mp_sqr(mp_int *a, mp_int *b) {
   int res;
 
-#ifdef BN_MP_TOOM_SQR_C
   /* use Toom-Cook? */
   if (a->used >= TOOM_SQR_CUTOFF) {
     res = mp_toom_sqr(a, b);
     /* Karatsuba? */
-  } else
-#endif
-#ifdef BN_MP_KARATSUBA_SQR_C
-      if (a->used >= KARATSUBA_SQR_CUTOFF) {
+  } else if (a->used >= KARATSUBA_SQR_CUTOFF) {
     res = mp_karatsuba_sqr(a, b);
-  } else
-#endif
-  {
-#ifdef BN_FAST_S_MP_SQR_C
+  } else {
     /* can we use the fast comba multiplier? */
     if ((((a->used * 2) + 1) < MP_WARRAY) &&
         (a->used <
          (1 << (((sizeof(mp_word) * CHAR_BIT) - (2 * DIGIT_BIT)) - 1)))) {
       res = fast_s_mp_sqr(a, b);
-    } else
-#endif
-    {
-#ifdef BN_S_MP_SQR_C
+    } else {
       res = s_mp_sqr(a, b);
-#else
-      res = MP_VAL;
-#endif
     }
   }
   b->sign = MP_ZPOS;
   return res;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_SQRMOD_C
-
-
 
 /* c = a * a (mod b) */
 int mp_sqrmod(mp_int *a, mp_int *b, mp_int *c) {
@@ -7442,24 +4250,6 @@ int mp_sqrmod(mp_int *a, mp_int *b, mp_int *c) {
   return res;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_SQRT_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_SQRTMOD_PRIME_C
-
 /* LibTomMath, multiple-precision integer library -- Tom St Denis
  *
  * LibTomMath is a library that provides multiple-precision
@@ -7468,12 +4258,6 @@ int mp_sqrmod(mp_int *a, mp_int *b, mp_int *c) {
  * The library is free for all purposes without any express
  * guarantee it works.
  */
-
-#endif
-
-#ifdef BN_MP_SUB_C
-
-
 
 /* high level subtraction (handles signs) */
 int mp_sub(mp_int *a, mp_int *b, mp_int *c) {
@@ -7509,16 +4293,6 @@ int mp_sub(mp_int *a, mp_int *b, mp_int *c) {
   }
   return res;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_SUB_D_C
-
-
 
 /* single digit subtraction */
 int mp_sub_d(mp_int *a, mp_digit b, mp_int *c) {
@@ -7589,46 +4363,6 @@ int mp_sub_d(mp_int *a, mp_digit b, mp_int *c) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_SUBMOD_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_TO_SIGNED_BIN_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_TO_SIGNED_BIN_N_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_TO_UNSIGNED_BIN_C
-
-
-
 /* store in unsigned [big endian] format */
 int mp_to_unsigned_bin(mp_int *a, unsigned char *b) {
   int x, res;
@@ -7650,16 +4384,6 @@ int mp_to_unsigned_bin(mp_int *a, unsigned char *b) {
   mp_clear(&t);
   return MP_OKAY;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_TOOM_MUL_C
-
-
 
 /* multiplication using the Toom-Cook 3-way algorithm
  *
@@ -7921,16 +4645,6 @@ ERR:
   return res;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_TOOM_SQR_C
-
-
-
 /* squaring using Toom-Cook 3-way algorithm */
 int mp_toom_sqr(mp_int *a, mp_int *b) {
   mp_int w0, w1, w2, w3, w4, tmp1, a0, a1, a2;
@@ -8136,16 +4850,6 @@ ERR:
   return res;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_TORADIX_C
-
-
-
 /* stores a bignum as a ASCII string in a given radix (2..64) */
 int mp_toradix(mp_int *a, char *str, int radix) {
   int res, digs;
@@ -8198,42 +4902,12 @@ int mp_toradix(mp_int *a, char *str, int radix) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_UNSIGNED_BIN_SIZE_C
-
-
-
 /* get the size for an unsigned equivalent */
 int mp_unsigned_bin_size(mp_int *a) {
   int size = mp_count_bits(a);
 
   return (size / 8) + (((size & 7) != 0) ? 1 : 0);
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_XOR_C
-
-
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_ZERO_C
-
-
 
 /* set to zero */
 void mp_zero(mp_int *a) {
@@ -8249,61 +4923,42 @@ void mp_zero(mp_int *a) {
   }
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_PRIME_TAB_C
-
-
 const mp_digit ltm_prime_tab[] = {
-    0x0002, 0x0003, 0x0005, 0x0007, 0x000B, 0x000D, 0x0011, 0x0013, 0x0017,
-    0x001D, 0x001F, 0x0025, 0x0029, 0x002B, 0x002F, 0x0035, 0x003B, 0x003D,
-    0x0043, 0x0047, 0x0049, 0x004F, 0x0053, 0x0059, 0x0061, 0x0065, 0x0067,
-    0x006B, 0x006D, 0x0071, 0x007F,
-    0x0083, 0x0089, 0x008B, 0x0095, 0x0097, 0x009D, 0x00A3, 0x00A7, 0x00AD,
-    0x00B3, 0x00B5, 0x00BF, 0x00C1, 0x00C5, 0x00C7, 0x00D3, 0x00DF, 0x00E3,
-    0x00E5, 0x00E9, 0x00EF, 0x00F1, 0x00FB, 0x0101, 0x0107, 0x010D, 0x010F,
-    0x0115, 0x0119, 0x011B, 0x0125, 0x0133, 0x0137,
+    0x0002, 0x0003, 0x0005, 0x0007, 0x000B, 0x000D, 0x0011, 0x0013,
+    0x0017, 0x001D, 0x001F, 0x0025, 0x0029, 0x002B, 0x002F, 0x0035,
+    0x003B, 0x003D, 0x0043, 0x0047, 0x0049, 0x004F, 0x0053, 0x0059,
+    0x0061, 0x0065, 0x0067, 0x006B, 0x006D, 0x0071, 0x007F, 0x0083,
+    0x0089, 0x008B, 0x0095, 0x0097, 0x009D, 0x00A3, 0x00A7, 0x00AD,
+    0x00B3, 0x00B5, 0x00BF, 0x00C1, 0x00C5, 0x00C7, 0x00D3, 0x00DF,
+    0x00E3, 0x00E5, 0x00E9, 0x00EF, 0x00F1, 0x00FB, 0x0101, 0x0107,
+    0x010D, 0x010F, 0x0115, 0x0119, 0x011B, 0x0125, 0x0133, 0x0137,
 
-    0x0139, 0x013D, 0x014B, 0x0151, 0x015B, 0x015D, 0x0161, 0x0167, 0x016F,
-    0x0175, 0x017B, 0x017F, 0x0185, 0x018D, 0x0191, 0x0199, 0x01A3, 0x01A5,
-    0x01AF, 0x01B1, 0x01B7, 0x01BB, 0x01C1, 0x01C9, 0x01CD, 0x01CF, 0x01D3,
-    0x01DF, 0x01E7, 0x01EB, 0x01F3, 0x01F7, 0x01FD, 0x0209, 0x020B, 0x021D,
-    0x0223, 0x022D, 0x0233, 0x0239, 0x023B, 0x0241, 0x024B, 0x0251, 0x0257,
-    0x0259, 0x025F, 0x0265, 0x0269, 0x026B, 0x0277, 0x0281, 0x0283, 0x0287,
-    0x028D, 0x0293, 0x0295, 0x02A1, 0x02A5, 0x02AB, 0x02B3, 0x02BD, 0x02C5,
-    0x02CF,
+    0x0139, 0x013D, 0x014B, 0x0151, 0x015B, 0x015D, 0x0161, 0x0167,
+    0x016F, 0x0175, 0x017B, 0x017F, 0x0185, 0x018D, 0x0191, 0x0199,
+    0x01A3, 0x01A5, 0x01AF, 0x01B1, 0x01B7, 0x01BB, 0x01C1, 0x01C9,
+    0x01CD, 0x01CF, 0x01D3, 0x01DF, 0x01E7, 0x01EB, 0x01F3, 0x01F7,
+    0x01FD, 0x0209, 0x020B, 0x021D, 0x0223, 0x022D, 0x0233, 0x0239,
+    0x023B, 0x0241, 0x024B, 0x0251, 0x0257, 0x0259, 0x025F, 0x0265,
+    0x0269, 0x026B, 0x0277, 0x0281, 0x0283, 0x0287, 0x028D, 0x0293,
+    0x0295, 0x02A1, 0x02A5, 0x02AB, 0x02B3, 0x02BD, 0x02C5, 0x02CF,
 
-    0x02D7, 0x02DD, 0x02E3, 0x02E7, 0x02EF, 0x02F5, 0x02F9, 0x0301, 0x0305,
-    0x0313, 0x031D, 0x0329, 0x032B, 0x0335, 0x0337, 0x033B, 0x033D, 0x0347,
-    0x0355, 0x0359, 0x035B, 0x035F, 0x036D, 0x0371, 0x0373, 0x0377, 0x038B,
-    0x038F, 0x0397, 0x03A1, 0x03A9, 0x03AD, 0x03B3, 0x03B9, 0x03C7, 0x03CB,
-    0x03D1, 0x03D7, 0x03DF, 0x03E5, 0x03F1, 0x03F5, 0x03FB, 0x03FD, 0x0407,
-    0x0409, 0x040F, 0x0419, 0x041B, 0x0425, 0x0427, 0x042D, 0x043F, 0x0443,
-    0x0445, 0x0449, 0x044F, 0x0455, 0x045D, 0x0463, 0x0469, 0x047F, 0x0481,
-    0x048B,
+    0x02D7, 0x02DD, 0x02E3, 0x02E7, 0x02EF, 0x02F5, 0x02F9, 0x0301,
+    0x0305, 0x0313, 0x031D, 0x0329, 0x032B, 0x0335, 0x0337, 0x033B,
+    0x033D, 0x0347, 0x0355, 0x0359, 0x035B, 0x035F, 0x036D, 0x0371,
+    0x0373, 0x0377, 0x038B, 0x038F, 0x0397, 0x03A1, 0x03A9, 0x03AD,
+    0x03B3, 0x03B9, 0x03C7, 0x03CB, 0x03D1, 0x03D7, 0x03DF, 0x03E5,
+    0x03F1, 0x03F5, 0x03FB, 0x03FD, 0x0407, 0x0409, 0x040F, 0x0419,
+    0x041B, 0x0425, 0x0427, 0x042D, 0x043F, 0x0443, 0x0445, 0x0449,
+    0x044F, 0x0455, 0x045D, 0x0463, 0x0469, 0x047F, 0x0481, 0x048B,
 
-    0x0493, 0x049D, 0x04A3, 0x04A9, 0x04B1, 0x04BD, 0x04C1, 0x04C7, 0x04CD,
-    0x04CF, 0x04D5, 0x04E1, 0x04EB, 0x04FD, 0x04FF, 0x0503, 0x0509, 0x050B,
-    0x0511, 0x0515, 0x0517, 0x051B, 0x0527, 0x0529, 0x052F, 0x0551, 0x0557,
-    0x055D, 0x0565, 0x0577, 0x0581, 0x058F, 0x0593, 0x0595, 0x0599, 0x059F,
-    0x05A7, 0x05AB, 0x05AD, 0x05B3, 0x05BF, 0x05C9, 0x05CB, 0x05CF, 0x05D1,
-    0x05D5, 0x05DB, 0x05E7, 0x05F3, 0x05FB, 0x0607, 0x060D, 0x0611, 0x0617,
-    0x061F, 0x0623, 0x062B, 0x062F, 0x063D, 0x0641, 0x0647, 0x0649, 0x064D,
-    0x0653
-};
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_REVERSE_C
-
-
+    0x0493, 0x049D, 0x04A3, 0x04A9, 0x04B1, 0x04BD, 0x04C1, 0x04C7,
+    0x04CD, 0x04CF, 0x04D5, 0x04E1, 0x04EB, 0x04FD, 0x04FF, 0x0503,
+    0x0509, 0x050B, 0x0511, 0x0515, 0x0517, 0x051B, 0x0527, 0x0529,
+    0x052F, 0x0551, 0x0557, 0x055D, 0x0565, 0x0577, 0x0581, 0x058F,
+    0x0593, 0x0595, 0x0599, 0x059F, 0x05A7, 0x05AB, 0x05AD, 0x05B3,
+    0x05BF, 0x05C9, 0x05CB, 0x05CF, 0x05D1, 0x05D5, 0x05DB, 0x05E7,
+    0x05F3, 0x05FB, 0x0607, 0x060D, 0x0611, 0x0617, 0x061F, 0x0623,
+    0x062B, 0x062F, 0x063D, 0x0641, 0x0647, 0x0649, 0x064D, 0x0653};
 
 /* reverse an array, used for radix code */
 void bn_reverse(unsigned char *s, int len) {
@@ -8320,16 +4975,6 @@ void bn_reverse(unsigned char *s, int len) {
     --iy;
   }
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_S_MP_ADD_C
-
-
 
 /* low level addition, based on HAC pp.594, Algorithm 14.7 */
 int s_mp_add(mp_int *a, mp_int *b, mp_int *c) {
@@ -8417,16 +5062,6 @@ int s_mp_add(mp_int *a, mp_int *b, mp_int *c) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_S_MP_EXPTMOD_C
-
-
-
 int s_mp_exptmod(mp_int *G, mp_int *X, mp_int *P, mp_int *Y, int redmode) {
   mp_int M[TAB_SIZE], res, mu;
   mp_digit buf;
@@ -8451,7 +5086,6 @@ int s_mp_exptmod(mp_int *G, mp_int *X, mp_int *P, mp_int *Y, int redmode) {
   } else {
     winsize = 8;
   }
-
 
   /* init M array */
   /* init first cell */
@@ -8650,16 +5284,6 @@ LBL_M:
   return err;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_S_MP_MUL_DIGS_C
-
-
-
 /* multiplies |a| * |b| and only computes upto digs digits of result
  * HAC pp. 595, Algorithm 14.12  Modified so you can control how
  * many digits of output are created.
@@ -8726,16 +5350,6 @@ int s_mp_mul_digs(mp_int *a, mp_int *b, mp_int *c, int digs) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_S_MP_MUL_HIGH_DIGS_C
-
-
-
 /* multiplies |a| * |b| and does not compute the lower digs digits
  * [meant to get the higher part of the product]
  */
@@ -8747,13 +5361,11 @@ int s_mp_mul_high_digs(mp_int *a, mp_int *b, mp_int *c, int digs) {
   mp_digit tmpx, *tmpt, *tmpy;
 
   /* can we use the fast multiplier? */
-#ifdef BN_FAST_S_MP_MUL_HIGH_DIGS_C
   if (((a->used + b->used + 1) < MP_WARRAY) &&
       (MIN(a->used, b->used) <
        (1 << ((CHAR_BIT * sizeof(mp_word)) - (2 * DIGIT_BIT))))) {
     return fast_s_mp_mul_high_digs(a, b, c, digs);
   }
-#endif
 
   if ((res = mp_init_size(&t, a->used + b->used + 1)) != MP_OKAY) {
     return res;
@@ -8792,16 +5404,6 @@ int s_mp_mul_high_digs(mp_int *a, mp_int *b, mp_int *c, int digs) {
   mp_clear(&t);
   return MP_OKAY;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_S_MP_SQR_C
-
-
 
 /* low level squaring, b = a*a, HAC pp.596-597, Algorithm 14.16 */
 int s_mp_sqr(mp_int *a, mp_int *b) {
@@ -8863,16 +5465,6 @@ int s_mp_sqr(mp_int *a, mp_int *b) {
   mp_clear(&t);
   return MP_OKAY;
 }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_S_MP_SUB_C
-
-
 
 /* low level subtraction (assumes |a| > |b|), HAC pp.595 Algorithm 14.9 */
 int s_mp_sub(mp_int *a, mp_int *b, mp_int *c) {
@@ -8939,16 +5531,6 @@ int s_mp_sub(mp_int *a, mp_int *b, mp_int *c) {
   return MP_OKAY;
 }
 
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BNCORE_C
-
-
-
 /* Known optimal configurations
 
    CPU                    /Compiler     /MUL CUTOFF/SQR CUTOFF
@@ -8966,18 +5548,10 @@ int KARATSUBA_MUL_CUTOFF =
     TOOM_MUL_CUTOFF =
         350, /* no optimal values of these are known yet so set em high */
     TOOM_SQR_CUTOFF = 400;
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
 
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt.c,v $ */
 /* $Revision: 1.36 $ */
 /* $Date: 2007/05/12 14:46:12 $ */
-
 
 #include <signal.h>
 
@@ -8995,17 +5569,11 @@ void crypt_argchk(char *v, char *s, int d) {
 
 #endif
 
-#ifndef TOMCRYPT_H_
-#define TOMCRYPT_H_
 #define LTM_DESC
 #define LTC_SHA1
 
 #include <string.h>
 #include <time.h>
-
-/* use configuration data */
-#ifndef TOMCRYPT_CUSTOM_H_
-#define TOMCRYPT_CUSTOM_H_
 
 /* macros for various libc functions you can change for embedded targets */
 #ifndef XMALLOC
@@ -9179,7 +5747,6 @@ void crypt_argchk(char *v, char *s, int d) {
 #define LTC_SHA256
 #define LTC_SHA224
 #define LTC_SHA1
-#define LTC_MD5
 #endif /* LTC_NO_HASHES */
 
 /* ---> MAC functions <--- */
@@ -9189,7 +5756,6 @@ void crypt_argchk(char *v, char *s, int d) {
 #define LTC_OMAC
 #define LTC_XCBC
 #define LTC_PELICAN
-
 
 /* ---> Encrypt + Authenticate Modes <--- */
 
@@ -9317,39 +5883,23 @@ void crypt_argchk(char *v, char *s, int d) {
 #endif
 
 /* THREAD management */
-#ifdef LTC_PTHREAD
-
-#include <pthread.h>
-
-#define LTC_MUTEX_GLOBAL(x) pthread_mutex_t x = PTHREAD_MUTEX_INITIALIZER;
-#define LTC_MUTEX_PROTO(x) extern pthread_mutex_t x;
-#define LTC_MUTEX_TYPE(x) pthread_mutex_t x;
-#define LTC_MUTEX_INIT(x) pthread_mutex_init(x, NULL);
-#define LTC_MUTEX_LOCK(x) pthread_mutex_lock(x);
-#define LTC_MUTEX_UNLOCK(x) pthread_mutex_unlock(x);
-
-#else
 
 /* default no functions */
 #define LTC_MUTEX_GLOBAL(x)
 #define LTC_MUTEX_PROTO(x)
-#define LTC_MUTEX_TYPE(x)
-#define LTC_MUTEX_INIT(x)
 #define LTC_MUTEX_LOCK(x)
 #define LTC_MUTEX_UNLOCK(x)
-#endif
 
 /* Debuggers */
 
 /* define this if you use Valgrind, note: it CHANGES the way SOBER-128 and
  * LTC_RC4 work (see the code) */
 /* #define LTC_VALGRIND */
-#endif
+//#endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_custom.h,v $ */
 /* $Revision: 1.73 $ */
 /* $Date: 2007/05/12 14:37:41 $ */
-
 
 /* version */
 #define CRYPT 0x0117
@@ -9721,7 +6271,6 @@ typedef unsigned ulong32;
   }
 #endif
 
-
 #define STORE32L(x, y)   \
   {                      \
     ulong32 __t = (x);   \
@@ -9784,7 +6333,6 @@ typedef unsigned ulong32;
         (((ulong64)((y)[0] & 255)));                                           \
   }
 
-
 #define STORE32H(x, y)   \
   {                      \
     ulong32 __t = (x);   \
@@ -9832,23 +6380,8 @@ static inline unsigned ROR(unsigned word, int i) {
   return word;
 }
 
-#ifndef LTC_NO_ROLC
-
-static inline unsigned ROLc(unsigned word, const int i) {
-  asm("roll %2,%0" : "=r"(word) : "0"(word), "I"(i));
-  return word;
-}
-
-static inline unsigned RORc(unsigned word, const int i) {
-  asm("rorl %2,%0" : "=r"(word) : "0"(word), "I"(i));
-  return word;
-}
-
-#else
-
 #define ROLc ROL
 #define RORc ROR
-#endif
 
 #elif !defined(__STRICT_ANSI__) && defined(LTC_PPC32)
 
@@ -9862,23 +6395,8 @@ static inline unsigned ROR(unsigned word, int i) {
   return word;
 }
 
-#ifndef LTC_NO_ROLC
-
-static inline unsigned ROLc(unsigned word, const int i) {
-  asm("rotlwi %0,%0,%2" : "=r"(word) : "0"(word), "I"(i));
-  return word;
-}
-
-static inline unsigned RORc(unsigned word, const int i) {
-  asm("rotrwi %0,%0,%2" : "=r"(word) : "0"(word), "I"(i));
-  return word;
-}
-
-#else
-
 #define ROLc ROL
 #define RORc ROR
-#endif
 
 #else
 
@@ -9915,23 +6433,8 @@ static inline unsigned long ROR64(unsigned long word, int i) {
   return word;
 }
 
-#ifndef LTC_NO_ROLC
-
-static inline unsigned long ROL64c(unsigned long word, const int i) {
-  asm("rolq %2,%0" : "=r"(word) : "0"(word), "J"(i));
-  return word;
-}
-
-static inline unsigned long ROR64c(unsigned long word, const int i) {
-  asm("rorq %2,%0" : "=r"(word) : "0"(word), "J"(i));
-  return word;
-}
-
-#else /* LTC_NO_ROLC */
-
 #define ROL64c ROL64
 #define ROR64c ROR64
-#endif
 
 #else /* Not x86_64  */
 
@@ -10031,14 +6534,12 @@ extern struct ltc_cipher_descriptor {
    @return CRYPT_OK if successful
  */
 
-
   /** Terminate the context
    @param skey    The scheduled key
  */
   void (*done)(symmetric_key *skey);
 
 } cipher_descriptor[];
-
 
 /* make aes an alias */
 
@@ -10205,7 +6706,6 @@ int sha1_done(hash_state *md, unsigned char *hash);
 extern const struct ltc_hash_descriptor sha1_desc;
 #endif
 
-
 int md5_init(hash_state *md);
 
 int md5_process(hash_state *md, const unsigned char *in, unsigned long inlen);
@@ -10283,17 +6783,14 @@ int hmac_done(hmac_state *hmac, unsigned char *out, unsigned long *outlen);
 
 #endif
 
-
 void gcm_gf_mult(const unsigned char *a, const unsigned char *b,
                  unsigned char *c);
-
 
 /* table shared between GCM and LRW */
 #if defined(LTC_GCM_TABLES) || defined(LRW_TABLES) || \
     ((defined(LTC_GCM_MODE) || defined(LTC_GCM_MODE)) && defined(LTC_FAST))
 extern const unsigned char gcm_shift_table[];
 #endif
-
 
 #define GCM_ENCRYPT 0
 #define GCM_DECRYPT 1
@@ -10319,9 +6816,6 @@ typedef struct {
       pttotlen;   /* 64-bit counter for the PT */
 
   unsigned char PC[16][256][16] /* 16 tables of 8x128 */
-#ifdef LTC_GCM_TABLES_SSE2
-      __attribute__((aligned(16)))
-#endif
       ;
 } gcm_state;
 
@@ -10340,7 +6834,6 @@ int gcm_process(gcm_state *gcm, unsigned char *pt, unsigned long ptlen,
                 unsigned char *ct, int direction);
 
 int gcm_done(gcm_state *gcm, unsigned char *tag, unsigned long *taglen);
-
 
 #ifdef LTC_PELICAN
 
@@ -11574,8 +8067,6 @@ int pkcs_1_pss_decode(const unsigned char *msghash, unsigned long msghashlen,
 /* $Revision: 1.8 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-#endif /* TOMCRYPT_H_ */
-
 /* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt.h,v $ */
 /* $Revision: 1.21 $ */
 /* $Date: 2006/12/16 19:34:05 $ */
@@ -11583,8 +8074,6 @@ int pkcs_1_pss_decode(const unsigned char *msghash, unsigned long msghashlen,
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_argchk.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file crypt_cipher_descriptor.c
@@ -11606,8 +8095,6 @@ LTC_MUTEX_GLOBAL(ltc_cipher_mutex)
  */
 /* $Revision: 1.13 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file crypt_cipher_is_valid.c
@@ -11633,8 +8120,6 @@ int cipher_is_valid(int idx) {
  */
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file crypt_find_cipher.c
@@ -11666,8 +8151,6 @@ int find_cipher(const char *name) {
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file crypt_find_cipher_any.c
    Find a cipher in the descriptor tables, Tom St Denis
@@ -11678,8 +8161,6 @@ int find_cipher(const char *name) {
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file crypt_find_cipher_id.c
    Find cipher by ID, Tom St Denis
@@ -11688,8 +8169,6 @@ int find_cipher(const char *name) {
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_find_cipher_id.c,v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file crypt_find_hash.c
@@ -11721,8 +8200,6 @@ int find_hash(const char *name) {
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file crypt_find_hash_any.c
    Find a hash, Tom St Denis
@@ -11731,8 +8208,6 @@ int find_hash(const char *name) {
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_find_hash_any.c,v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file crypt_find_hash_id.c
@@ -11743,13 +8218,9 @@ int find_hash(const char *name) {
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_find_hash_oid.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file crypt_find_prng.c
@@ -11781,8 +8252,6 @@ int find_prng(const char *name) {
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file crypt_fsa.c
    LibTomCrypt FULL SPEED AHEAD!, Tom St Denis
@@ -11791,8 +8260,6 @@ int find_prng(const char *name) {
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_fsa.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file crypt_hash_descriptor.c
@@ -11816,8 +8283,6 @@ LTC_MUTEX_GLOBAL(ltc_hash_mutex)
  */
 /* $Revision: 1.10 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file crypt_hash_is_valid.c
@@ -11843,11 +8308,7 @@ int hash_is_valid(int idx) {
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 ltc_math_descriptor ltc_mp;
-
-
 
 /**
    @file crypt_prng_descriptor.c
@@ -11868,8 +8329,6 @@ LTC_MUTEX_GLOBAL(ltc_prng_mutex)
  */
 /* $Revision: 1.8 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file crypt_prng_is_valid.c
@@ -11894,8 +8353,6 @@ int prng_is_valid(int idx) {
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_prng_is_valid.c,v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file crypt_register_cipher.c
@@ -11943,8 +8400,6 @@ int register_cipher(const struct ltc_cipher_descriptor *cipher) {
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file crypt_register_hash.c
    Register a HASH, Tom St Denis
@@ -11988,8 +8443,6 @@ int register_hash(const struct ltc_hash_descriptor *hash) {
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_register_hash.c,v $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file crypt_register_prng.c
@@ -12035,8 +8488,6 @@ int register_prng(const struct ltc_prng_descriptor *prng) {
 /* $Revision: 1.8 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file crypt_unregister_cipher.c
    Unregister a cipher, Tom St Denis
@@ -12046,8 +8497,6 @@ int register_prng(const struct ltc_prng_descriptor *prng) {
  */
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file crypt_unregister_hash.c
@@ -12059,8 +8508,6 @@ int register_prng(const struct ltc_prng_descriptor *prng) {
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file crypt_unregister_prng.c
    Unregister a PRNG, Tom St Denis
@@ -12070,8 +8517,6 @@ int register_prng(const struct ltc_prng_descriptor *prng) {
  */
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_decode_bit_string.c
@@ -12163,8 +8608,6 @@ int der_decode_bit_string(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_decode_boolean.c
    ASN.1 DER, decode a BOOLEAN, Tom St Denis
@@ -12199,8 +8642,6 @@ int der_decode_boolean(const unsigned char *in, unsigned long inlen, int *out) {
  * /cvs/libtom/libtomcrypt/src/pk/asn1/der/boolean/der_decode_boolean.c,v $ */
 /* $Revision: 1.2 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_decode_choice.c
@@ -12373,8 +8814,6 @@ int der_decode_choice(const unsigned char *in, unsigned long *inlen,
 /* $Revision: 1.9 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_decode_ia5_string.c
    ASN.1 DER, encode a IA5 STRING, Tom St Denis
@@ -12458,8 +8897,6 @@ int der_decode_ia5_string(const unsigned char *in, unsigned long inlen,
  * /cvs/libtom/libtomcrypt/src/pk/asn1/der/ia5/der_decode_ia5_string.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_decode_integer.c
@@ -12562,8 +8999,6 @@ int der_decode_integer(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_decode_object_identifier.c
    ASN.1 DER, Decode Object Identifier, Tom St Denis
@@ -12654,8 +9089,6 @@ int der_decode_object_identifier(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_decode_octet_string.c
    ASN.1 DER, encode a OCTET STRING, Tom St Denis
@@ -12735,8 +9168,6 @@ int der_decode_octet_string(const unsigned char *in, unsigned long inlen,
  */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_decode_printable_string.c
@@ -12822,8 +9253,6 @@ int der_decode_printable_string(const unsigned char *in, unsigned long inlen,
  * $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_decode_sequence_ex.c
@@ -13134,8 +9563,6 @@ LBL_ERR:
  */
 /* $Revision: 1.16 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_decode_sequence_flexi.c
@@ -13532,8 +9959,6 @@ error:
 /* $Revision: 1.26 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_decode_sequence_multi.c
    ASN.1 DER, decode a SEQUENCE, Tom St Denis
@@ -13661,8 +10086,6 @@ LBL_ERR:
 /* $Revision: 1.13 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_decode_short_integer.c
    ASN.1 DER, decode an integer, Tom St Denis
@@ -13719,8 +10142,6 @@ int der_decode_short_integer(const unsigned char *in, unsigned long inlen,
  * $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_decode_utctime.c
@@ -13856,8 +10277,6 @@ int der_decode_utctime(const unsigned char *in, unsigned long *inlen,
 /* $Revision: 1.9 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_decode_utf8_string.c
    ASN.1 DER, encode a UTF8 STRING, Tom St Denis
@@ -13960,8 +10379,6 @@ int der_decode_utf8_string(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.8 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_encode_bit_string.c
    ASN.1 DER, encode a BIT STRING, Tom St Denis
@@ -14040,8 +10457,6 @@ int der_encode_bit_string(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_encode_boolean.c
    ASN.1 DER, encode a BOOLEAN, Tom St Denis
@@ -14079,8 +10494,6 @@ int der_encode_boolean(int in, unsigned char *out, unsigned long *outlen) {
  * /cvs/libtom/libtomcrypt/src/pk/asn1/der/boolean/der_encode_boolean.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_encode_ia5_string.c
@@ -14156,8 +10569,6 @@ int der_encode_ia5_string(const unsigned char *in, unsigned long inlen,
  * /cvs/libtom/libtomcrypt/src/pk/asn1/der/ia5/der_encode_ia5_string.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_encode_integer.c
@@ -14283,8 +10694,6 @@ int der_encode_integer(void *num, unsigned char *out, unsigned long *outlen) {
 /* $Revision: 1.9 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_encode_object_identifier.c
    ASN.1 DER, Encode Object Identifier, Tom St Denis
@@ -14389,8 +10798,6 @@ int der_encode_object_identifier(unsigned long *words, unsigned long nwords,
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_encode_octet_string.c
    ASN.1 DER, encode a OCTET STRING, Tom St Denis
@@ -14467,8 +10874,6 @@ int der_encode_octet_string(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_encode_printable_string.c
    ASN.1 DER, encode a printable STRING, Tom St Denis
@@ -14544,8 +10949,6 @@ int der_encode_printable_string(const unsigned char *in, unsigned long inlen,
  * $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_encode_sequence_ex.c
@@ -14879,8 +11282,6 @@ LBL_ERR:
 
 #endif
 
-
-
 /**
    @file der_encode_sequence_multi.c
    ASN.1 DER, encode a SEQUENCE, Tom St Denis
@@ -15006,8 +11407,6 @@ LBL_ERR:
 /* $Revision: 1.12 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_encode_set.c
    ASN.1 DER, Encode a SET, Tom St Denis
@@ -15120,8 +11519,6 @@ int der_encode_set(ltc_asn1_list *list, unsigned long inlen, unsigned char *out,
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/asn1/der/set/der_encode_set.c,v $ */
 /* $Revision: 1.12 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_encode_setof.c
@@ -15255,7 +11652,6 @@ int der_encode_setof(ltc_asn1_list *list, unsigned long inlen,
     y += edges[x].size;
   }
 
-
   /* free buffers */
   XFREE(edges);
   XFREE(buf);
@@ -15269,8 +11665,6 @@ int der_encode_setof(ltc_asn1_list *list, unsigned long inlen,
  */
 /* $Revision: 1.12 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_encode_short_integer.c
@@ -15360,8 +11754,6 @@ int der_encode_short_integer(unsigned long num, unsigned char *out,
 /* $Revision: 1.8 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_encode_utctime.c
    ASN.1 DER, encode a  UTCTIME, Tom St Denis
@@ -15434,8 +11826,6 @@ int der_encode_utctime(ltc_utctime *utctime, unsigned char *out,
  * /cvs/libtom/libtomcrypt/src/pk/asn1/der/utctime/der_encode_utctime.c,v $ */
 /* $Revision: 1.10 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_encode_utf8_string.c
@@ -15548,8 +11938,6 @@ int der_encode_utf8_string(const wchar_t *in, unsigned long inlen,
 /* $Revision: 1.9 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_length_bit_string.c
    ASN.1 DER, get length of BIT STRING, Tom St Denis
@@ -15594,8 +11982,6 @@ int der_length_bit_string(unsigned long nbits, unsigned long *outlen) {
 /* $Revision: 1.3 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_length_boolean.c
    ASN.1 DER, get length of a BOOLEAN, Tom St Denis
@@ -15620,8 +12006,6 @@ int der_length_boolean(unsigned long *outlen) {
  * /cvs/libtom/libtomcrypt/src/pk/asn1/der/boolean/der_length_boolean.c,v $ */
 /* $Revision: 1.3 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_length_ia5_string.c
@@ -15720,8 +12104,6 @@ int der_length_ia5_string(const unsigned char *octets, unsigned long noctets,
 /* $Revision: 1.3 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_length_integer.c
    ASN.1 DER, get length of encoding, Tom St Denis
@@ -15795,8 +12177,6 @@ int der_length_integer(void *num, unsigned long *outlen) {
  * /cvs/libtom/libtomcrypt/src/pk/asn1/der/integer/der_length_integer.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_length_object_identifier.c
@@ -15876,8 +12256,6 @@ int der_length_object_identifier(unsigned long *words, unsigned long nwords,
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_length_octet_string.c
    ASN.1 DER, get length of OCTET STRING, Tom St Denis
@@ -15920,8 +12298,6 @@ int der_length_octet_string(unsigned long noctets, unsigned long *outlen) {
  */
 /* $Revision: 1.3 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_length_printable_string.c
@@ -16019,8 +12395,6 @@ int der_length_printable_string(const unsigned char *octets,
  * $ */
 /* $Revision: 1.3 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_length_sequence.c
@@ -16180,8 +12554,6 @@ LBL_ERR:
 /* $Revision: 1.14 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_length_short_integer.c
    ASN.1 DER, get length of encoding, Tom St Denis
@@ -16242,8 +12614,6 @@ int der_length_short_integer(unsigned long num, unsigned long *outlen) {
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_length_utctime.c
    ASN.1 DER, get length of UTCTIME, Tom St Denis
@@ -16278,8 +12648,6 @@ int der_length_utctime(ltc_utctime *utctime, unsigned long *outlen) {
  * /cvs/libtom/libtomcrypt/src/pk/asn1/der/utctime/der_length_utctime.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file der_length_utf8_string.c
@@ -16352,8 +12720,6 @@ int der_length_utf8_string(const wchar_t *in, unsigned long noctets,
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-
-
 /**
    @file der_sequence_free.c
    ASN.1 DER, free's a structure allocated by der_decode_sequence_flexi(), Tom
@@ -16418,8 +12784,6 @@ void der_sequence_free(ltc_asn1_list *in) {
  * /cvs/libtom/libtomcrypt/src/pk/asn1/der/sequence/der_sequence_free.c,v $ */
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -16536,8 +12900,6 @@ const ltc_ecc_set_type ltc_ecc_sets[] = {
 /* $Revision: 1.40 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
  * All curves taken from NIST recommendation paper of July 1999
@@ -16600,8 +12962,6 @@ int ecc_ansi_x963_export(ecc_key *key, unsigned char *out,
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_ansi_x963_export.c,v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -16692,8 +13052,6 @@ error:
 /* $Revision: 1.11 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
  * All curves taken from NIST recommendation paper of July 1999
@@ -16713,8 +13071,6 @@ error:
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
  * All curves taken from NIST recommendation paper of July 1999
@@ -16733,8 +13089,6 @@ error:
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
  * All curves taken from NIST recommendation paper of July 1999
@@ -16752,8 +13106,6 @@ error:
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_export.c,v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -16782,8 +13134,6 @@ void ecc_free(ecc_key *key) {
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
  * All curves taken from NIST recommendation paper of July 1999
@@ -16802,8 +13152,6 @@ void ecc_free(ecc_key *key) {
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
  * All curves taken from NIST recommendation paper of July 1999
@@ -16821,8 +13169,6 @@ void ecc_free(ecc_key *key) {
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_import.c,v $ */
 /* $Revision: 1.13 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -16935,8 +13281,6 @@ ERR_BUF:
 /* $Revision: 1.13 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
  * All curves taken from NIST recommendation paper of July 1999
@@ -17031,8 +13375,6 @@ done:
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_shared_secret.c,v $ */
 /* $Revision: 1.10 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -17151,8 +13493,6 @@ errnokey:
 /* $Revision: 1.11 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
  * All curves taken from NIST recommendation paper of July 1999
@@ -17170,8 +13510,6 @@ errnokey:
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_sizes.c,v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -17191,8 +13529,6 @@ errnokey:
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_test.c,v $ */
 /* $Revision: 1.12 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -17386,21 +13722,15 @@ error:
 /* $Revision: 1.14 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/error_to_string.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 #define DESC_DEF_ONLY
 
 /* $Source: /cvs/libtom/libtomcrypt/src/math/gmp_desc.c,v $ */
 /* $Revision: 1.16 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /**
    @file hash_file.c
@@ -17411,8 +13741,6 @@ error:
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:23 $ */
 
-
-
 /**
    @file hash_filehandle.c
    Hash open files, Tom St Denis
@@ -17421,8 +13749,6 @@ error:
 /* $Source: /cvs/libtom/libtomcrypt/src/hashes/helper/hash_filehandle.c,v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:23 $ */
-
-
 
 /**
    @file hash_memory.c
@@ -17479,8 +13805,6 @@ LBL_ERR:
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:23 $ */
 
-
-
 /**
    @file hash_memory_multi.c
    Hash (multiple buffers) memory helper, Tom St Denis
@@ -17489,8 +13813,6 @@ LBL_ERR:
 /* $Source: /cvs/libtom/libtomcrypt/src/hashes/helper/hash_memory_multi.c,v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:23 $ */
-
-
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -17526,8 +13848,6 @@ int ltc_ecc_is_valid_idx(int n) {
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_is_valid_idx.c,v $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -17613,8 +13933,6 @@ done:
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_map.c,v $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -17846,8 +14164,6 @@ ERR_T:
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_mul2add.c,v $ */
 /* $Revision: 1.8 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -18107,8 +14423,6 @@ done:
 /* $Revision: 1.26 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
  * All curves taken from NIST recommendation paper of July 1999
@@ -18300,8 +14614,6 @@ done:
 /* $Revision: 1.13 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
  * All curves taken from NIST recommendation paper of July 1999
@@ -18349,8 +14661,6 @@ void ltc_ecc_del_point(ecc_point *p) {
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ltc_ecc_points.c,v $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -18659,8 +14969,6 @@ done:
 /* $Revision: 1.16 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
  * All curves taken from NIST recommendation paper of July 1999
@@ -18879,8 +15187,6 @@ done:
  * $ */
 /* $Revision: 1.11 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 #define DESC_DEF_ONLY
 
@@ -19444,8 +15750,6 @@ const ltc_math_descriptor ltm_desc = {
 /* $Revision: 1.31 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 #ifdef MPI
 
 int ltc_init_multi(void **a, ...) {
@@ -19493,8 +15797,6 @@ void ltc_deinit_multi(void *a, ...) {
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:23 $ */
 
-
-
 /**
    @file pkcs_1_i2osp.c
    Integer to Octet I2OSP, Tom St Denis
@@ -19511,8 +15813,6 @@ void ltc_deinit_multi(void *a, ...) {
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_i2osp.c,v $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /**
    @file pkcs_1_mgf1.c
@@ -19605,8 +15905,6 @@ LBL_ERR:
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_mgf1.c,v $ */
 /* $Revision: 1.8 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /**
    @file pkcs_1_oaep_decode.c
@@ -19783,8 +16081,6 @@ LBL_ERR:
 /* $Revision: 1.13 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /**
    @file pkcs_1_oaep_encode.c
    OAEP Padding for LTC_PKCS #1, Tom St Denis
@@ -19944,8 +16240,6 @@ LBL_ERR:
 /* $Revision: 1.9 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /**
    @file pkcs_1_os2ip.c
    Octet to Integer OS2IP, Tom St Denis
@@ -19957,8 +16251,6 @@ LBL_ERR:
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_os2ip.c,v $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /**
    @file pkcs_1_pss_decode.c
@@ -20124,8 +16416,6 @@ LBL_ERR:
 /* $Revision: 1.11 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /**
    @file pkcs_1_pss_encode.c
    LTC_PKCS #1 PSS Signature Padding, Tom St Denis
@@ -20286,8 +16576,6 @@ LBL_ERR:
 /* $Revision: 1.9 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /** @file pkcs_1_v1_5_decode.c
  *
  *  LTC_PKCS #1 v1.5 Padding. (Andreas Lange)
@@ -20389,8 +16677,6 @@ bail:
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /*! \file pkcs_1_v1_5_encode.c
  *
  *  LTC_PKCS #1 v1.5 Padding (Andreas Lange)
@@ -20487,8 +16773,6 @@ bail:
 /* $Revision: 1.4 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /**
    @file rand_prime.c
    Generate a random prime, Tom St Denis
@@ -20550,7 +16834,6 @@ int rand_prime(void *N, long len, prng_state *prng, int wprng) {
     }
   } while (res == LTC_MP_NO);
 
-
   XFREE(buf);
   return CRYPT_OK;
 }
@@ -20558,8 +16841,6 @@ int rand_prime(void *N, long len, prng_state *prng, int wprng) {
 /* $Source: /cvs/libtom/libtomcrypt/src/math/rand_prime.c,v $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:23 $ */
-
-
 
 /**
    @file rng_get_bytes.c
@@ -20706,8 +16987,6 @@ unsigned long rng_get_bytes(unsigned char *out, unsigned long outlen,
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /**
    @file rng_make_prng.c
    portable way to get secure random bits to feed a PRNG  (Tom St Denis)
@@ -20763,8 +17042,6 @@ int rng_make_prng(int bits, int wprng, prng_state *prng,
 /* $Source: /cvs/libtom/libtomcrypt/src/prngs/rng_make_prng.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file rsa_decrypt_key.c
@@ -20860,8 +17137,6 @@ int rsa_decrypt_key_ex(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.10 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /**
    @file rsa_encrypt_key.c
    RSA LTC_PKCS #1 encryption, Tom St Denis and Andreas Lange
@@ -20952,8 +17227,6 @@ int rsa_encrypt_key_ex(const unsigned char *in, unsigned long inlen,
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_encrypt_key.c,v $ */
 /* $Revision: 1.10 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /**
    @file rsa_exptmod.c
@@ -21078,8 +17351,6 @@ error:
 /* $Revision: 1.18 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /**
    @file rsa_free.c
    Free an RSA key, Tom St Denis
@@ -21102,8 +17373,6 @@ void rsa_free(rsa_key *key) {
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_free.c,v $ */
 /* $Revision: 1.10 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /**
    @file rsa_import.c
@@ -21231,8 +17500,6 @@ LBL_ERR:
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_import.c,v $ */
 /* $Revision: 1.23 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /**
    @file rsa_make_key.c
@@ -21374,8 +17641,6 @@ cleanup:
 /* $Revision: 1.16 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /**
    @file rsa_sign_hash.c
    RSA LTC_PKCS #1 v1.5 and v2 PSS sign hash, Tom St Denis and Andreas Lange
@@ -21496,8 +17761,6 @@ int rsa_sign_hash_ex(const unsigned char *in, unsigned long inlen,
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/rsa/rsa_sign_hash.c,v $ */
 /* $Revision: 1.11 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /**
    @file rsa_verify_hash.c
@@ -21660,8 +17923,6 @@ bail_2:
 /* $Revision: 1.13 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /**
    @file sprng.c
    Secure PRNG, Tom St Denis
@@ -21731,8 +17992,6 @@ int sprng_done(prng_state *prng) { return CRYPT_OK; }
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /**
    @file zeromem.c
    Zero a block of memory, Tom St Denis
@@ -21755,8 +18014,6 @@ void zeromem(void *out, size_t outlen) {
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/zeromem.c,v $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
-
-
 
 /**
    @file sha1.c
@@ -21792,11 +18049,8 @@ const struct ltc_hash_descriptor sha1_desc = {
 #define F2(x, y, z) ((x & y) | (z & (x | y)))
 #define F3(x, y, z) (x ^ y ^ z)
 
-
-static int sha1_compress(hash_state *md, unsigned char *buf)
-{
+static int sha1_compress(hash_state *md, unsigned char *buf) {
   ulong32 a, b, c, d, e, W[80], i;
-
 
   /* copy the state into 512-bits into W[0..15] */
   for (i = 0; i < 16; i++) {
@@ -21880,7 +18134,6 @@ static int sha1_compress(hash_state *md, unsigned char *buf)
   return CRYPT_OK;
 }
 
-
 /**
    Initialize the hash state
    @param md   The hash state you wish to initialize
@@ -21963,8 +18216,6 @@ int sha1_done(hash_state *md, unsigned char *out) {
 /* $Revision: 1.10 $ */
 /* $Date: 2007/05/12 14:25:28 $ */
 
-
-
 /**
   @file sha256.c
   LTC_SHA256 by Tom St Denis
@@ -21996,7 +18247,6 @@ const struct ltc_hash_descriptor sha256_desc = {
     &sha256_done,
 };
 
-
 /* Various logical functions */
 #define Ch(x, y, z) (z ^ (x & (y ^ z)))
 #define Maj(x, y, z) (((x | y) & z) | (x & y))
@@ -22009,8 +18259,7 @@ const struct ltc_hash_descriptor sha256_desc = {
 
 /* compress 512-bits */
 
-static int sha256_compress(hash_state *md, unsigned char *buf)
-{
+static int sha256_compress(hash_state *md, unsigned char *buf) {
   ulong32 S[8], W[64], t0, t1;
   int i;
 
@@ -22103,14 +18352,12 @@ static int sha256_compress(hash_state *md, unsigned char *buf)
 
 #undef RND
 
-
   /* feedback */
   for (i = 0; i < 8; i++) {
     md->sha256.state[i] = md->sha256.state[i] + S[i];
   }
   return CRYPT_OK;
 }
-
 
 /**
    Initialize the hash state
@@ -22194,11 +18441,6 @@ int sha256_done(hash_state *md, unsigned char *out) {
 
 #endif
 
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
 /**
    @param sha384.c
    LTC_SHA384 hash included in sha512.c, Tom St Denis
@@ -22273,12 +18515,6 @@ int sha384_done(hash_state *md, unsigned char *out) {
 }
 
 #endif /* defined(LTC_SHA384) && defined(LTC_SHA512) */
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
 
 /**
    @param sha512.c
@@ -22373,8 +18609,7 @@ static const ulong64 K[80] = {
 
 /* compress 1024-bits */
 
-static int sha512_compress(hash_state *md, unsigned char *buf)
-{
+static int sha512_compress(hash_state *md, unsigned char *buf) {
   ulong64 S[8], W[80], t0, t1;
   int i;
 
@@ -22505,12 +18740,6 @@ int sha512_done(hash_state *md, unsigned char *out) {
 
 #endif
 
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
-
 /**
   @file hmac_init.c
   HMAC support, initialize state, Tom St Denis/Dobes Vandermeer
@@ -22604,12 +18833,6 @@ done:
 
 #endif
 
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
-
 /**
   @file hmac_process.c
   HMAC support, process data, Tom St Denis/Dobes Vandermeer
@@ -22636,12 +18859,6 @@ int hmac_process(hmac_state *hmac, const unsigned char *in,
 }
 
 #endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
 
 /**
   @file hmac_done.c
@@ -22734,10 +18951,6 @@ LBL_ERR:
 
 #endif
 
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
 #define __LTC_AES_TAB_C__
 
 /* The precomputed tables for AES */
@@ -22818,7 +19031,6 @@ static const ulong32 TE0[256] = {
 
 #ifndef PELI_TAB
 #endif
-
 
 static const ulong32 TD0[256] = {
     0x51f4a750UL, 0x7e416553UL, 0x1a17a4c3UL, 0x3a275e96UL, 0x3bab6bcbUL,
@@ -22929,8 +19141,6 @@ static const ulong32 Td4[256] = {
     0x14141414UL, 0x63636363UL, 0x55555555UL, 0x21212121UL, 0x0c0c0c0cUL,
     0x7d7d7d7dUL,
 };
-
-
 
 #define Te0(x) TE0[x]
 #define Te1(x) TE1[x]
@@ -23324,7 +19534,6 @@ static const ulong32 Te4_3[] = {
     0x16000000UL};
 #endif /* pelimac */
 
-
 static const ulong32 TD1[256] = {
     0x5051f4a7UL, 0x537e4165UL, 0xc31a17a4UL, 0x963a275eUL, 0xcb3bab6bUL,
     0xf11f9d45UL, 0xabacfa58UL, 0x934be303UL, 0x552030faUL, 0xf6ad766dUL,
@@ -23704,8 +19913,6 @@ static const ulong32 Tks3[] = {
     0x6bae84bbUL, 0x62a38fb5UL, 0x5d80be9fUL, 0x548db591UL, 0x4f9aa883UL,
     0x4697a38dUL};
 
-
-
 static const ulong32 rcon[] = {
     0x01000000UL, 0x02000000UL, 0x04000000UL, 0x08000000UL,
     0x10000000UL, 0x20000000UL, 0x40000000UL, 0x80000000UL,
@@ -23714,12 +19921,6 @@ static const ulong32 rcon[] = {
 };
 
 #endif /* __LTC_AES_TAB_C__ */
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
 
 /* AES implementation by Tom St Denis
  *
@@ -23742,8 +19943,6 @@ static const ulong32 rcon[] = {
   Implementation of AES
 */
 
-
-
 #define SETUP rijndael_setup
 #define ECB_ENC rijndael_ecb_encrypt
 #define ECB_DEC rijndael_ecb_decrypt
@@ -23755,14 +19954,12 @@ const struct ltc_cipher_descriptor aes_desc = {
     "aes", 6, 16, SETUP, ECB_ENC, ECB_DONE,
 };
 
-
 #define __LTC_AES_TAB_C__
 
 static ulong32 setup_mix(ulong32 temp) {
   return (Te4_3[byte(temp, 2)]) ^ (Te4_2[byte(temp, 1)]) ^
          (Te4_1[byte(temp, 0)]) ^ (Te4_0[byte(temp, 3)]);
 }
-
 
 /**
    Initialize the AES (Rijndael) block cipher
@@ -23910,8 +20107,7 @@ int SETUP(const unsigned char *key, int keylen, int num_rounds,
   @return CRYPT_OK if successful
 */
 
-int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey)
-{
+int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey) {
   ulong32 s0, s1, s2, s3, t0, t1, t2, t3, *rk;
   int Nr, r;
 
@@ -23934,7 +20130,6 @@ int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey)
   s2 ^= rk[2];
   LOAD32H(s3, pt + 12);
   s3 ^= rk[3];
-
 
   /*
    * Nr - 1 full rounds:
@@ -23965,7 +20160,6 @@ int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey)
          Te3(byte(t2, 0)) ^ rk[3];
   }
 
-
   /*
    * apply last round and
    * map cipher state to byte array block:
@@ -23986,8 +20180,6 @@ int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey)
   return CRYPT_OK;
 }
 
-
-
 /**
   Decrypts a block of text with AES
   @param ct The input ciphertext (16 bytes)
@@ -23996,8 +20188,7 @@ int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey)
   @return CRYPT_OK if successful
 */
 
-int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey)
-{
+int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey) {
   ulong32 s0, s1, s2, s3, t0, t1, t2, t3, *rk;
   int Nr, r;
 
@@ -24020,7 +20211,6 @@ int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey)
   s2 ^= rk[2];
   LOAD32H(s3, ct + 12);
   s3 ^= rk[3];
-
 
   /*
    * Nr - 1 full rounds:
@@ -24075,13 +20265,11 @@ int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey)
   return CRYPT_OK;
 }
 
-
 /**
   Performs a self-test of the AES block cipher
   @return CRYPT_OK if functional, CRYPT_NOP if self-test has been disabled
 */
 int ECB_TEST(void) { return CRYPT_NOP; }
-
 
 /** Terminate the context
    @param skey    The scheduled key
@@ -24112,84 +20300,40 @@ int ECB_KS(int *keysize) {
   }
 }
 
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
-
 /**
    @file cbc_decrypt.c
    CBC implementation, encrypt block, Tom St Denis
 */
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
 
 /**
    @file cbc_done.c
    CBC implementation, finish chain, Tom St Denis
 */
 
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
-
 /**
    @file cbc_encrypt.c
    CBC implementation, encrypt block, Tom St Denis
 */
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
 
 /**
    @file cbc_getiv.c
    CBC implementation, get IV, Tom St Denis
 */
 
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
-
 /**
    @file cbc_setiv.c
    CBC implementation, set IV, Tom St Denis
 */
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
 
 /**
    @file cbc_start.c
    CBC implementation, start chain, Tom St Denis
 */
 
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
-
 /**
    @file gcm_add_iv.c
    GCM implementation, add IV data to the state, by Tom St Denis
 */
-
 
 /**
   Add IV data to the GCM state
@@ -24255,18 +20399,14 @@ int gcm_add_iv(gcm_state *gcm, const unsigned char *IV, unsigned long IVlen) {
   return CRYPT_OK;
 }
 
-
 /* $Source: /cvs/libtom/libtomcrypt/src/encauth/gcm/gcm_add_iv.c,v $ */
 /* $Revision: 1.9 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /**
    @file gcm_done.c
    GCM implementation, Terminate the stream, by Tom St Denis
 */
-
 
 /**
   Terminate a GCM stream
@@ -24324,18 +20464,14 @@ int gcm_done(gcm_state *gcm, unsigned char *tag, unsigned long *taglen) {
   return CRYPT_OK;
 }
 
-
 /* $Source: /cvs/libtom/libtomcrypt/src/encauth/gcm/gcm_done.c,v $ */
 /* $Revision: 1.11 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /**
    @file gcm_init.c
    GCM implementation, initialize state, by Tom St Denis
 */
-
 
 /**
   Initialize a GCM state
@@ -24352,7 +20488,6 @@ int gcm_init(gcm_state *gcm, int cipher, const unsigned char *key, int keylen) {
 
   LTC_ARGCHK(gcm != NULL);
   LTC_ARGCHK(key != NULL);
-
 
   /* is cipher valid? */
   if ((err = cipher_is_valid(cipher)) != CRYPT_OK) {
@@ -24408,22 +20543,17 @@ int gcm_init(gcm_state *gcm, int cipher, const unsigned char *key, int keylen) {
     }
   }
 
-
   return CRYPT_OK;
 }
-
 
 /* $Source: /cvs/libtom/libtomcrypt/src/encauth/gcm/gcm_init.c,v $ */
 /* $Revision: 1.20 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-
-
 /**
    @file gcm_process.c
    GCM implementation, process message data, by Tom St Denis
 */
-
 
 /**
   Process plaintext/ciphertext through GCM
@@ -24562,18 +20692,14 @@ int gcm_process(gcm_state *gcm, unsigned char *pt, unsigned long ptlen,
   return CRYPT_OK;
 }
 
-
 /* $Source: /cvs/libtom/libtomcrypt/src/encauth/gcm/gcm_process.c,v $ */
 /* $Revision: 1.16 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /**
    @file gcm_mult_h.c
    GCM implementation, do the GF mult, by Tom St Denis
 */
-
 
 /**
   GCM multiply by H
@@ -24583,29 +20709,18 @@ int gcm_process(gcm_state *gcm, unsigned char *pt, unsigned long ptlen,
 void gcm_mult_h(gcm_state *gcm, unsigned char *I) {
   unsigned char T[16];
   int x, y;
-#ifdef LTC_GCM_TABLES_SSE2
-  asm("movdqa (%0),%%xmm0" ::"r"(&gcm->PC[0][I[0]][0]));
-  for (x = 1; x < 16; x++) {
-    asm("pxor (%0),%%xmm0" ::"r"(&gcm->PC[x][I[x]][0]));
-  }
-  asm("movdqa %%xmm0,(%0)" ::"r"(&T));
-#else
   XMEMCPY(T, &gcm->PC[0][I[0]][0], 16);
   for (x = 1; x < 16; x++) {
     for (y = 0; y < 16; y += sizeof(LTC_FAST_TYPE)) {
       *((LTC_FAST_TYPE *)(T + y)) ^= *((LTC_FAST_TYPE *)(&gcm->PC[x][I[x]][y]));
     }
   }
-#endif /* LTC_GCM_TABLES_SSE2 */
   XMEMCPY(I, T, 16);
 }
-
 
 /* $Source: /cvs/libtom/libtomcrypt/src/encauth/gcm/gcm_mult_h.c,v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /**
    @file gcm_gf_mult.c
@@ -24664,8 +20779,6 @@ const unsigned char gcm_shift_table[256 * 2] = {
     0xbc, 0xf8, 0xbd, 0x3a, 0xbf, 0x7c, 0xbe, 0xbe};
 
 #endif
-
-
 
 /* map normal numbers to "ieee" way ... e.g. bit reversed */
 #define M(x) (((x & 8) >> 3) | ((x & 4) >> 1) | ((x & 2) << 1) | ((x & 1) << 3))
@@ -24765,19 +20878,14 @@ void gcm_gf_mult(const unsigned char *a, const unsigned char *b,
   }
 }
 
-
-
 /* $Source: /cvs/libtom/libtomcrypt/src/encauth/gcm/gcm_gf_mult.c,v $ */
 /* $Revision: 1.25 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
-
-
 
 /**
    @file gcm_add_aad.c
    GCM implementation, Add AAD data to the stream, by Tom St Denis
 */
-
 
 /**
   Add AAD to the GCM state
@@ -24873,19 +20981,11 @@ int gcm_add_aad(gcm_state *gcm, const unsigned char *adata,
   return CRYPT_OK;
 }
 
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
-
 /**
    @file gcm_reset.c
    GCM implementation, reset a used state so it can accept IV data, by Tom St
    Denis
 */
-
 
 /**
   Reset a GCM state to as if you just called gcm_init().  This saves the
@@ -24907,18 +21007,10 @@ int gcm_reset(gcm_state *gcm) {
   return CRYPT_OK;
 }
 
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-
-
 /**
   @file md5.c
   LTC_MD5 hash function by Tom St Denis
 */
-
 
 const struct ltc_hash_descriptor md5_desc = {
     "md5",
@@ -24946,7 +21038,6 @@ const struct ltc_hash_descriptor md5_desc = {
 #define H(x, y, z) (x ^ y ^ z)
 #define I(x, y, z) (y ^ (x | (~z)))
 
-
 #define FF(a, b, c, d, M, s, t) \
   a = (a + F(b, c, d) + M + t); \
   a = ROLc(a, s) + b;
@@ -24963,10 +21054,7 @@ const struct ltc_hash_descriptor md5_desc = {
   a = (a + I(b, c, d) + M + t); \
   a = ROLc(a, s) + b;
 
-
-
-static int md5_compress(hash_state *md, unsigned char *buf)
-{
+static int md5_compress(hash_state *md, unsigned char *buf) {
   ulong32 i, W[16], a, b, c, d;
 
   /* copy the state into 512-bits into W[0..15] */
@@ -25053,7 +21141,6 @@ static int md5_compress(hash_state *md, unsigned char *buf)
   return CRYPT_OK;
 }
 
-
 /**
    Initialize the hash state
    @param md   The hash state you wish to initialize
@@ -25128,4 +21215,3 @@ int md5_done(hash_state *md, unsigned char *out) {
   }
   return CRYPT_OK;
 }
-
