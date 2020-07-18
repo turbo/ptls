@@ -1,4 +1,4 @@
-#define LTM_NO_FILE
+
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "ArgumentSelectionDefects"
@@ -2327,12 +2327,6 @@ typedef mp_digit mp_min_u32;
 
 #define MP_YES 1 /* yes response */
 #define MP_NO 0  /* no response */
-
-/* Primality generation flags */
-#define LTM_PRIME_BBS 0x0001     /* BBS style prime */
-#define LTM_PRIME_SAFE 0x0002    /* Safe prime (p-1)/2 == prime */
-#define LTM_PRIME_2MSB_ON 0x0008 /* force 2nd MSB to 1 */
-
 typedef int mp_err;
 
 /* you'll have to tune these... */
@@ -2361,10 +2355,6 @@ typedef struct {
   mp_digit *dp;
 } mp_int;
 
-/* callback for mp_prime_random, should fill dst with random bytes and return
- * how many read [upto len] */
-typedef int ltm_prime_callback(unsigned char *dst, int len, void *dat);
-
 #define DIGIT(m, k) ((m)->dp[(k)])
 
 /* ---> init and deinit bignum functions <--- */
@@ -2382,9 +2372,6 @@ void mp_clear_multi(mp_int *mp, ...);
 
 /* exchange two ints */
 void mp_exch(mp_int *a, mp_int *b);
-
-/* shrink ram required for a bignum */
-int mp_shrink(mp_int *a);
 
 /* grow an int to a given size */
 int mp_grow(mp_int *a, int size);
@@ -2417,15 +2404,6 @@ int mp_set_long_long(mp_int *a, unsigned long long b);
 /* get a 32-bit value */
 unsigned long mp_get_int(mp_int *a);
 
-/* get a platform dependent unsigned long value */
-unsigned long mp_get_long(mp_int *a);
-
-/* get a platform dependent unsigned long long value */
-unsigned long long mp_get_long_long(mp_int *a);
-
-/* initialize and set a digit */
-int mp_init_set(mp_int *a, mp_digit b);
-
 /* initialize and set 32-bit value */
 int mp_init_set_int(mp_int *a, unsigned long b);
 
@@ -2437,14 +2415,6 @@ int mp_init_copy(mp_int *a, mp_int *b);
 
 /* trim unused digits */
 void mp_clamp(mp_int *a);
-
-/* import binary data */
-int mp_import(mp_int *rop, size_t count, int order, size_t size, int endian,
-              size_t nails, const void *op);
-
-/* export binary data */
-int mp_export(void *rop, size_t *countp, int order, size_t size, int endian,
-              size_t nails, mp_int *op);
 
 /* ---> digit manipulation <--- */
 
@@ -2477,18 +2447,7 @@ int mp_cnt_lsb(mp_int *a);
 
 /* I Love Earth! */
 
-/* makes a pseudo-random int of a given size */
-int mp_rand(mp_int *a, int digits);
-
 /* ---> binary operations <--- */
-/* c = a XOR b  */
-int mp_xor(mp_int *a, mp_int *b, mp_int *c);
-
-/* c = a OR b */
-int mp_or(mp_int *a, mp_int *b, mp_int *c);
-
-/* c = a AND b */
-int mp_and(mp_int *a, mp_int *b, mp_int *c);
 
 /* ---> Basic arithmetic <--- */
 
@@ -2542,20 +2501,12 @@ int mp_div_d(mp_int *a, mp_digit b, mp_int *c, mp_digit *d);
 /* a/3 => 3c + d == a */
 int mp_div_3(mp_int *a, mp_int *c, mp_digit *d);
 
-/* c = a**b */
-int mp_expt_d(mp_int *a, mp_digit b, mp_int *c);
 int mp_expt_d_ex(mp_int *a, mp_digit b, mp_int *c, int fast);
 
 /* c = a mod b, 0 <= c < b  */
 int mp_mod_d(mp_int *a, mp_digit b, mp_digit *c);
 
 /* ---> number theory <--- */
-
-/* d = a + b (mod c) */
-int mp_addmod(mp_int *a, mp_int *b, mp_int *c, mp_int *d);
-
-/* d = a - b (mod c) */
-int mp_submod(mp_int *a, mp_int *b, mp_int *c, mp_int *d);
 
 /* d = a * b (mod c) */
 int mp_mulmod(mp_int *a, mp_int *b, mp_int *c, mp_int *d);
@@ -2569,27 +2520,13 @@ int mp_invmod(mp_int *a, mp_int *b, mp_int *c);
 /* c = (a, b) */
 int mp_gcd(mp_int *a, mp_int *b, mp_int *c);
 
-/* produces value such that U1*a + U2*b = U3 */
-int mp_exteuclid(mp_int *a, mp_int *b, mp_int *U1, mp_int *U2, mp_int *U3);
-
 /* c = [a, b] or (a*b)/(a, b) */
 int mp_lcm(mp_int *a, mp_int *b, mp_int *c);
 
-/* finds one of the b'th root of a, such that |c|**b <= |a|
- *
- * returns error if a < 0 and b is even
- */
-int mp_n_root(mp_int *a, mp_digit b, mp_int *c);
 int mp_n_root_ex(mp_int *a, mp_digit b, mp_int *c, int fast);
 
 /* special sqrt algo */
 int mp_sqrt(mp_int *arg, mp_int *ret);
-
-/* special sqrt (mod prime) */
-int mp_sqrtmod_prime(mp_int *arg, mp_int *prime, mp_int *ret);
-
-/* is number a square? */
-int mp_is_square(mp_int *arg, int *ret);
 
 /* computes the jacobi c = (a | n) (or Legendre if b is prime)  */
 int mp_jacobi(mp_int *a, mp_int *n, int *c);
@@ -2660,20 +2597,10 @@ extern const mp_digit ltm_prime_tab[PRIME_SIZE];
 /* result=1 if a is divisible by one of the first PRIME_SIZE primes */
 int mp_prime_is_divisible(mp_int *a, int *result);
 
-/* performs one Fermat test of "a" using base "b".
- * Sets result to 0 if composite or 1 if probable prime
- */
-int mp_prime_fermat(mp_int *a, mp_int *b, int *result);
-
 /* performs one Miller-Rabin test of "a" using base "b".
  * Sets result to 0 if composite or 1 if probable prime
  */
 int mp_prime_miller_rabin(mp_int *a, mp_int *b, int *result);
-
-/* This gives [for a given bit size] the number of trials required
- * such that Miller-Rabin gives a prob of failure lower than 2^-96
- */
-int mp_prime_rabin_miller_trials(int size);
 
 /* performs t rounds of Miller-Rabin on "a" using the first
  * t prime bases.  Also performs an initial sieve of trial
@@ -3741,23 +3668,6 @@ int mp_add_d(mp_int *a, mp_digit b, mp_int *c) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* d = a + b (mod c) */
-int mp_addmod(mp_int *a, mp_int *b, mp_int *c, mp_int *d) {
-  int res;
-  mp_int t;
-
-  if ((res = mp_init(&t)) != MP_OKAY) {
-    return res;
-  }
-
-  if ((res = mp_add(a, b, &t)) != MP_OKAY) {
-    mp_clear(&t);
-    return res;
-  }
-  res = mp_mod(&t, c, d);
-  mp_clear(&t);
-  return res;
-}
 #endif
 
 /* $Source$ */
@@ -3781,39 +3691,6 @@ int mp_addmod(mp_int *a, mp_int *b, mp_int *c, mp_int *d) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* AND two ints together */
-int mp_and(mp_int *a, mp_int *b, mp_int *c) {
-  int res, ix, px;
-  mp_int t, *x;
-
-  if (a->used > b->used) {
-    if ((res = mp_init_copy(&t, a)) != MP_OKAY) {
-      return res;
-    }
-    px = b->used;
-    x = b;
-  } else {
-    if ((res = mp_init_copy(&t, b)) != MP_OKAY) {
-      return res;
-    }
-    px = a->used;
-    x = a;
-  }
-
-  for (ix = 0; ix < px; ix++) {
-    t.dp[ix] &= x->dp[ix];
-  }
-
-  /* zero digits above the last from the smallest mp_int */
-  for (; ix < t.used; ix++) {
-    t.dp[ix] = 0;
-  }
-
-  mp_clamp(&t);
-  mp_exch(c, &t);
-  mp_clear(&t);
-  return MP_OKAY;
-}
 #endif
 
 /* $Source$ */
@@ -5113,74 +4990,6 @@ void mp_exch(mp_int *a, mp_int *b) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* based on gmp's mpz_export.
- * see http://gmplib.org/manual/Integer-Import-and-Export.html
- */
-int mp_export(void *rop, size_t *countp, int order, size_t size, int endian,
-              size_t nails, mp_int *op) {
-  int result;
-  size_t odd_nails, nail_bytes, i, j, bits, count;
-  unsigned char odd_nail_mask;
-
-  mp_int t;
-
-  if ((result = mp_init_copy(&t, op)) != MP_OKAY) {
-    return result;
-  }
-
-  if (endian == 0) {
-    union {
-      unsigned int i;
-      char c[4];
-    } lint;
-    lint.i = 0x01020304;
-
-    endian = (lint.c[0] == 4) ? -1 : 1;
-  }
-
-  odd_nails = (nails % 8);
-  odd_nail_mask = 0xff;
-  for (i = 0; i < odd_nails; ++i) {
-    odd_nail_mask ^= (1 << (7 - i));
-  }
-  nail_bytes = nails / 8;
-
-  bits = mp_count_bits(&t);
-  count = (bits / ((size * 8) - nails)) +
-          (((bits % ((size * 8) - nails)) != 0) ? 1 : 0);
-
-  for (i = 0; i < count; ++i) {
-    for (j = 0; j < size; ++j) {
-      unsigned char *byte = ((unsigned char *)rop +
-                             (((order == -1) ? i : ((count - 1) - i)) * size) +
-                             ((endian == -1) ? j : ((size - 1) - j)));
-
-      if (j >= (size - nail_bytes)) {
-        *byte = 0;
-        continue;
-      }
-
-      *byte = (unsigned char)((j == ((size - nail_bytes) - 1))
-                                  ? (t.dp[0] & odd_nail_mask)
-                                  : (t.dp[0] & 0xFF));
-
-      if ((result = mp_div_2d(
-               &t, ((j == ((size - nail_bytes) - 1)) ? (8 - odd_nails) : 8), &t,
-               NULL)) != MP_OKAY) {
-        mp_clear(&t);
-        return result;
-      }
-    }
-  }
-
-  mp_clear(&t);
-
-  if (countp != NULL) {
-    *countp = count;
-  }
-
-  return MP_OKAY;
-}
 #endif
 
 /* $Source$ */
@@ -5204,10 +5013,6 @@ int mp_export(void *rop, size_t *countp, int order, size_t size, int endian,
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* wrapper function for mp_expt_d_ex() */
-int mp_expt_d(mp_int *a, mp_digit b, mp_int *c) {
-  return mp_expt_d_ex(a, b, c, 0);
-}
 #endif
 
 /* $Source$ */
@@ -5748,109 +5553,6 @@ LBL_M:
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* Extended euclidean algorithm of (a, b) produces
-   a*u1 + b*u2 = u3
- */
-int mp_exteuclid(mp_int *a, mp_int *b, mp_int *U1, mp_int *U2, mp_int *U3) {
-  mp_int u1, u2, u3, v1, v2, v3, t1, t2, t3, q, tmp;
-  int err;
-
-  if ((err = mp_init_multi(&u1, &u2, &u3, &v1, &v2, &v3, &t1, &t2, &t3, &q,
-                           &tmp, NULL)) != MP_OKAY) {
-    return err;
-  }
-
-  /* initialize, (u1,u2,u3) = (1,0,a) */
-  mp_set(&u1, 1);
-  if ((err = mp_copy(a, &u3)) != MP_OKAY) {
-    goto _ERR;
-  }
-
-  /* initialize, (v1,v2,v3) = (0,1,b) */
-  mp_set(&v2, 1);
-  if ((err = mp_copy(b, &v3)) != MP_OKAY) {
-    goto _ERR;
-  }
-
-  /* loop while v3 != 0 */
-  while (mp_iszero(&v3) == MP_NO) {
-    /* q = u3/v3 */
-    if ((err = mp_div(&u3, &v3, &q, NULL)) != MP_OKAY) {
-      goto _ERR;
-    }
-
-    /* (t1,t2,t3) = (u1,u2,u3) - (v1,v2,v3)q */
-    if ((err = mp_mul(&v1, &q, &tmp)) != MP_OKAY) {
-      goto _ERR;
-    }
-    if ((err = mp_sub(&u1, &tmp, &t1)) != MP_OKAY) {
-      goto _ERR;
-    }
-    if ((err = mp_mul(&v2, &q, &tmp)) != MP_OKAY) {
-      goto _ERR;
-    }
-    if ((err = mp_sub(&u2, &tmp, &t2)) != MP_OKAY) {
-      goto _ERR;
-    }
-    if ((err = mp_mul(&v3, &q, &tmp)) != MP_OKAY) {
-      goto _ERR;
-    }
-    if ((err = mp_sub(&u3, &tmp, &t3)) != MP_OKAY) {
-      goto _ERR;
-    }
-
-    /* (u1,u2,u3) = (v1,v2,v3) */
-    if ((err = mp_copy(&v1, &u1)) != MP_OKAY) {
-      goto _ERR;
-    }
-    if ((err = mp_copy(&v2, &u2)) != MP_OKAY) {
-      goto _ERR;
-    }
-    if ((err = mp_copy(&v3, &u3)) != MP_OKAY) {
-      goto _ERR;
-    }
-
-    /* (v1,v2,v3) = (t1,t2,t3) */
-    if ((err = mp_copy(&t1, &v1)) != MP_OKAY) {
-      goto _ERR;
-    }
-    if ((err = mp_copy(&t2, &v2)) != MP_OKAY) {
-      goto _ERR;
-    }
-    if ((err = mp_copy(&t3, &v3)) != MP_OKAY) {
-      goto _ERR;
-    }
-  }
-
-  /* make sure U3 >= 0 */
-  if (u3.sign == MP_NEG) {
-    if ((err = mp_neg(&u1, &u1)) != MP_OKAY) {
-      goto _ERR;
-    }
-    if ((err = mp_neg(&u2, &u2)) != MP_OKAY) {
-      goto _ERR;
-    }
-    if ((err = mp_neg(&u3, &u3)) != MP_OKAY) {
-      goto _ERR;
-    }
-  }
-
-  /* copy result out */
-  if (U1 != NULL) {
-    mp_exch(U1, &u1);
-  }
-  if (U2 != NULL) {
-    mp_exch(U2, &u2);
-  }
-  if (U3 != NULL) {
-    mp_exch(U3, &u3);
-  }
-
-  err = MP_OKAY;
-_ERR:
-  mp_clear_multi(&u1, &u2, &u3, &v1, &v2, &v3, &t1, &t2, &t3, &q, &tmp, NULL);
-  return err;
-}
 #endif
 
 /* $Source$ */
@@ -5874,49 +5576,6 @@ _ERR:
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* read a bigint from a file stream in ASCII */
-int mp_fread(mp_int *a, int radix, FILE *stream) {
-  int err, ch, neg, y;
-
-  /* clear a */
-  mp_zero(a);
-
-  /* if first digit is - then set negative */
-  ch = fgetc(stream);
-  if (ch == '-') {
-    neg = MP_NEG;
-    ch = fgetc(stream);
-  } else {
-    neg = MP_ZPOS;
-  }
-
-  for (;;) {
-    /* find y in the radix map */
-    for (y = 0; y < radix; y++) {
-      if (mp_s_rmap[y] == ch) {
-        break;
-      }
-    }
-    if (y == radix) {
-      break;
-    }
-
-    /* shift up and add */
-    if ((err = mp_mul_d(a, radix, a)) != MP_OKAY) {
-      return err;
-    }
-    if ((err = mp_add_d(a, y, a)) != MP_OKAY) {
-      return err;
-    }
-
-    ch = fgetc(stream);
-  }
-  if (mp_cmp_d(a, 0) != MP_EQ) {
-    a->sign = neg;
-  }
-
-  return MP_OKAY;
-}
 #endif
 
 /* $Source$ */
@@ -5925,49 +5584,6 @@ int mp_fread(mp_int *a, int radix, FILE *stream) {
 
 #ifdef BN_MP_FWRITE_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
-
-int mp_fwrite(mp_int *a, int radix, FILE *stream) {
-  char *buf;
-  int err, len, x;
-
-  if ((err = mp_radix_size(a, radix, &len)) != MP_OKAY) {
-    return err;
-  }
-
-  buf = OPT_CAST(char) XMALLOC(len);
-  if (buf == NULL) {
-    return MP_MEM;
-  }
-
-  if ((err = mp_toradix(a, buf, radix)) != MP_OKAY) {
-    XFREE(buf);
-    return err;
-  }
-
-  for (x = 0; x < len; x++) {
-    if (fputc(buf[x], stream) == EOF) {
-      XFREE(buf);
-      return MP_VAL;
-    }
-  }
-
-  XFREE(buf);
-  return MP_OKAY;
-}
 #endif
 
 /* $Source$ */
@@ -6146,30 +5762,6 @@ unsigned long mp_get_int(mp_int *a) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* get the lower unsigned long of an mp_int, platform dependent */
-unsigned long mp_get_long(mp_int *a) {
-  int i;
-  unsigned long res;
-
-  if (a->used == 0) {
-    return 0;
-  }
-
-  /* get number of digits of the lsb we have to read */
-  i = MIN(a->used, (int)(((sizeof(unsigned long) * CHAR_BIT) + DIGIT_BIT - 1) /
-                         DIGIT_BIT)) -
-      1;
-
-  /* get most significant digit of result */
-  res = DIGIT(a, i);
-
-#if (ULONG_MAX != 0xffffffffuL) || (DIGIT_BIT < 32)
-  while (--i >= 0) {
-    res = (res << DIGIT_BIT) | DIGIT(a, i);
-  }
-#endif
-  return res;
-}
 #endif
 
 #ifdef BN_MP_GET_LONG_LONG_C
@@ -6189,31 +5781,6 @@ unsigned long mp_get_long(mp_int *a) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* get the lower unsigned long long of an mp_int, platform dependent */
-unsigned long long mp_get_long_long(mp_int *a) {
-  int i;
-  unsigned long long res;
-
-  if (a->used == 0) {
-    return 0;
-  }
-
-  /* get number of digits of the lsb we have to read */
-  i = MIN(a->used,
-          (int)(((sizeof(unsigned long long) * CHAR_BIT) + DIGIT_BIT - 1) /
-                DIGIT_BIT)) -
-      1;
-
-  /* get most significant digit of result */
-  res = DIGIT(a, i);
-
-#if DIGIT_BIT < 64
-  while (--i >= 0) {
-    res = (res << DIGIT_BIT) | DIGIT(a, i);
-  }
-#endif
-  return res;
-}
 #endif
 
 #ifdef BN_MP_GROW_C
@@ -6290,55 +5857,6 @@ int mp_grow(mp_int *a, int size) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* based on gmp's mpz_import.
- * see http://gmplib.org/manual/Integer-Import-and-Export.html
- */
-int mp_import(mp_int *rop, size_t count, int order, size_t size, int endian,
-              size_t nails, const void *op) {
-  int result;
-  size_t odd_nails, nail_bytes, i, j;
-  unsigned char odd_nail_mask;
-
-  mp_zero(rop);
-
-  if (endian == 0) {
-    union {
-      unsigned int i;
-      char c[4];
-    } lint;
-    lint.i = 0x01020304;
-
-    endian = (lint.c[0] == 4) ? -1 : 1;
-  }
-
-  odd_nails = (nails % 8);
-  odd_nail_mask = 0xff;
-  for (i = 0; i < odd_nails; ++i) {
-    odd_nail_mask ^= (1 << (7 - i));
-  }
-  nail_bytes = nails / 8;
-
-  for (i = 0; i < count; ++i) {
-    for (j = 0; j < (size - nail_bytes); ++j) {
-      unsigned char byte = *(
-          (unsigned char *)op +
-          (((order == 1) ? i : ((count - 1) - i)) * size) +
-          ((endian == 1) ? (j + nail_bytes) : (((size - 1) - j) - nail_bytes)));
-
-      if ((result = mp_mul_2d(rop, ((j == 0) ? (8 - odd_nails) : 8), rop)) !=
-          MP_OKAY) {
-        return result;
-      }
-
-      rop->dp[0] |= (j == 0) ? (byte & odd_nail_mask) : byte;
-      rop->used += 1;
-    }
-  }
-
-  mp_clamp(rop);
-
-  return MP_OKAY;
-}
 #endif
 
 /* $Source$ */
@@ -6497,16 +6015,6 @@ int mp_init_multi(mp_int *mp, ...) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* initialize and set a digit */
-int mp_init_set(mp_int *a, mp_digit b) {
-  int err;
-
-  if ((err = mp_init(a)) != MP_OKAY) {
-    return err;
-  }
-  mp_set(a, b);
-  return err;
-}
 #endif
 
 /* $Source$ */
@@ -6843,72 +6351,6 @@ static const char rem_105[105] = {
     1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1,
     0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1};
 
-/* Store non-zero to ret if arg is square, and zero if not */
-int mp_is_square(mp_int *arg, int *ret) {
-  int res;
-  mp_digit c;
-  mp_int t;
-  unsigned long r;
-
-  /* Default to Non-square :) */
-  *ret = MP_NO;
-
-  if (arg->sign == MP_NEG) {
-    return MP_VAL;
-  }
-
-  /* digits used?  (TSD) */
-  if (arg->used == 0) {
-    return MP_OKAY;
-  }
-
-  /* First check mod 128 (suppose that DIGIT_BIT is at least 7) */
-  if (rem_128[127 & DIGIT(arg, 0)] == 1) {
-    return MP_OKAY;
-  }
-
-  /* Next check mod 105 (3*5*7) */
-  if ((res = mp_mod_d(arg, 105, &c)) != MP_OKAY) {
-    return res;
-  }
-  if (rem_105[c] == 1) {
-    return MP_OKAY;
-  }
-
-  if ((res = mp_init_set_int(&t, 11L * 13L * 17L * 19L * 23L * 29L * 31L)) !=
-      MP_OKAY) {
-    return res;
-  }
-  if ((res = mp_mod(arg, &t, &t)) != MP_OKAY) {
-    goto ERR;
-  }
-  r = mp_get_int(&t);
-
-  /* Check for other prime modules, note it's not an ERROR but we must
-   * free "t" so the easiest way is to goto ERR.  We know that res
-   * is already equal to MP_OKAY from the mp_mod call
-   */
-  if (((1L << (r % 11)) & 0x5C4L) != 0L) goto ERR;
-  if (((1L << (r % 13)) & 0x9E4L) != 0L) goto ERR;
-  if (((1L << (r % 17)) & 0x5CE8L) != 0L) goto ERR;
-  if (((1L << (r % 19)) & 0x4F50CL) != 0L) goto ERR;
-  if (((1L << (r % 23)) & 0x7ACCA0L) != 0L) goto ERR;
-  if (((1L << (r % 29)) & 0xC2EDD0CL) != 0L) goto ERR;
-  if (((1L << (r % 31)) & 0x6DE2B848L) != 0L) goto ERR;
-
-  /* Final check - is sqr(sqrt(arg)) == arg ? */
-  if ((res = mp_sqrt(arg, &t)) != MP_OKAY) {
-    goto ERR;
-  }
-  if ((res = mp_sqr(&t, &t)) != MP_OKAY) {
-    goto ERR;
-  }
-
-  *ret = (mp_cmp_mag(&t, arg) == MP_EQ) ? MP_YES : MP_NO;
-ERR:
-  mp_clear(&t);
-  return res;
-}
 #endif
 
 /* $Source$ */
@@ -8155,12 +7597,6 @@ int mp_mulmod(mp_int *a, mp_int *b, mp_int *c, mp_int *d) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* wrapper function for mp_n_root_ex()
- * computes c = (a)**(1/b) such that (c)**b <= a and (c+1)**b > a
- */
-int mp_n_root(mp_int *a, mp_digit b, mp_int *c) {
-  return mp_n_root_ex(a, b, c, 0);
-}
 #endif
 
 /* $Source$ */
@@ -8360,33 +7796,6 @@ int mp_neg(mp_int *a, mp_int *b) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* OR two ints together */
-int mp_or(mp_int *a, mp_int *b, mp_int *c) {
-  int res, ix, px;
-  mp_int t, *x;
-
-  if (a->used > b->used) {
-    if ((res = mp_init_copy(&t, a)) != MP_OKAY) {
-      return res;
-    }
-    px = b->used;
-    x = b;
-  } else {
-    if ((res = mp_init_copy(&t, b)) != MP_OKAY) {
-      return res;
-    }
-    px = a->used;
-    x = a;
-  }
-
-  for (ix = 0; ix < px; ix++) {
-    t.dp[ix] |= x->dp[ix];
-  }
-  mp_clamp(&t);
-  mp_exch(c, &t);
-  mp_clear(&t);
-  return MP_OKAY;
-}
 #endif
 
 /* $Source$ */
@@ -8410,46 +7819,6 @@ int mp_or(mp_int *a, mp_int *b, mp_int *c) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* performs one Fermat test.
- *
- * If "a" were prime then b**a == b (mod a) since the order of
- * the multiplicative sub-group would be phi(a) = a-1.  That means
- * it would be the same as b**(a mod (a-1)) == b**1 == b (mod a).
- *
- * Sets result to 1 if the congruence holds, or zero otherwise.
- */
-int mp_prime_fermat(mp_int *a, mp_int *b, int *result) {
-  mp_int t;
-  int err;
-
-  /* default to composite  */
-  *result = MP_NO;
-
-  /* ensure b > 1 */
-  if (mp_cmp_d(b, 1) != MP_GT) {
-    return MP_VAL;
-  }
-
-  /* init t */
-  if ((err = mp_init(&t)) != MP_OKAY) {
-    return err;
-  }
-
-  /* compute t = b**a mod a */
-  if ((err = mp_exptmod(b, a, a, &t)) != MP_OKAY) {
-    goto LBL_T;
-  }
-
-  /* is it equal to b? */
-  if (mp_cmp(&t, b) == MP_EQ) {
-    *result = MP_YES;
-  }
-
-  err = MP_OKAY;
-LBL_T:
-  mp_clear(&t);
-  return err;
-}
 #endif
 
 /* $Source$ */
@@ -8741,19 +8110,6 @@ static const struct {
 } sizes[] = {{128, 28}, {256, 16}, {384, 10}, {512, 7},
              {640, 6},  {768, 5},  {896, 4},  {1024, 4}};
 
-/* returns # of RM trials required for a given bit size */
-int mp_prime_rabin_miller_trials(int size) {
-  int x;
-
-  for (x = 0; x < (int)(sizeof(sizes) / (sizeof(sizes[0]))); x++) {
-    if (sizes[x].k == size) {
-      return sizes[x].t;
-    } else if (sizes[x].k > size) {
-      return (x == 0) ? sizes[0].t : sizes[x - 1].t;
-    }
-  }
-  return sizes[x - 1].t + 1;
-}
 #endif
 
 /* $Source$ */
@@ -8917,37 +8273,6 @@ const char *mp_s_rmap =
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* makes a pseudo-random int of a given size */
-int mp_rand(mp_int *a, int digits) {
-  int res;
-  mp_digit d;
-
-  mp_zero(a);
-  if (digits <= 0) {
-    return MP_OKAY;
-  }
-
-  /* first place a random non-zero digit */
-  do {
-    d = ((mp_digit)abs(MP_GEN_RANDOM())) & MP_MASK;
-  } while (d == 0);
-
-  if ((res = mp_add_d(a, d, a)) != MP_OKAY) {
-    return res;
-  }
-
-  while (--digits > 0) {
-    if ((res = mp_lshd(a, 1)) != MP_OKAY) {
-      return res;
-    }
-
-    if ((res = mp_add_d(a, ((mp_digit)abs(MP_GEN_RANDOM())), a)) != MP_OKAY) {
-      return res;
-    }
-  }
-
-  return MP_OKAY;
-}
 #endif
 
 /* $Source$ */
@@ -9774,25 +9099,6 @@ MP_SET_XLONG(mp_set_long_long, unsigned long long)
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* shrink a bignum */
-int mp_shrink(mp_int *a) {
-  mp_digit *tmp;
-  int used = 1;
-
-  if (a->used > 0) {
-    used = a->used;
-  }
-
-  if (a->alloc != used) {
-    if ((tmp = OPT_CAST(mp_digit) XREALLOC(a->dp, sizeof(mp_digit) * used)) ==
-        NULL) {
-      return MP_MEM;
-    }
-    a->dp = tmp;
-    a->alloc = used;
-  }
-  return MP_OKAY;
-}
 #endif
 
 /* $Source$ */
@@ -10014,118 +9320,6 @@ E2:
  * guarantee it works.
  */
 
-/* Tonelli-Shanks algorithm
- * https://en.wikipedia.org/wiki/Tonelli%E2%80%93Shanks_algorithm
- * https://gmplib.org/list-archives/gmp-discuss/2013-April/005300.html
- *
- */
-
-int mp_sqrtmod_prime(mp_int *n, mp_int *prime, mp_int *ret) {
-  int res, legendre;
-  mp_int t1, C, Q, S, Z, M, T, R, two;
-  mp_digit i;
-
-  /* first handle the simple cases */
-  if (mp_cmp_d(n, 0) == MP_EQ) {
-    mp_zero(ret);
-    return MP_OKAY;
-  }
-  if (mp_cmp_d(prime, 2) == MP_EQ) return MP_VAL; /* prime must be odd */
-  if ((res = mp_jacobi(n, prime, &legendre)) != MP_OKAY) return res;
-  if (legendre == -1) return MP_VAL; /* quadratic non-residue mod prime */
-
-  if ((res = mp_init_multi(&t1, &C, &Q, &S, &Z, &M, &T, &R, &two, NULL)) !=
-      MP_OKAY) {
-    return res;
-  }
-
-  /* SPECIAL CASE: if prime mod 4 == 3
-   * compute directly: res = n^(prime+1)/4 mod prime
-   * Handbook of Applied Cryptography algorithm 3.36
-   */
-  if ((res = mp_mod_d(prime, 4, &i)) != MP_OKAY) goto cleanup;
-  if (i == 3) {
-    if ((res = mp_add_d(prime, 1, &t1)) != MP_OKAY) goto cleanup;
-    if ((res = mp_div_2(&t1, &t1)) != MP_OKAY) goto cleanup;
-    if ((res = mp_div_2(&t1, &t1)) != MP_OKAY) goto cleanup;
-    if ((res = mp_exptmod(n, &t1, prime, ret)) != MP_OKAY) goto cleanup;
-    res = MP_OKAY;
-    goto cleanup;
-  }
-
-  /* NOW: Tonelli-Shanks algorithm */
-
-  /* factor out powers of 2 from prime-1, defining Q and S as: prime-1 = Q*2^S
-   */
-  if ((res = mp_copy(prime, &Q)) != MP_OKAY) goto cleanup;
-  if ((res = mp_sub_d(&Q, 1, &Q)) != MP_OKAY) goto cleanup;
-  /* Q = prime - 1 */
-  mp_zero(&S);
-  /* S = 0 */
-  while (mp_iseven(&Q) != MP_NO) {
-    if ((res = mp_div_2(&Q, &Q)) != MP_OKAY) goto cleanup;
-    /* Q = Q / 2 */
-    if ((res = mp_add_d(&S, 1, &S)) != MP_OKAY) goto cleanup;
-    /* S = S + 1 */
-  }
-
-  /* find a Z such that the Legendre symbol (Z|prime) == -1 */
-  if ((res = mp_set_int(&Z, 2)) != MP_OKAY) goto cleanup;
-  /* Z = 2 */
-  while (1) {
-    if ((res = mp_jacobi(&Z, prime, &legendre)) != MP_OKAY) goto cleanup;
-    if (legendre == -1) break;
-    if ((res = mp_add_d(&Z, 1, &Z)) != MP_OKAY) goto cleanup;
-    /* Z = Z + 1 */
-  }
-
-  if ((res = mp_exptmod(&Z, &Q, prime, &C)) != MP_OKAY) goto cleanup;
-  /* C = Z ^ Q mod prime */
-  if ((res = mp_add_d(&Q, 1, &t1)) != MP_OKAY) goto cleanup;
-  if ((res = mp_div_2(&t1, &t1)) != MP_OKAY) goto cleanup;
-  /* t1 = (Q + 1) / 2 */
-  if ((res = mp_exptmod(n, &t1, prime, &R)) != MP_OKAY) goto cleanup;
-  /* R = n ^ ((Q + 1) / 2) mod prime */
-  if ((res = mp_exptmod(n, &Q, prime, &T)) != MP_OKAY) goto cleanup;
-  /* T = n ^ Q mod prime */
-  if ((res = mp_copy(&S, &M)) != MP_OKAY) goto cleanup;
-  /* M = S */
-  if ((res = mp_set_int(&two, 2)) != MP_OKAY) goto cleanup;
-
-  res = MP_VAL;
-  while (1) {
-    if ((res = mp_copy(&T, &t1)) != MP_OKAY) goto cleanup;
-    i = 0;
-    while (1) {
-      if (mp_cmp_d(&t1, 1) == MP_EQ) break;
-      if ((res = mp_exptmod(&t1, &two, prime, &t1)) != MP_OKAY) goto cleanup;
-      i++;
-    }
-    if (i == 0) {
-      if ((res = mp_copy(&R, ret)) != MP_OKAY) goto cleanup;
-      res = MP_OKAY;
-      goto cleanup;
-    }
-    if ((res = mp_sub_d(&M, i, &t1)) != MP_OKAY) goto cleanup;
-    if ((res = mp_sub_d(&t1, 1, &t1)) != MP_OKAY) goto cleanup;
-    if ((res = mp_exptmod(&two, &t1, prime, &t1)) != MP_OKAY) goto cleanup;
-    /* t1 = 2 ^ (M - i - 1) */
-    if ((res = mp_exptmod(&C, &t1, prime, &t1)) != MP_OKAY) goto cleanup;
-    /* t1 = C ^ (2 ^ (M - i - 1)) mod prime */
-    if ((res = mp_sqrmod(&t1, prime, &C)) != MP_OKAY) goto cleanup;
-    /* C = (t1 * t1) mod prime */
-    if ((res = mp_mulmod(&R, &t1, prime, &R)) != MP_OKAY) goto cleanup;
-    /* R = (R * t1) mod prime */
-    if ((res = mp_mulmod(&T, &C, prime, &T)) != MP_OKAY) goto cleanup;
-    /* T = (T * C) mod prime */
-    mp_set(&M, i);
-    /* M = i */
-  }
-
-cleanup:
-  mp_clear_multi(&t1, &C, &Q, &S, &Z, &M, &T, &R, &two, NULL);
-  return res;
-}
 #endif
 
 #ifdef BN_MP_SUB_C
@@ -10293,23 +9487,6 @@ int mp_sub_d(mp_int *a, mp_digit b, mp_int *c) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* d = a - b (mod c) */
-int mp_submod(mp_int *a, mp_int *b, mp_int *c, mp_int *d) {
-  int res;
-  mp_int t;
-
-  if ((res = mp_init(&t)) != MP_OKAY) {
-    return res;
-  }
-
-  if ((res = mp_sub(a, b, &t)) != MP_OKAY) {
-    mp_clear(&t);
-    return res;
-  }
-  res = mp_mod(&t, c, d);
-  mp_clear(&t);
-  return res;
-}
 #endif
 
 /* $Source$ */
@@ -11039,33 +10216,6 @@ int mp_unsigned_bin_size(mp_int *a) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* XOR two ints together */
-int mp_xor(mp_int *a, mp_int *b, mp_int *c) {
-  int res, ix, px;
-  mp_int t, *x;
-
-  if (a->used > b->used) {
-    if ((res = mp_init_copy(&t, a)) != MP_OKAY) {
-      return res;
-    }
-    px = b->used;
-    x = b;
-  } else {
-    if ((res = mp_init_copy(&t, b)) != MP_OKAY) {
-      return res;
-    }
-    px = a->used;
-    x = a;
-  }
-
-  for (ix = 0; ix < px; ix++) {
-    t.dp[ix] ^= x->dp[ix];
-  }
-  mp_clamp(&t);
-  mp_exch(c, &t);
-  mp_clear(&t);
-  return MP_OKAY;
-}
 #endif
 
 /* $Source$ */
@@ -11953,366 +11103,6 @@ int KARATSUBA_MUL_CUTOFF =
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-/**
-   @file crypt.c
-   Build strings, Tom St Denis
- */
-
-const char *crypt_build_settings =
-    "LibTomCrypt "
-    "1.17"
-    " (Tom St Denis, tomstdenis@gmail.com)\n"
-    "LibTomCrypt is public domain software.\n"
-    "Built on " __DATE__ " at " __TIME__
-    "\n\n\n"
-    "Endianess: "
-#if defined(ENDIAN_NEUTRAL)
-    "neutral\n"
-#elif defined(ENDIAN_LITTLE)
-    "little"
-#if defined(ENDIAN_32BITWORD)
-    " (32-bit words)\n"
-#else
-    " (64-bit words)\n"
-#endif
-#elif defined(ENDIAN_BIG)
-    "big"
-#if defined(ENDIAN_32BITWORD)
-    " (32-bit words)\n"
-#else
-    " (64-bit words)\n"
-#endif
-#endif
-    "Clean stack: "
-#if defined(LTC_CLEAN_STACK)
-    "enabled\n"
-#else
-    "disabled\n"
-#endif
-    "Ciphers built-in:\n"
-#if defined(LTC_BLOWFISH)
-    "   Blowfish\n"
-#endif
-#if defined(LTC_RC2)
-    "   LTC_RC2\n"
-#endif
-#if defined(LTC_RC5)
-    "   LTC_RC5\n"
-#endif
-#if defined(LTC_RC6)
-    "   LTC_RC6\n"
-#endif
-#if defined(LTC_SAFERP)
-    "   Safer+\n"
-#endif
-#if defined(LTC_SAFER)
-    "   Safer\n"
-#endif
-#if defined(LTC_RIJNDAEL)
-    "   Rijndael\n"
-#endif
-#if defined(LTC_XTEA)
-    "   LTC_XTEA\n"
-#endif
-#if defined(LTC_TWOFISH)
-    "   Twofish "
-#if defined(LTC_TWOFISH_SMALL) && defined(LTC_TWOFISH_TABLES) && \
-    defined(LTC_TWOFISH_ALL_TABLES)
-    "(small, tables, all_tables)\n"
-#elif defined(LTC_TWOFISH_SMALL) && defined(LTC_TWOFISH_TABLES)
-    "(small, tables)\n"
-#elif defined(LTC_TWOFISH_SMALL) && defined(LTC_TWOFISH_ALL_TABLES)
-    "(small, all_tables)\n"
-#elif defined(LTC_TWOFISH_TABLES) && defined(LTC_TWOFISH_ALL_TABLES)
-    "(tables, all_tables)\n"
-#elif defined(LTC_TWOFISH_SMALL)
-    "(small)\n"
-#elif defined(LTC_TWOFISH_TABLES)
-    "(tables)\n"
-#elif defined(LTC_TWOFISH_ALL_TABLES)
-    "(all_tables)\n"
-#else
-    "\n"
-#endif
-#endif
-#if defined(LTC_DES)
-    "   LTC_DES\n"
-#endif
-#if defined(LTC_CAST5)
-    "   LTC_CAST5\n"
-#endif
-#if defined(LTC_NOEKEON)
-    "   Noekeon\n"
-#endif
-#if defined(LTC_SKIPJACK)
-    "   Skipjack\n"
-#endif
-#if defined(LTC_KHAZAD)
-    "   Khazad\n"
-#endif
-#if defined(LTC_ANUBIS)
-    "   Anubis "
-#endif
-#if defined(LTC_ANUBIS_TWEAK)
-    " (tweaked)"
-#endif
-    "\n"
-#if defined(LTC_KSEED)
-    "   LTC_KSEED\n"
-#endif
-#if defined(LTC_KASUMI)
-    "   KASUMI\n"
-#endif
-
-    "\nHashes built-in:\n"
-#if defined(LTC_SHA512)
-    "   LTC_SHA-512\n"
-#endif
-#if defined(LTC_SHA384)
-    "   LTC_SHA-384\n"
-#endif
-#if defined(LTC_SHA256)
-    "   LTC_SHA-256\n"
-#endif
-#if defined(LTC_SHA224)
-    "   LTC_SHA-224\n"
-#endif
-#if defined(LTC_TIGER)
-    "   LTC_TIGER\n"
-#endif
-#if defined(LTC_SHA1)
-    "   LTC_SHA1\n"
-#endif
-#if defined(LTC_MD5)
-    "   LTC_MD5\n"
-#endif
-#if defined(LTC_MD4)
-    "   LTC_MD4\n"
-#endif
-#if defined(LTC_MD2)
-    "   LTC_MD2\n"
-#endif
-#if defined(LTC_RIPEMD128)
-    "   LTC_RIPEMD128\n"
-#endif
-#if defined(LTC_RIPEMD160)
-    "   LTC_RIPEMD160\n"
-#endif
-#if defined(LTC_RIPEMD256)
-    "   LTC_RIPEMD256\n"
-#endif
-#if defined(LTC_RIPEMD320)
-    "   LTC_RIPEMD320\n"
-#endif
-#if defined(LTC_WHIRLPOOL)
-    "   LTC_WHIRLPOOL\n"
-#endif
-#if defined(LTC_CHC_HASH)
-    "   LTC_CHC_HASH \n"
-#endif
-
-    "\nBlock Chaining Modes:\n"
-#if defined(LTC_CFB_MODE)
-    "   CFB\n"
-#endif
-#if defined(LTC_OFB_MODE)
-    "   OFB\n"
-#endif
-#if defined(LTC_ECB_MODE)
-    "   ECB\n"
-#endif
-#if defined(LTC_CBC_MODE)
-    "   CBC\n"
-#endif
-#if defined(LTC_CTR_MODE)
-    "   CTR "
-#endif
-#if defined(LTC_CTR_OLD)
-    " (CTR_OLD) "
-#endif
-    "\n"
-#if defined(LRW_MODE)
-    "   LRW_MODE"
-#if defined(LRW_TABLES)
-    " (LRW_TABLES) "
-#endif
-    "\n"
-#endif
-#if defined(LTC_F8_MODE)
-    "   F8 MODE\n"
-#endif
-#if defined(LTC_XTS_MODE)
-    "   LTC_XTS_MODE\n"
-#endif
-
-    "\nMACs:\n"
-#if defined(LTC_HMAC)
-    "   LTC_HMAC\n"
-#endif
-#if defined(LTC_OMAC)
-    "   LTC_OMAC\n"
-#endif
-#if defined(LTC_PMAC)
-    "   PMAC\n"
-#endif
-#if defined(LTC_PELICAN)
-    "   LTC_PELICAN\n"
-#endif
-#if defined(LTC_XCBC)
-    "   XCBC-MAC\n"
-#endif
-#if defined(LTC_F9_MODE)
-    "   F9-MAC\n"
-#endif
-
-    "\nENC + AUTH modes:\n"
-#if defined(LTC_EAX_MODE)
-    "   LTC_EAX_MODE\n"
-#endif
-#if defined(LTC_OCB_MODE)
-    "   LTC_OCB_MODE\n"
-#endif
-#if defined(LTC_CCM_MODE)
-    "   LTC_CCM_MODE\n"
-#endif
-#if defined(LTC_GCM_MODE)
-    "   LTC_GCM_MODE "
-#endif
-#if defined(LTC_GCM_TABLES)
-    " (LTC_GCM_TABLES) "
-#endif
-    "\n"
-
-    "\nPRNG:\n"
-#if defined(LTC_YARROW)
-    "   Yarrow\n"
-#endif
-#if defined(LTC_SPRNG)
-    "   LTC_SPRNG\n"
-#endif
-#if defined(LTC_RC4)
-    "   LTC_RC4\n"
-#endif
-#if defined(LTC_FORTUNA)
-    "   Fortuna\n"
-#endif
-#if defined(LTC_SOBER128)
-    "   LTC_SOBER128\n"
-#endif
-
-    "\nPK Algs:\n"
-#if defined(LTC_MRSA)
-    "   RSA \n"
-#endif
-#if defined(LTC_MECC)
-    "   ECC\n"
-#endif
-#if defined(LTC_MDSA)
-    "   DSA\n"
-#endif
-#if defined(MKAT)
-    "   Katja\n"
-#endif
-
-    "\nCompiler:\n"
-#if defined(WIN32)
-    "   WIN32 platform detected.\n"
-#endif
-#if defined(__CYGWIN__)
-    "   CYGWIN Detected.\n"
-#endif
-#if defined(__DJGPP__)
-    "   DJGPP Detected.\n"
-#endif
-#if defined(_MSC_VER)
-    "   MSVC compiler detected.\n"
-#endif
-#if defined(__GNUC__)
-    "   GCC compiler detected.\n"
-#endif
-#if defined(INTEL_CC)
-    "   Intel C Compiler detected.\n"
-#endif
-#if defined(__x86_64__)
-    "   x86-64 detected.\n"
-#endif
-#if defined(LTC_PPC32)
-    "   LTC_PPC32 defined \n"
-#endif
-
-    "\nVarious others: "
-#if defined(LTC_BASE64)
-    " LTC_BASE64 "
-#endif
-#if defined(MPI)
-    " MPI "
-#endif
-#if defined(TRY_UNRANDOM_FIRST)
-    " TRY_UNRANDOM_FIRST "
-#endif
-#if defined(LTC_TEST)
-    " LTC_TEST "
-#endif
-#if defined(LTC_PKCS_1)
-    " LTC_PKCS#1 "
-#endif
-#if defined(LTC_PKCS_5)
-    " LTC_PKCS#5 "
-#endif
-#if defined(LTC_SMALL_CODE)
-    " LTC_SMALL_CODE "
-#endif
-#if defined(LTC_NO_FILE)
-    " LTC_NO_FILE "
-#endif
-#if defined(LTC_DER)
-    " LTC_DER "
-#endif
-#if defined(LTC_FAST)
-    " LTC_FAST "
-#endif
-#if defined(LTC_NO_FAST)
-    " LTC_NO_FAST "
-#endif
-#if defined(LTC_NO_BSWAP)
-    " LTC_NO_BSWAP "
-#endif
-#if defined(LTC_NO_ASM)
-    " LTC_NO_ASM "
-#endif
-#if defined(LTC_NO_TEST)
-    " LTC_NO_TEST "
-#endif
-#if defined(LTC_NO_TABLES)
-    " LTC_NO_TABLES "
-#endif
-#if defined(LTC_PTHREAD)
-    " LTC_PTHREAD "
-#endif
-#if defined(LTM_LTC_DESC)
-    " LTM_DESC "
-#endif
-#if defined(TFM_LTC_DESC)
-    " TFM_DESC "
-#endif
-#if defined(LTC_MECC_ACCEL)
-    " LTC_MECC_ACCEL "
-#endif
-#if defined(GMP_LTC_DESC)
-    " GMP_DESC "
-#endif
-#if defined(LTC_EASY)
-    " (easy) "
-#endif
-#if defined(LTC_MECC_FP)
-    " LTC_MECC_FP "
-#endif
-#if defined(LTC_ECC_SHAMIR)
-    " LTC_ECC_SHAMIR "
-#endif
-    "\n"
-    "\n\n\n";
-
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt.c,v $ */
 /* $Revision: 1.36 $ */
 /* $Date: 2007/05/12 14:46:12 $ */
@@ -12574,9 +11364,6 @@ void crypt_argchk(char *v, char *s, int d) {
 /* ---> Encrypt + Authenticate Modes <--- */
 
 #define LTC_EAX_MODE
-#if defined(LTC_EAX_MODE) && !(defined(LTC_CTR_MODE) && defined(LTC_OMAC))
-#error LTC_EAX_MODE requires CTR and LTC_OMAC mode
-#endif
 
 #define LTC_OCB_MODE
 #define LTC_CCM_MODE
@@ -12603,7 +11390,6 @@ void crypt_argchk(char *v, char *s, int d) {
 #define LTC_YARROW
 /* which descriptor of AES to use?  */
 /* 0 = rijndael_enc 1 = aes_enc, 2 = rijndael [full], 3 = aes [full] */
-#define LTC_YARROW_AES 0
 
 #if defined(LTC_YARROW) && !defined(LTC_CTR_MODE)
 #error LTC_YARROW requires LTC_CTR_MODE chaining mode to be defined!
@@ -12618,7 +11404,6 @@ void crypt_argchk(char *v, char *s, int d) {
 /* Fortuna PRNG */
 #define LTC_FORTUNA
 /* reseed every N calls to the read function */
-#define LTC_FORTUNA_WD 10
 /* number of pools (4..32) can save a bit of ram by lowering the count */
 #define LTC_FORTUNA_POOLS 32
 
@@ -12756,7 +11541,6 @@ extern "C" {
 
 /* version */
 #define CRYPT 0x0117
-#define SCRYPT "1.17"
 
 /* max size of either a cipher/hash block or symmetric key [largest of the two]
  */
@@ -12793,9 +11577,7 @@ enum {
   CRYPT_FILE_NOTFOUND, /* File Not Found */
 
   CRYPT_PK_INVALID_TYPE,   /* Invalid type of PK key */
-  CRYPT_PK_INVALID_SYSTEM, /* Invalid PK system specified */
-  CRYPT_PK_DUP,            /* Duplicate key already in key ring */
-  CRYPT_PK_NOT_FOUND,      /* Key not found in keyring */
+
   CRYPT_PK_INVALID_SIZE,   /* Invalid size input for PK parameters */
 
   CRYPT_INVALID_PRIME_SIZE, /* Invalid size of prime requested */
@@ -13284,10 +12066,6 @@ typedef unsigned long ulong32;
 #endif /* ENDIAN_64BITWORD */
 #endif /* ENDIAN_BIG */
 
-#define BSWAP(x)                                             \
-  (((x >> 24) & 0x000000FFUL) | ((x << 24) & 0xFF000000UL) | \
-   ((x >> 8) & 0x0000FF00UL) | ((x << 8) & 0x00FF0000UL))
-
 /* 32-bit Rotates */
 #if defined(_MSC_VER)
 
@@ -13462,32 +12240,9 @@ static inline unsigned long ROR64c(unsigned long word, const int i) {
  * all of the key formats in one union.  This makes the function prototypes
  * easier to use.
  */
-#ifdef LTC_BLOWFISH
-struct blowfish_key {
-  ulong32 S[4][256];
-  ulong32 K[18];
-};
-#endif
 
-#ifdef LTC_RC5
-struct rc5_key {
-  int rounds;
-  ulong32 K[50];
-};
-#endif
 
-#ifdef LTC_RC6
-struct rc6_key {
-  ulong32 K[44];
-};
-#endif
 
-#ifdef LTC_SAFERP
-struct saferp_key {
-  unsigned char K[33][16];
-  long rounds;
-};
-#endif
 
 #ifdef LTC_RIJNDAEL
 struct rijndael_key {
@@ -13496,103 +12251,17 @@ struct rijndael_key {
 };
 #endif
 
-#ifdef LTC_KSEED
-struct kseed_key {
-  ulong32 K[32], dK[32];
-};
-#endif
 
-#ifdef LTC_KASUMI
-struct kasumi_key {
-  ulong32 KLi1[8], KLi2[8], KOi1[8], KOi2[8], KOi3[8], KIi1[8], KIi2[8],
-      KIi3[8];
-};
-#endif
 
-#ifdef LTC_XTEA
-struct xtea_key {
-  unsigned long A[32], B[32];
-};
-#endif
 
-#ifdef LTC_TWOFISH
-#ifndef LTC_TWOFISH_SMALL
-struct twofish_key {
-  ulong32 S[4][256], K[40];
-};
-#else
-struct twofish_key {
-  ulong32 K[40];
-  unsigned char S[32], start;
-};
-#endif
-#endif
 
-#ifdef LTC_SAFER
-#define LTC_SAFER_K64_DEFAULT_NOF_ROUNDS 6
-#define LTC_SAFER_K128_DEFAULT_NOF_ROUNDS 10
-#define LTC_SAFER_SK64_DEFAULT_NOF_ROUNDS 8
-#define LTC_SAFER_SK128_DEFAULT_NOF_ROUNDS 10
-#define LTC_SAFER_MAX_NOF_ROUNDS 13
-#define LTC_SAFER_BLOCK_LEN 8
-#define LTC_SAFER_KEY_LEN \
-  (1 + LTC_SAFER_BLOCK_LEN * (1 + 2 * LTC_SAFER_MAX_NOF_ROUNDS))
-typedef unsigned char safer_block_t[LTC_SAFER_BLOCK_LEN];
-typedef unsigned char safer_key_t[LTC_SAFER_KEY_LEN];
-struct safer_key {
-  safer_key_t key;
-};
-#endif
 
-#ifdef LTC_RC2
-struct rc2_key {
-  unsigned xkey[64];
-};
-#endif
 
-#ifdef LTC_DES
-struct des_key {
-  ulong32 ek[32], dk[32];
-};
 
-struct des3_key {
-  ulong32 ek[3][32], dk[3][32];
-};
-#endif
 
-#ifdef LTC_CAST5
-struct cast5_key {
-  ulong32 K[32], keylen;
-};
-#endif
 
-#ifdef LTC_NOEKEON
-struct noekeon_key {
-  ulong32 K[4], dK[4];
-};
-#endif
 
-#ifdef LTC_SKIPJACK
-struct skipjack_key {
-  unsigned char key[10];
-};
-#endif
 
-#ifdef LTC_KHAZAD
-struct khazad_key {
-  ulong64 roundKeyEnc[8 + 1];
-  ulong64 roundKeyDec[8 + 1];
-};
-#endif
-
-#ifdef LTC_ANUBIS
-struct anubis_key {
-  int keyBits;
-  int R;
-  ulong32 roundKeyEnc[18 + 1][4];
-  ulong32 roundKeyDec[18 + 1][4];
-};
-#endif
 
 #ifdef LTC_MULTI2
 struct multi2_key {
@@ -13602,57 +12271,8 @@ struct multi2_key {
 #endif
 
 typedef union Symmetric_key {
-#ifdef LTC_DES
-  struct des_key des;
-  struct des3_key des3;
-#endif
-#ifdef LTC_RC2
-  struct rc2_key rc2;
-#endif
-#ifdef LTC_SAFER
-  struct safer_key safer;
-#endif
-#ifdef LTC_TWOFISH
-  struct twofish_key twofish;
-#endif
-#ifdef LTC_BLOWFISH
-  struct blowfish_key blowfish;
-#endif
-#ifdef LTC_RC5
-  struct rc5_key rc5;
-#endif
-#ifdef LTC_RC6
-  struct rc6_key rc6;
-#endif
-#ifdef LTC_SAFERP
-  struct saferp_key saferp;
-#endif
 #ifdef LTC_RIJNDAEL
   struct rijndael_key rijndael;
-#endif
-#ifdef LTC_XTEA
-  struct xtea_key xtea;
-#endif
-#ifdef LTC_CAST5
-  struct cast5_key cast5;
-#endif
-#ifdef LTC_NOEKEON
-  struct noekeon_key noekeon;
-#endif
-#ifdef LTC_SKIPJACK
-  struct skipjack_key skipjack;
-#endif
-#ifdef LTC_KHAZAD
-  struct khazad_key khazad;
-#endif
-#ifdef LTC_ANUBIS
-  struct anubis_key anubis;
-#endif
-#ifdef LTC_KSEED
-  struct kseed_key kseed;
-#endif
-#ifdef LTC_KASUMI
-  struct kasumi_key kasumi;
 #endif
 #ifdef LTC_MULTI2
   struct multi2_key multi2;
@@ -13660,132 +12280,12 @@ typedef union Symmetric_key {
   void *data;
 } symmetric_key;
 
-#ifdef LTC_ECB_MODE
-/** A block cipher ECB structure */
-typedef struct {
-  /** The index of the cipher chosen */
-  int cipher,
-      /** The block size of the given cipher */
-      blocklen;
-  /** The scheduled key */
-  symmetric_key key;
-} symmetric_ECB;
-#endif
 
-#ifdef LTC_CFB_MODE
-/** A block cipher CFB structure */
-typedef struct {
-  /** The index of the cipher chosen */
-  int cipher,
-      /** The block size of the given cipher */
-      blocklen,
-      /** The padding offset */
-      padlen;
-  /** The current IV */
-  unsigned char IV[MAXBLOCKSIZE],
-      /** The pad used to encrypt/decrypt */
-      pad[MAXBLOCKSIZE];
-  /** The scheduled key */
-  symmetric_key key;
-} symmetric_CFB;
-#endif
 
-#ifdef LTC_OFB_MODE
-/** A block cipher OFB structure */
-typedef struct {
-  /** The index of the cipher chosen */
-  int cipher,
-      /** The block size of the given cipher */
-      blocklen,
-      /** The padding offset */
-      padlen;
-  /** The current IV */
-  unsigned char IV[MAXBLOCKSIZE];
-  /** The scheduled key */
-  symmetric_key key;
-} symmetric_OFB;
-#endif
 
-#ifdef LTC_CBC_MODE
-/** A block cipher CBC structure */
-typedef struct {
-  /** The index of the cipher chosen */
-  int cipher,
-      /** The block size of the given cipher */
-      blocklen;
-  /** The current IV */
-  unsigned char IV[MAXBLOCKSIZE];
-  /** The scheduled key */
-  symmetric_key key;
-} symmetric_CBC;
-#endif
 
-#ifdef LTC_CTR_MODE
-/** A block cipher CTR structure */
-typedef struct {
-  /** The index of the cipher chosen */
-  int cipher,
-      /** The block size of the given cipher */
-      blocklen,
-      /** The padding offset */
-      padlen,
-      /** The mode (endianess) of the CTR, 0==little, 1==big */
-      mode,
-      /** counter width */
-      ctrlen;
 
-  /** The counter */
-  unsigned char ctr[MAXBLOCKSIZE],
-      /** The pad used to encrypt/decrypt */
-      pad[MAXBLOCKSIZE];
-  /** The scheduled key */
-  symmetric_key key;
-} symmetric_CTR;
-#endif
 
-#ifdef LTC_LRW_MODE
-/** A LRW structure */
-typedef struct {
-  /** The index of the cipher chosen (must be a 128-bit block cipher) */
-  int cipher;
-
-  /** The current IV */
-  unsigned char IV[16],
-
-      /** the tweak key */
-      tweak[16],
-
-      /** The current pad, it's the product of the first 15 bytes against the
-         tweak key */
-      pad[16];
-
-  /** The scheduled symmetric key */
-  symmetric_key key;
-
-#ifdef LRW_TABLES
-  /** The pre-computed multiplication table */
-  unsigned char PC[16][256][16];
-#endif
-} symmetric_LRW;
-#endif
-
-#ifdef LTC_F8_MODE
-/** A block cipher F8 structure */
-typedef struct {
-  /** The index of the cipher chosen */
-  int cipher,
-      /** The block size of the given cipher */
-      blocklen,
-      /** The padding offset */
-      padlen;
-  /** The current IV */
-  unsigned char IV[MAXBLOCKSIZE], MIV[MAXBLOCKSIZE];
-  /** Current block count */
-  ulong32 blockcnt;
-  /** The scheduled key */
-  symmetric_key key;
-} symmetric_F8;
-#endif
 
 /** cipher descriptor table, last entry has "name == NULL" to mark the end of
  * table */
@@ -14023,99 +12523,11 @@ extern struct ltc_cipher_descriptor {
                    unsigned char *out, unsigned long *outlen);
 } cipher_descriptor[];
 
-#ifdef LTC_BLOWFISH
-int blowfish_setup(const unsigned char *key, int keylen, int num_rounds,
-                   symmetric_key *skey);
-int blowfish_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                         symmetric_key *skey);
-int blowfish_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                         symmetric_key *skey);
-int blowfish_test(void);
-void blowfish_done(symmetric_key *skey);
-int blowfish_keysize(int *keysize);
 
-extern const struct ltc_cipher_descriptor blowfish_desc;
-#endif
 
-#ifdef LTC_RC5
-int rc5_setup(const unsigned char *key, int keylen, int num_rounds,
-              symmetric_key *skey);
-int rc5_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                    symmetric_key *skey);
-int rc5_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                    symmetric_key *skey);
-int rc5_test(void);
-void rc5_done(symmetric_key *skey);
-int rc5_keysize(int *keysize);
 
-extern const struct ltc_cipher_descriptor rc5_desc;
-#endif
 
-#ifdef LTC_RC6
-int rc6_setup(const unsigned char *key, int keylen, int num_rounds,
-              symmetric_key *skey);
-int rc6_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                    symmetric_key *skey);
-int rc6_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                    symmetric_key *skey);
-int rc6_test(void);
-void rc6_done(symmetric_key *skey);
-int rc6_keysize(int *keysize);
 
-extern const struct ltc_cipher_descriptor rc6_desc;
-#endif
-
-#ifdef LTC_RC2
-int rc2_setup(const unsigned char *key, int keylen, int num_rounds,
-              symmetric_key *skey);
-int rc2_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                    symmetric_key *skey);
-int rc2_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                    symmetric_key *skey);
-int rc2_test(void);
-void rc2_done(symmetric_key *skey);
-int rc2_keysize(int *keysize);
-
-extern const struct ltc_cipher_descriptor rc2_desc;
-#endif
-
-#ifdef LTC_SAFERP
-int saferp_setup(const unsigned char *key, int keylen, int num_rounds,
-                 symmetric_key *skey);
-int saferp_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                       symmetric_key *skey);
-int saferp_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                       symmetric_key *skey);
-int saferp_test(void);
-void saferp_done(symmetric_key *skey);
-int saferp_keysize(int *keysize);
-
-extern const struct ltc_cipher_descriptor saferp_desc;
-#endif
-
-#ifdef LTC_SAFER
-int safer_k64_setup(const unsigned char *key, int keylen, int num_rounds,
-                    symmetric_key *skey);
-int safer_sk64_setup(const unsigned char *key, int keylen, int num_rounds,
-                     symmetric_key *skey);
-int safer_k128_setup(const unsigned char *key, int keylen, int num_rounds,
-                     symmetric_key *skey);
-int safer_sk128_setup(const unsigned char *key, int keylen, int num_rounds,
-                      symmetric_key *skey);
-int safer_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                      symmetric_key *key);
-int safer_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                      symmetric_key *key);
-int safer_k64_test(void);
-int safer_sk64_test(void);
-int safer_sk128_test(void);
-void safer_done(symmetric_key *skey);
-int safer_64_keysize(int *keysize);
-int safer_128_keysize(int *keysize);
-
-extern const struct ltc_cipher_descriptor safer_k64_desc, safer_k128_desc,
-    safer_sk64_desc, safer_sk128_desc;
-#endif
 
 #ifdef LTC_RIJNDAEL
 
@@ -14151,154 +12563,15 @@ extern const struct ltc_cipher_descriptor rijndael_desc, aes_desc;
 extern const struct ltc_cipher_descriptor rijndael_enc_desc, aes_enc_desc;
 #endif
 
-#ifdef LTC_XTEA
-int xtea_setup(const unsigned char *key, int keylen, int num_rounds,
-               symmetric_key *skey);
-int xtea_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                     symmetric_key *skey);
-int xtea_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                     symmetric_key *skey);
-int xtea_test(void);
-void xtea_done(symmetric_key *skey);
-int xtea_keysize(int *keysize);
 
-extern const struct ltc_cipher_descriptor xtea_desc;
-#endif
 
-#ifdef LTC_TWOFISH
-int twofish_setup(const unsigned char *key, int keylen, int num_rounds,
-                  symmetric_key *skey);
-int twofish_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                        symmetric_key *skey);
-int twofish_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                        symmetric_key *skey);
-int twofish_test(void);
-void twofish_done(symmetric_key *skey);
-int twofish_keysize(int *keysize);
 
-extern const struct ltc_cipher_descriptor twofish_desc;
-#endif
 
-#ifdef LTC_DES
-int des_setup(const unsigned char *key, int keylen, int num_rounds,
-              symmetric_key *skey);
-int des_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                    symmetric_key *skey);
-int des_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                    symmetric_key *skey);
-int des_test(void);
-void des_done(symmetric_key *skey);
-int des_keysize(int *keysize);
-int des3_setup(const unsigned char *key, int keylen, int num_rounds,
-               symmetric_key *skey);
-int des3_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                     symmetric_key *skey);
-int des3_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                     symmetric_key *skey);
-int des3_test(void);
-void des3_done(symmetric_key *skey);
-int des3_keysize(int *keysize);
 
-extern const struct ltc_cipher_descriptor des_desc, des3_desc;
-#endif
 
-#ifdef LTC_CAST5
-int cast5_setup(const unsigned char *key, int keylen, int num_rounds,
-                symmetric_key *skey);
-int cast5_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                      symmetric_key *skey);
-int cast5_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                      symmetric_key *skey);
-int cast5_test(void);
-void cast5_done(symmetric_key *skey);
-int cast5_keysize(int *keysize);
 
-extern const struct ltc_cipher_descriptor cast5_desc;
-#endif
 
-#ifdef LTC_NOEKEON
-int noekeon_setup(const unsigned char *key, int keylen, int num_rounds,
-                  symmetric_key *skey);
-int noekeon_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                        symmetric_key *skey);
-int noekeon_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                        symmetric_key *skey);
-int noekeon_test(void);
-void noekeon_done(symmetric_key *skey);
-int noekeon_keysize(int *keysize);
 
-extern const struct ltc_cipher_descriptor noekeon_desc;
-#endif
-
-#ifdef LTC_SKIPJACK
-int skipjack_setup(const unsigned char *key, int keylen, int num_rounds,
-                   symmetric_key *skey);
-int skipjack_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                         symmetric_key *skey);
-int skipjack_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                         symmetric_key *skey);
-int skipjack_test(void);
-void skipjack_done(symmetric_key *skey);
-int skipjack_keysize(int *keysize);
-
-extern const struct ltc_cipher_descriptor skipjack_desc;
-#endif
-
-#ifdef LTC_KHAZAD
-int khazad_setup(const unsigned char *key, int keylen, int num_rounds,
-                 symmetric_key *skey);
-int khazad_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                       symmetric_key *skey);
-int khazad_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                       symmetric_key *skey);
-int khazad_test(void);
-void khazad_done(symmetric_key *skey);
-int khazad_keysize(int *keysize);
-
-extern const struct ltc_cipher_descriptor khazad_desc;
-#endif
-
-#ifdef LTC_ANUBIS
-int anubis_setup(const unsigned char *key, int keylen, int num_rounds,
-                 symmetric_key *skey);
-int anubis_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                       symmetric_key *skey);
-int anubis_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                       symmetric_key *skey);
-int anubis_test(void);
-void anubis_done(symmetric_key *skey);
-int anubis_keysize(int *keysize);
-
-extern const struct ltc_cipher_descriptor anubis_desc;
-#endif
-
-#ifdef LTC_KSEED
-int kseed_setup(const unsigned char *key, int keylen, int num_rounds,
-                symmetric_key *skey);
-int kseed_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                      symmetric_key *skey);
-int kseed_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                      symmetric_key *skey);
-int kseed_test(void);
-void kseed_done(symmetric_key *skey);
-int kseed_keysize(int *keysize);
-
-extern const struct ltc_cipher_descriptor kseed_desc;
-#endif
-
-#ifdef LTC_KASUMI
-int kasumi_setup(const unsigned char *key, int keylen, int num_rounds,
-                 symmetric_key *skey);
-int kasumi_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                       symmetric_key *skey);
-int kasumi_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                       symmetric_key *skey);
-int kasumi_test(void);
-void kasumi_done(symmetric_key *skey);
-int kasumi_keysize(int *keysize);
-
-extern const struct ltc_cipher_descriptor kasumi_desc;
-#endif
 
 #ifdef LTC_MULTI2
 int multi2_setup(const unsigned char *key, int keylen, int num_rounds,
@@ -14314,105 +12587,12 @@ int multi2_keysize(int *keysize);
 extern const struct ltc_cipher_descriptor multi2_desc;
 #endif
 
-#ifdef LTC_ECB_MODE
-int ecb_start(int cipher, const unsigned char *key, int keylen, int num_rounds,
-              symmetric_ECB *ecb);
-int ecb_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len,
-                symmetric_ECB *ecb);
-int ecb_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len,
-                symmetric_ECB *ecb);
-int ecb_done(symmetric_ECB *ecb);
-#endif
 
-#ifdef LTC_CFB_MODE
-int cfb_start(int cipher, const unsigned char *IV, const unsigned char *key,
-              int keylen, int num_rounds, symmetric_CFB *cfb);
-int cfb_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len,
-                symmetric_CFB *cfb);
-int cfb_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len,
-                symmetric_CFB *cfb);
-int cfb_getiv(unsigned char *IV, unsigned long *len, symmetric_CFB *cfb);
-int cfb_setiv(const unsigned char *IV, unsigned long len, symmetric_CFB *cfb);
-int cfb_done(symmetric_CFB *cfb);
-#endif
 
-#ifdef LTC_OFB_MODE
-int ofb_start(int cipher, const unsigned char *IV, const unsigned char *key,
-              int keylen, int num_rounds, symmetric_OFB *ofb);
-int ofb_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len,
-                symmetric_OFB *ofb);
-int ofb_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len,
-                symmetric_OFB *ofb);
-int ofb_getiv(unsigned char *IV, unsigned long *len, symmetric_OFB *ofb);
-int ofb_setiv(const unsigned char *IV, unsigned long len, symmetric_OFB *ofb);
-int ofb_done(symmetric_OFB *ofb);
-#endif
 
-#ifdef LTC_CBC_MODE
-int cbc_start(int cipher, const unsigned char *IV, const unsigned char *key,
-              int keylen, int num_rounds, symmetric_CBC *cbc);
-int cbc_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len,
-                symmetric_CBC *cbc);
-int cbc_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len,
-                symmetric_CBC *cbc);
-int cbc_getiv(unsigned char *IV, unsigned long *len, symmetric_CBC *cbc);
-int cbc_setiv(const unsigned char *IV, unsigned long len, symmetric_CBC *cbc);
-int cbc_done(symmetric_CBC *cbc);
-#endif
 
-#ifdef LTC_CTR_MODE
 
-#define CTR_COUNTER_LITTLE_ENDIAN 0x0000
-#define CTR_COUNTER_BIG_ENDIAN 0x1000
-#define LTC_CTR_RFC3686 0x2000
 
-int ctr_start(int cipher, const unsigned char *IV, const unsigned char *key,
-              int keylen, int num_rounds, int ctr_mode, symmetric_CTR *ctr);
-int ctr_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len,
-                symmetric_CTR *ctr);
-int ctr_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len,
-                symmetric_CTR *ctr);
-
-int ctr_setiv(const unsigned char *IV, unsigned long len, symmetric_CTR *ctr);
-int ctr_done(symmetric_CTR *ctr);
-int ctr_test(void);
-#endif
-
-#ifdef LTC_LRW_MODE
-
-#define LRW_ENCRYPT 0
-#define LRW_DECRYPT 1
-
-int lrw_start(int cipher, const unsigned char *IV, const unsigned char *key,
-              int keylen, const unsigned char *tweak, int num_rounds,
-              symmetric_LRW *lrw);
-int lrw_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len,
-                symmetric_LRW *lrw);
-int lrw_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len,
-                symmetric_LRW *lrw);
-int lrw_getiv(unsigned char *IV, unsigned long *len, symmetric_LRW *lrw);
-int lrw_setiv(const unsigned char *IV, unsigned long len, symmetric_LRW *lrw);
-int lrw_done(symmetric_LRW *lrw);
-int lrw_test(void);
-
-/* don't call */
-int lrw_process(const unsigned char *pt, unsigned char *ct, unsigned long len,
-                int mode, symmetric_LRW *lrw);
-#endif
-
-#ifdef LTC_F8_MODE
-int f8_start(int cipher, const unsigned char *IV, const unsigned char *key,
-             int keylen, const unsigned char *salt_key, int skeylen,
-             int num_rounds, symmetric_F8 *f8);
-int f8_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len,
-               symmetric_F8 *f8);
-int f8_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len,
-               symmetric_F8 *f8);
-int f8_getiv(unsigned char *IV, unsigned long *len, symmetric_F8 *f8);
-int f8_setiv(const unsigned char *IV, unsigned long len, symmetric_F8 *f8);
-int f8_done(symmetric_F8 *f8);
-int f8_test_mode(void);
-#endif
 
 #ifdef LTC_XTS_MODE
 typedef struct {
@@ -14480,85 +12660,17 @@ struct md5_state {
 };
 #endif
 
-#ifdef LTC_MD4
-struct md4_state {
-  ulong64 length;
-  ulong32 state[4], curlen;
-  unsigned char buf[64];
-};
-#endif
 
-#ifdef LTC_TIGER
-struct tiger_state {
-  ulong64 state[3], length;
-  unsigned long curlen;
-  unsigned char buf[64];
-};
-#endif
 
-#ifdef LTC_MD2
-struct md2_state {
-  unsigned char chksum[16], X[48], buf[16];
-  unsigned long curlen;
-};
-#endif
 
-#ifdef LTC_RIPEMD128
-struct rmd128_state {
-  ulong64 length;
-  unsigned char buf[64];
-  ulong32 curlen, state[4];
-};
-#endif
 
-#ifdef LTC_RIPEMD160
-struct rmd160_state {
-  ulong64 length;
-  unsigned char buf[64];
-  ulong32 curlen, state[5];
-};
-#endif
 
-#ifdef LTC_RIPEMD256
-struct rmd256_state {
-  ulong64 length;
-  unsigned char buf[64];
-  ulong32 curlen, state[8];
-};
-#endif
 
-#ifdef LTC_RIPEMD320
-struct rmd320_state {
-  ulong64 length;
-  unsigned char buf[64];
-  ulong32 curlen, state[10];
-};
-#endif
 
-#ifdef LTC_WHIRLPOOL
-struct whirlpool_state {
-  ulong64 length, state[8];
-  unsigned char buf[64];
-  ulong32 curlen;
-};
-#endif
 
-#ifdef LTC_CHC_HASH
-struct chc_state {
-  ulong64 length;
-  unsigned char state[MAXBLOCKSIZE], buf[MAXBLOCKSIZE];
-  ulong32 curlen;
-};
-#endif
 
 typedef union Hash_state {
   char dummy[1];
-#ifdef LTC_CHC_HASH
-  struct chc_state chc;
-#endif
-#ifdef LTC_WHIRLPOOL
-  struct whirlpool_state whirlpool;
-#endif
 #ifdef LTC_SHA512
   struct sha512_state sha512;
 #endif
@@ -14570,27 +12682,6 @@ typedef union Hash_state {
 #endif
 #ifdef LTC_MD5
   struct md5_state md5;
-#endif
-#ifdef LTC_MD4
-  struct md4_state md4;
-#endif
-#ifdef LTC_MD2
-  struct md2_state md2;
-#endif
-#ifdef LTC_TIGER
-  struct tiger_state tiger;
-#endif
-#ifdef LTC_RIPEMD128
-  struct rmd128_state rmd128;
-#endif
-#ifdef LTC_RIPEMD160
-  struct rmd160_state rmd160;
-#endif
-#ifdef LTC_RIPEMD256
-  struct rmd256_state rmd256;
-#endif
-#ifdef LTC_RIPEMD320
-  struct rmd320_state rmd320;
 #endif
   void *data;
 } hash_state;
@@ -14644,25 +12735,7 @@ extern struct ltc_hash_descriptor {
                     unsigned char *out, unsigned long *outlen);
 } hash_descriptor[];
 
-#ifdef LTC_CHC_HASH
-int chc_register(int cipher);
-int chc_init(hash_state *md);
-int chc_process(hash_state *md, const unsigned char *in, unsigned long inlen);
-int chc_done(hash_state *md, unsigned char *hash);
-int chc_test(void);
 
-extern const struct ltc_hash_descriptor chc_desc;
-#endif
-
-#ifdef LTC_WHIRLPOOL
-int whirlpool_init(hash_state *md);
-int whirlpool_process(hash_state *md, const unsigned char *in,
-                      unsigned long inlen);
-int whirlpool_done(hash_state *md, unsigned char *hash);
-int whirlpool_test(void);
-
-extern const struct ltc_hash_descriptor whirlpool_desc;
-#endif
 
 #ifdef LTC_SHA512
 int sha512_init(hash_state *md);
@@ -14728,72 +12801,12 @@ int md5_test(void);
 extern const struct ltc_hash_descriptor md5_desc;
 #endif
 
-#ifdef LTC_MD4
-int md4_init(hash_state *md);
-int md4_process(hash_state *md, const unsigned char *in, unsigned long inlen);
-int md4_done(hash_state *md, unsigned char *hash);
-int md4_test(void);
 
-extern const struct ltc_hash_descriptor md4_desc;
-#endif
 
-#ifdef LTC_MD2
-int md2_init(hash_state *md);
-int md2_process(hash_state *md, const unsigned char *in, unsigned long inlen);
-int md2_done(hash_state *md, unsigned char *hash);
-int md2_test(void);
 
-extern const struct ltc_hash_descriptor md2_desc;
-#endif
 
-#ifdef LTC_TIGER
-int tiger_init(hash_state *md);
-int tiger_process(hash_state *md, const unsigned char *in, unsigned long inlen);
-int tiger_done(hash_state *md, unsigned char *hash);
-int tiger_test(void);
 
-extern const struct ltc_hash_descriptor tiger_desc;
-#endif
 
-#ifdef LTC_RIPEMD128
-int rmd128_init(hash_state *md);
-int rmd128_process(hash_state *md, const unsigned char *in,
-                   unsigned long inlen);
-int rmd128_done(hash_state *md, unsigned char *hash);
-int rmd128_test(void);
-
-extern const struct ltc_hash_descriptor rmd128_desc;
-#endif
-
-#ifdef LTC_RIPEMD160
-int rmd160_init(hash_state *md);
-int rmd160_process(hash_state *md, const unsigned char *in,
-                   unsigned long inlen);
-int rmd160_done(hash_state *md, unsigned char *hash);
-int rmd160_test(void);
-
-extern const struct ltc_hash_descriptor rmd160_desc;
-#endif
-
-#ifdef LTC_RIPEMD256
-int rmd256_init(hash_state *md);
-int rmd256_process(hash_state *md, const unsigned char *in,
-                   unsigned long inlen);
-int rmd256_done(hash_state *md, unsigned char *hash);
-int rmd256_test(void);
-
-extern const struct ltc_hash_descriptor rmd256_desc;
-#endif
-
-#ifdef LTC_RIPEMD320
-int rmd320_init(hash_state *md);
-int rmd320_process(hash_state *md, const unsigned char *in,
-                   unsigned long inlen);
-int rmd320_done(hash_state *md, unsigned char *hash);
-int rmd320_test(void);
-
-extern const struct ltc_hash_descriptor rmd320_desc;
-#endif
 
 int find_hash(const char *name);
 int find_hash_id(unsigned char ID);
@@ -14946,49 +12959,6 @@ int pmac_ntz(unsigned long x);
 void pmac_shift_xor(pmac_state *pmac);
 #endif /* PMAC */
 
-#ifdef LTC_EAX_MODE
-
-#if !(defined(LTC_OMAC) && defined(LTC_CTR_MODE))
-#error LTC_EAX_MODE requires LTC_OMAC and CTR
-#endif
-
-typedef struct {
-  unsigned char N[MAXBLOCKSIZE];
-  symmetric_CTR ctr;
-  omac_state headeromac, ctomac;
-} eax_state;
-
-int eax_init(eax_state *eax, int cipher, const unsigned char *key,
-             unsigned long keylen, const unsigned char *nonce,
-             unsigned long noncelen, const unsigned char *header,
-             unsigned long headerlen);
-
-int eax_encrypt(eax_state *eax, const unsigned char *pt, unsigned char *ct,
-                unsigned long length);
-int eax_decrypt(eax_state *eax, const unsigned char *ct, unsigned char *pt,
-                unsigned long length);
-int eax_addheader(eax_state *eax, const unsigned char *header,
-                  unsigned long length);
-int eax_done(eax_state *eax, unsigned char *tag, unsigned long *taglen);
-
-int eax_encrypt_authenticate_memory(
-    int cipher, const unsigned char *key, unsigned long keylen,
-    const unsigned char *nonce, unsigned long noncelen,
-    const unsigned char *header, unsigned long headerlen,
-    const unsigned char *pt, unsigned long ptlen, unsigned char *ct,
-    unsigned char *tag, unsigned long *taglen);
-
-int eax_decrypt_verify_memory(int cipher, const unsigned char *key,
-                              unsigned long keylen, const unsigned char *nonce,
-                              unsigned long noncelen,
-                              const unsigned char *header,
-                              unsigned long headerlen, const unsigned char *ct,
-                              unsigned long ctlen, unsigned char *pt,
-                              unsigned char *tag, unsigned long taglen,
-                              int *stat);
-
-int eax_test(void);
-#endif /* EAX MODE */
 
 #ifdef LTC_OCB_MODE
 typedef struct {
@@ -15177,30 +13147,6 @@ int xcbc_file(int cipher, const unsigned char *key, unsigned long keylen,
 int xcbc_test(void);
 #endif
 
-#ifdef LTC_F9_MODE
-
-typedef struct {
-  unsigned char akey[MAXBLOCKSIZE], ACC[MAXBLOCKSIZE], IV[MAXBLOCKSIZE];
-
-  symmetric_key key;
-
-  int cipher, buflen, keylen, blocksize;
-} f9_state;
-
-int f9_init(f9_state *f9, int cipher, const unsigned char *key,
-            unsigned long keylen);
-int f9_process(f9_state *f9, const unsigned char *in, unsigned long inlen);
-int f9_done(f9_state *f9, unsigned char *out, unsigned long *outlen);
-int f9_memory(int cipher, const unsigned char *key, unsigned long keylen,
-              const unsigned char *in, unsigned long inlen, unsigned char *out,
-              unsigned long *outlen);
-int f9_memory_multi(int cipher, const unsigned char *key, unsigned long keylen,
-                    unsigned char *out, unsigned long *outlen,
-                    const unsigned char *in, unsigned long inlen, ...);
-int f9_file(int cipher, const unsigned char *key, unsigned long keylen,
-            const char *filename, unsigned char *out, unsigned long *outlen);
-int f9_test(void);
-#endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_mac.h,v $ */
 /* $Revision: 1.23 $ */
@@ -15211,7 +13157,6 @@ int f9_test(void);
 struct yarrow_prng {
   int cipher, hash;
   unsigned char pool[MAXBLOCKSIZE];
-  symmetric_CTR ctr;
   LTC_MUTEX_TYPE(prng_lock)
 };
 #endif
@@ -32005,86 +29950,6 @@ int ECB_KS(int *keysize) {
    CBC implementation, encrypt block, Tom St Denis
 */
 
-#ifdef LTC_CBC_MODE
-
-/**
-  CBC decrypt
-  @param ct     Ciphertext
-  @param pt     [out] Plaintext
-  @param len    The number of bytes to process (must be multiple of block
-  length)
-  @param cbc    CBC state
-  @return CRYPT_OK if successful
-*/
-int cbc_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len,
-                symmetric_CBC *cbc) {
-  int x, err;
-  unsigned char tmp[16];
-#ifdef LTC_FAST
-  LTC_FAST_TYPE tmpy;
-#else
-  unsigned char tmpy;
-#endif
-
-  LTC_ARGCHK(pt != NULL);
-  LTC_ARGCHK(ct != NULL);
-  LTC_ARGCHK(cbc != NULL);
-
-  if ((err = cipher_is_valid(cbc->cipher)) != CRYPT_OK) {
-    return err;
-  }
-
-  /* is blocklen valid? */
-  if (cbc->blocklen < 1 || cbc->blocklen > (int)sizeof(cbc->IV)) {
-    return CRYPT_INVALID_ARG;
-  }
-
-  if (len % cbc->blocklen) {
-    return CRYPT_INVALID_ARG;
-  }
-#ifdef LTC_FAST
-  if (cbc->blocklen % sizeof(LTC_FAST_TYPE)) {
-    return CRYPT_INVALID_ARG;
-  }
-#endif
-
-  if (cipher_descriptor[cbc->cipher].accel_cbc_decrypt != NULL) {
-    return cipher_descriptor[cbc->cipher].accel_cbc_decrypt(
-        ct, pt, len / cbc->blocklen, cbc->IV, &cbc->key);
-  } else {
-    while (len) {
-      /* decrypt */
-      if ((err = cipher_descriptor[cbc->cipher].ecb_decrypt(
-               ct, tmp, &cbc->key)) != CRYPT_OK) {
-        return err;
-      }
-
-/* xor IV against plaintext */
-#if defined(LTC_FAST)
-      for (x = 0; x < cbc->blocklen; x += sizeof(LTC_FAST_TYPE)) {
-        tmpy = *((LTC_FAST_TYPE *)((unsigned char *)cbc->IV + x)) ^
-               *((LTC_FAST_TYPE *)((unsigned char *)tmp + x));
-        *((LTC_FAST_TYPE *)((unsigned char *)cbc->IV + x)) =
-            *((LTC_FAST_TYPE *)((unsigned char *)ct + x));
-        *((LTC_FAST_TYPE *)((unsigned char *)pt + x)) = tmpy;
-      }
-#else
-      for (x = 0; x < cbc->blocklen; x++) {
-        tmpy = tmp[x] ^ cbc->IV[x];
-        cbc->IV[x] = ct[x];
-        pt[x] = tmpy;
-      }
-#endif
-
-      ct += cbc->blocklen;
-      pt += cbc->blocklen;
-      len -= cbc->blocklen;
-    }
-  }
-  return CRYPT_OK;
-}
-
-#endif
 
 /* $Source$ */
 /* $Revision$ */
@@ -32106,24 +29971,6 @@ int cbc_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len,
    CBC implementation, finish chain, Tom St Denis
 */
 
-#ifdef LTC_CBC_MODE
-
-/** Terminate the chain
-  @param cbc    The CBC chain to terminate
-  @return CRYPT_OK on success
-*/
-int cbc_done(symmetric_CBC *cbc) {
-  int err;
-  LTC_ARGCHK(cbc != NULL);
-
-  if ((err = cipher_is_valid(cbc->cipher)) != CRYPT_OK) {
-    return err;
-  }
-  cipher_descriptor[cbc->cipher].done(&cbc->key);
-  return CRYPT_OK;
-}
-
-#endif
 
 /* $Source$ */
 /* $Revision$ */
@@ -32145,87 +29992,6 @@ int cbc_done(symmetric_CBC *cbc) {
    CBC implementation, encrypt block, Tom St Denis
 */
 
-#ifdef LTC_CBC_MODE
-
-/**
-  CBC encrypt
-  @param pt     Plaintext
-  @param ct     [out] Ciphertext
-  @param len    The number of bytes to process (must be multiple of block
-  length)
-  @param cbc    CBC state
-  @return CRYPT_OK if successful
-*/
-int cbc_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len,
-                symmetric_CBC *cbc) {
-  int x, err;
-
-  LTC_ARGCHK(pt != NULL);
-  LTC_ARGCHK(ct != NULL);
-  LTC_ARGCHK(cbc != NULL);
-
-  if ((err = cipher_is_valid(cbc->cipher)) != CRYPT_OK) {
-    return err;
-  }
-
-  /* is blocklen valid? */
-  if (cbc->blocklen < 1 || cbc->blocklen > (int)sizeof(cbc->IV)) {
-    return CRYPT_INVALID_ARG;
-  }
-
-  if (len % cbc->blocklen) {
-    return CRYPT_INVALID_ARG;
-  }
-#ifdef LTC_FAST
-  if (cbc->blocklen % sizeof(LTC_FAST_TYPE)) {
-    return CRYPT_INVALID_ARG;
-  }
-#endif
-
-  if (cipher_descriptor[cbc->cipher].accel_cbc_encrypt != NULL) {
-    return cipher_descriptor[cbc->cipher].accel_cbc_encrypt(
-        pt, ct, len / cbc->blocklen, cbc->IV, &cbc->key);
-  } else {
-    while (len) {
-/* xor IV against plaintext */
-#if defined(LTC_FAST)
-      for (x = 0; x < cbc->blocklen; x += sizeof(LTC_FAST_TYPE)) {
-        *((LTC_FAST_TYPE *)((unsigned char *)cbc->IV + x)) ^=
-            *((LTC_FAST_TYPE *)((unsigned char *)pt + x));
-      }
-#else
-      for (x = 0; x < cbc->blocklen; x++) {
-        cbc->IV[x] ^= pt[x];
-      }
-#endif
-
-      /* encrypt */
-      if ((err = cipher_descriptor[cbc->cipher].ecb_encrypt(
-               cbc->IV, ct, &cbc->key)) != CRYPT_OK) {
-        return err;
-      }
-
-      /* store IV [ciphertext] for a future block */
-#if defined(LTC_FAST)
-      for (x = 0; x < cbc->blocklen; x += sizeof(LTC_FAST_TYPE)) {
-        *((LTC_FAST_TYPE *)((unsigned char *)cbc->IV + x)) =
-            *((LTC_FAST_TYPE *)((unsigned char *)ct + x));
-      }
-#else
-      for (x = 0; x < cbc->blocklen; x++) {
-        cbc->IV[x] = ct[x];
-      }
-#endif
-
-      ct += cbc->blocklen;
-      pt += cbc->blocklen;
-      len -= cbc->blocklen;
-    }
-  }
-  return CRYPT_OK;
-}
-
-#endif
 
 /* $Source$ */
 /* $Revision$ */
@@ -32247,30 +30013,6 @@ int cbc_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len,
    CBC implementation, get IV, Tom St Denis
 */
 
-#ifdef LTC_CBC_MODE
-
-/**
-   Get the current initial vector
-   @param IV   [out] The destination of the initial vector
-   @param len  [in/out]  The max size and resulting size of the initial vector
-   @param cbc  The CBC state
-   @return CRYPT_OK if successful
-*/
-int cbc_getiv(unsigned char *IV, unsigned long *len, symmetric_CBC *cbc) {
-  LTC_ARGCHK(IV != NULL);
-  LTC_ARGCHK(len != NULL);
-  LTC_ARGCHK(cbc != NULL);
-  if ((unsigned long)cbc->blocklen > *len) {
-    *len = cbc->blocklen;
-    return CRYPT_BUFFER_OVERFLOW;
-  }
-  XMEMCPY(IV, cbc->IV, cbc->blocklen);
-  *len = cbc->blocklen;
-
-  return CRYPT_OK;
-}
-
-#endif
 
 /* $Source$ */
 /* $Revision$ */
@@ -32292,26 +30034,6 @@ int cbc_getiv(unsigned char *IV, unsigned long *len, symmetric_CBC *cbc) {
    CBC implementation, set IV, Tom St Denis
 */
 
-#ifdef LTC_CBC_MODE
-
-/**
-   Set an initial vector
-   @param IV   The initial vector
-   @param len  The length of the vector (in octets)
-   @param cbc  The CBC state
-   @return CRYPT_OK if successful
-*/
-int cbc_setiv(const unsigned char *IV, unsigned long len, symmetric_CBC *cbc) {
-  LTC_ARGCHK(IV != NULL);
-  LTC_ARGCHK(cbc != NULL);
-  if (len != (unsigned long)cbc->blocklen) {
-    return CRYPT_INVALID_ARG;
-  }
-  XMEMCPY(cbc->IV, IV, len);
-  return CRYPT_OK;
-}
-
-#endif
 
 /* $Source$ */
 /* $Revision$ */
@@ -32333,47 +30055,6 @@ int cbc_setiv(const unsigned char *IV, unsigned long len, symmetric_CBC *cbc) {
    CBC implementation, start chain, Tom St Denis
 */
 
-#ifdef LTC_CBC_MODE
-
-/**
-   Initialize a CBC context
-   @param cipher      The index of the cipher desired
-   @param IV          The initial vector
-   @param key         The secret key
-   @param keylen      The length of the secret key (octets)
-   @param num_rounds  Number of rounds in the cipher desired (0 for default)
-   @param cbc         The CBC state to initialize
-   @return CRYPT_OK if successful
-*/
-int cbc_start(int cipher, const unsigned char *IV, const unsigned char *key,
-              int keylen, int num_rounds, symmetric_CBC *cbc) {
-  int x, err;
-
-  LTC_ARGCHK(IV != NULL);
-  LTC_ARGCHK(key != NULL);
-  LTC_ARGCHK(cbc != NULL);
-
-  /* bad param? */
-  if ((err = cipher_is_valid(cipher)) != CRYPT_OK) {
-    return err;
-  }
-
-  /* setup cipher */
-  if ((err = cipher_descriptor[cipher].setup(key, keylen, num_rounds,
-                                             &cbc->key)) != CRYPT_OK) {
-    return err;
-  }
-
-  /* copy IV */
-  cbc->blocklen = cipher_descriptor[cipher].block_length;
-  cbc->cipher = cipher;
-  for (x = 0; x < cbc->blocklen; x++) {
-    cbc->IV[x] = IV[x];
-  }
-  return CRYPT_OK;
-}
-
-#endif
 
 /* $Source$ */
 /* $Revision$ */
@@ -33679,103 +31360,6 @@ int md5_test(void) {
   CTR implementation, encrypt data, Tom St Denis
 */
 
-#ifdef LTC_CTR_MODE
-
-/**
-  CTR encrypt
-  @param pt     Plaintext
-  @param ct     [out] Ciphertext
-  @param len    Length of plaintext (octets)
-  @param ctr    CTR state
-  @return CRYPT_OK if successful
-*/
-int ctr_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len,
-                symmetric_CTR *ctr) {
-  int x, err;
-
-  LTC_ARGCHK(pt != NULL);
-  LTC_ARGCHK(ct != NULL);
-  LTC_ARGCHK(ctr != NULL);
-
-  if ((err = cipher_is_valid(ctr->cipher)) != CRYPT_OK) {
-    return err;
-  }
-
-  /* is blocklen/padlen valid? */
-  if (ctr->blocklen < 1 || ctr->blocklen > (int)sizeof(ctr->ctr) ||
-      ctr->padlen < 0 || ctr->padlen > (int)sizeof(ctr->pad)) {
-    return CRYPT_INVALID_ARG;
-  }
-
-#ifdef LTC_FAST
-  if (ctr->blocklen % sizeof(LTC_FAST_TYPE)) {
-    return CRYPT_INVALID_ARG;
-  }
-#endif
-
-  /* handle acceleration only if pad is empty, accelerator is present and length
-   * is >= a block size */
-  if ((ctr->padlen == ctr->blocklen) &&
-      cipher_descriptor[ctr->cipher].accel_ctr_encrypt != NULL &&
-      (len >= (unsigned long)ctr->blocklen)) {
-    if ((err = cipher_descriptor[ctr->cipher].accel_ctr_encrypt(
-             pt, ct, len / ctr->blocklen, ctr->ctr, ctr->mode, &ctr->key)) !=
-        CRYPT_OK) {
-      return err;
-    }
-    len %= ctr->blocklen;
-  }
-
-  while (len) {
-    /* is the pad empty? */
-    if (ctr->padlen == ctr->blocklen) {
-      /* increment counter */
-      if (ctr->mode == CTR_COUNTER_LITTLE_ENDIAN) {
-        /* little-endian */
-        for (x = 0; x < ctr->ctrlen; x++) {
-          ctr->ctr[x] = (ctr->ctr[x] + (unsigned char)1) & (unsigned char)255;
-          if (ctr->ctr[x] != (unsigned char)0) {
-            break;
-          }
-        }
-      } else {
-        /* big-endian */
-        for (x = ctr->blocklen - 1; x >= ctr->ctrlen; x--) {
-          ctr->ctr[x] = (ctr->ctr[x] + (unsigned char)1) & (unsigned char)255;
-          if (ctr->ctr[x] != (unsigned char)0) {
-            break;
-          }
-        }
-      }
-
-      /* encrypt it */
-      if ((err = cipher_descriptor[ctr->cipher].ecb_encrypt(
-               ctr->ctr, ctr->pad, &ctr->key)) != CRYPT_OK) {
-        return err;
-      }
-      ctr->padlen = 0;
-    }
-#ifdef LTC_FAST
-    if (ctr->padlen == 0 && len >= (unsigned long)ctr->blocklen) {
-      for (x = 0; x < ctr->blocklen; x += sizeof(LTC_FAST_TYPE)) {
-        *((LTC_FAST_TYPE *)((unsigned char *)ct + x)) =
-            *((LTC_FAST_TYPE *)((unsigned char *)pt + x)) ^
-            *((LTC_FAST_TYPE *)((unsigned char *)ctr->pad + x));
-      }
-      pt += ctr->blocklen;
-      ct += ctr->blocklen;
-      len -= ctr->blocklen;
-      ctr->padlen = ctr->blocklen;
-      continue;
-    }
-#endif
-    *ct++ = *pt++ ^ ctr->pad[ctr->padlen++];
-    --len;
-  }
-  return CRYPT_OK;
-}
-
-#endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_encrypt.c,v $ */
 /* $Revision: 1.22 $ */
@@ -33797,24 +31381,6 @@ int ctr_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len,
    CTR implementation, finish chain, Tom St Denis
 */
 
-#ifdef LTC_CTR_MODE
-
-/** Terminate the chain
-  @param ctr    The CTR chain to terminate
-  @return CRYPT_OK on success
-*/
-int ctr_done(symmetric_CTR *ctr) {
-  int err;
-  LTC_ARGCHK(ctr != NULL);
-
-  if ((err = cipher_is_valid(ctr->cipher)) != CRYPT_OK) {
-    return err;
-  }
-  cipher_descriptor[ctr->cipher].done(&ctr->key);
-  return CRYPT_OK;
-}
-
-#endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_done.c,v $ */
 /* $Revision: 1.7 $ */
@@ -33836,26 +31402,6 @@ int ctr_done(symmetric_CTR *ctr) {
   CTR implementation, decrypt data, Tom St Denis
 */
 
-#ifdef LTC_CTR_MODE
-
-/**
-   CTR decrypt
-   @param ct      Ciphertext
-   @param pt      [out] Plaintext
-   @param len     Length of ciphertext (octets)
-   @param ctr     CTR state
-   @return CRYPT_OK if successful
-*/
-int ctr_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len,
-                symmetric_CTR *ctr) {
-  LTC_ARGCHK(pt != NULL);
-  LTC_ARGCHK(ct != NULL);
-  LTC_ARGCHK(ctr != NULL);
-
-  return ctr_encrypt(ct, pt, len, ctr);
-}
-
-#endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_decrypt.c,v $ */
 /* $Revision: 1.6 $ */
@@ -33877,85 +31423,6 @@ int ctr_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len,
    CTR implementation, start chain, Tom St Denis
 */
 
-#ifdef LTC_CTR_MODE
-
-/**
-   Initialize a CTR context
-   @param cipher      The index of the cipher desired
-   @param IV          The initial vector
-   @param key         The secret key
-   @param keylen      The length of the secret key (octets)
-   @param num_rounds  Number of rounds in the cipher desired (0 for default)
-   @param ctr_mode    The counter mode (CTR_COUNTER_LITTLE_ENDIAN or
-   CTR_COUNTER_BIG_ENDIAN)
-   @param ctr         The CTR state to initialize
-   @return CRYPT_OK if successful
-*/
-int ctr_start(int cipher, const unsigned char *IV, const unsigned char *key,
-              int keylen, int num_rounds, int ctr_mode, symmetric_CTR *ctr) {
-  int x, err;
-
-  LTC_ARGCHK(IV != NULL);
-  LTC_ARGCHK(key != NULL);
-  LTC_ARGCHK(ctr != NULL);
-
-  /* bad param? */
-  if ((err = cipher_is_valid(cipher)) != CRYPT_OK) {
-    return err;
-  }
-
-  /* ctrlen == counter width */
-  ctr->ctrlen = (ctr_mode & 255) ? (ctr_mode & 255)
-                                 : cipher_descriptor[cipher].block_length;
-  if (ctr->ctrlen > cipher_descriptor[cipher].block_length) {
-    return CRYPT_INVALID_ARG;
-  }
-
-  if ((ctr_mode & 0x1000) == CTR_COUNTER_BIG_ENDIAN) {
-    ctr->ctrlen = cipher_descriptor[cipher].block_length - ctr->ctrlen;
-  }
-
-  /* setup cipher */
-  if ((err = cipher_descriptor[cipher].setup(key, keylen, num_rounds,
-                                             &ctr->key)) != CRYPT_OK) {
-    return err;
-  }
-
-  /* copy ctr */
-  ctr->blocklen = cipher_descriptor[cipher].block_length;
-  ctr->cipher = cipher;
-  ctr->padlen = 0;
-  ctr->mode = ctr_mode & 0x1000;
-  for (x = 0; x < ctr->blocklen; x++) {
-    ctr->ctr[x] = IV[x];
-  }
-
-  if (ctr_mode & LTC_CTR_RFC3686) {
-    /* increment the IV as per RFC 3686 */
-    if (ctr->mode == CTR_COUNTER_LITTLE_ENDIAN) {
-      /* little-endian */
-      for (x = 0; x < ctr->ctrlen; x++) {
-        ctr->ctr[x] = (ctr->ctr[x] + (unsigned char)1) & (unsigned char)255;
-        if (ctr->ctr[x] != (unsigned char)0) {
-          break;
-        }
-      }
-    } else {
-      /* big-endian */
-      for (x = ctr->blocklen - 1; x >= ctr->ctrlen; x--) {
-        ctr->ctr[x] = (ctr->ctr[x] + (unsigned char)1) & (unsigned char)255;
-        if (ctr->ctr[x] != (unsigned char)0) {
-          break;
-        }
-      }
-    }
-  }
-
-  return cipher_descriptor[ctr->cipher].ecb_encrypt(ctr->ctr, ctr->pad,
-                                                    &ctr->key);
-}
-
-#endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_start.c,v $ */
 /* $Revision: 1.15 $ */
@@ -33977,39 +31444,6 @@ int ctr_start(int cipher, const unsigned char *IV, const unsigned char *key,
   CTR implementation, set IV, Tom St Denis
 */
 
-#ifdef LTC_CTR_MODE
-
-/**
-   Set an initial vector
-   @param IV   The initial vector
-   @param len  The length of the vector (in octets)
-   @param ctr  The CTR state
-   @return CRYPT_OK if successful
-*/
-int ctr_setiv(const unsigned char *IV, unsigned long len, symmetric_CTR *ctr) {
-  int err;
-
-  LTC_ARGCHK(IV != NULL);
-  LTC_ARGCHK(ctr != NULL);
-
-  /* bad param? */
-  if ((err = cipher_is_valid(ctr->cipher)) != CRYPT_OK) {
-    return err;
-  }
-
-  if (len != (unsigned long)ctr->blocklen) {
-    return CRYPT_INVALID_ARG;
-  }
-
-  /* set IV */
-  XMEMCPY(ctr->ctr, IV, len);
-
-  /* force next block */
-  ctr->padlen = 0;
-  return cipher_descriptor[ctr->cipher].ecb_encrypt(IV, ctr->pad, &ctr->key);
-}
-
-#endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_setiv.c,v $ */
 /* $Revision: 1.7 $ */
@@ -34031,9 +31465,6 @@ int ctr_setiv(const unsigned char *IV, unsigned long len, symmetric_CTR *ctr) {
    CTR implementation, get IV, Tom St Denis
 */
 
-#ifdef LTC_CTR_MODE
-
-#endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_getiv.c,v $ */
 /* $Revision: 1.7 $ */
