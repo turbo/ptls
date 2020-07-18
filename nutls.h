@@ -95,28 +95,19 @@ typedef enum {
   unexpected_message = 10,
   bad_record_mac = 20,
   decryption_failed_RESERVED = 21,
-  record_overflow = 22,
   decompression_failure = 30,
-  handshake_failure = 40,
-  no_certificate_RESERVED = 41,
   bad_certificate = 42,
   unsupported_certificate = 43,
   certificate_revoked = 44,
   certificate_expired = 45,
   certificate_unknown = 46,
-  illegal_parameter = 47,
-  unknown_ca = 48,
-  access_denied = 49,
   decode_error = 50,
   decrypt_error = 51,
-  export_restriction_RESERVED = 60,
-  protocol_version = 70,
   insufficient_security = 71,
   internal_error = 80,
   inappropriate_fallback = 86,
   user_canceled = 90,
   no_renegotiation = 100,
-  unsupported_extension = 110,
   no_error = 255
 } TLSAlertDescription;
 
@@ -178,7 +169,7 @@ int tls_packet_uint8(struct TLSPacket *packet, unsigned char i);
 int tls_packet_uint16(struct TLSPacket *packet, unsigned short i);
 
 int tls_packet_uint24(struct TLSPacket *packet, unsigned int i);
-int tls_random(unsigned char *key, int len);
+//int tls_random(unsigned char *key, int len);
 
 /*
   Get encrypted data to write, if any. Once you've sent all of it, call
@@ -193,9 +184,6 @@ void tls_buffer_clear(struct TLSContext *context);
  * error. */
 int tls_established(struct TLSContext *context);
 
-/* Discards any unread decrypted data not consumed by tls_read(). */
-void tls_read_clear(struct TLSContext *context);
-
 /*
   Reads any unread decrypted data (see tls_consume_stream). If you don't read
   all of it, the remainder will be left in the internal buffers for next
@@ -206,8 +194,6 @@ int tls_read(struct TLSContext *context, unsigned char *buf, unsigned int size);
 
 struct TLSContext *tls_create_context(unsigned char is_server,
                                       unsigned short version);
-const struct ECCCurveParameters *tls_set_curve(
-    struct TLSContext *context, const struct ECCCurveParameters *curve);
 
 /* Create a context for a given client, from a server context. Returns NULL on
  * error. */
@@ -320,7 +306,7 @@ void tls_print_certificate(const char *fname);
 //int tls_add_alpn(struct TLSContext *context, const char *alpn);
 int tls_alpn_contains(struct TLSContext *context, const char *alpn,
                       unsigned char alpn_size);
-const char *tls_alpn(struct TLSContext *context);
+
 // useful when renewing certificates for servers, without the need to restart
 // the server
 int tls_clear_certificates(struct TLSContext *context);

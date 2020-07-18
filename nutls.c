@@ -3,14 +3,10 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <time.h>
 // hton* and ntoh* functions
 #include <arpa/inet.h>
-#include <errno.h>
-#include <unistd.h>
-
 #include "mincrypt.c"
 
 #if (CRYPT <= 0x0117)
@@ -96,6 +92,7 @@
     fprintf(stderr, "\n");                         \
   }
 #else
+
 #define DEBUG_PRINT(...) \
   {}
 #define DEBUG_DUMP_HEX(buf, len) \
@@ -106,6 +103,7 @@
   {}
 #define DEBUG_DUMP_HEX_LABEL(title, buf, len) \
   {}
+
 #endif
 
 #ifndef htonll
@@ -183,13 +181,6 @@
   }
 #define CHECK_SIZE(size, buf_size, err) \
   if (((int)(size) > (int)(buf_size)) || ((int)(buf_size) < 0)) return err;
-#define TLS_IMPORT_CHECK_SIZE(buf_pos, size, buf_size) \
-  if (((int)size > (int)buf_size - buf_pos) ||         \
-      ((int)buf_pos > (int)buf_size)) {                \
-    DEBUG_PRINT("IMPORT ELEMENT SIZE ERROR\n");        \
-    tls_destroy_context(context);                      \
-    return NULL;                                       \
-  }
 #define CHECK_HANDSHAKE_STATE(context, n, limit)          \
   {                                                       \
     if (context->hs_messages[n] >= limit) {               \
@@ -205,12 +196,6 @@
 // ChaCha20 implementation by D. J. Bernstein
 // Public domain.
 
-#define CHACHA_MINKEYLEN 16
-#define CHACHA_NONCELEN 8
-#define CHACHA_NONCELEN_96 12
-#define CHACHA_CTRLEN 8
-#define CHACHA_CTRLEN_96 4
-#define CHACHA_STATELEN (CHACHA_NONCELEN + CHACHA_CTRLEN)
 #define CHACHA_BLOCKLEN 64
 
 #define POLY1305_MAX_AAD 32
@@ -232,11 +217,7 @@ struct chacha_ctx {
 
 static inline void chacha_keysetup(struct chacha_ctx *x, const u_char *k,
                                    u_int kbits);
-static inline void chacha_ivsetup(struct chacha_ctx *x, const u_char *iv,
-                                  const u_char *ctr);
-static inline void chacha_ivsetup_96bitnonce(struct chacha_ctx *x,
-                                             const u_char *iv,
-                                             const u_char *ctr);
+
 static inline void chacha_encrypt_bytes(struct chacha_ctx *x, const u_char *m,
                                         u_char *c, u_int bytes);
 static inline int poly1305_generate_key(unsigned char *key256,
@@ -294,6 +275,8 @@ typedef struct chacha_ctx chacha_ctx;
 static const char sigma[] = "expand 32-byte k";
 static const char tau[] = "expand 16-byte k";
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
 static inline void chacha_keysetup(chacha_ctx *x, const u8 *k, u32 kbits) {
   const char *constants;
 
@@ -317,6 +300,7 @@ static inline void chacha_keysetup(chacha_ctx *x, const u8 *k, u32 kbits) {
   x->input[3] = _private_tls_U8TO32_LITTLE(constants + 12);
 }
 
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
 static inline void chacha_key(chacha_ctx *x, u8 *k) {
   _private_tls_U32TO8_LITTLE(k, x->input[4]);
   _private_tls_U32TO8_LITTLE(k + 4, x->input[5]);
@@ -329,12 +313,14 @@ static inline void chacha_key(chacha_ctx *x, u8 *k) {
   _private_tls_U32TO8_LITTLE(k + 28, x->input[11]);
 }
 
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
 static inline void chacha_nonce(chacha_ctx *x, u8 *nonce) {
   _private_tls_U32TO8_LITTLE(nonce + 0, x->input[13]);
   _private_tls_U32TO8_LITTLE(nonce + 4, x->input[14]);
   _private_tls_U32TO8_LITTLE(nonce + 8, x->input[15]);
 }
 
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
 static inline void chacha_ivsetup(chacha_ctx *x, const u8 *iv,
                                   const u8 *counter) {
   x->input[12] = counter == NULL ? 0 : _private_tls_U8TO32_LITTLE(counter + 0);
@@ -345,6 +331,7 @@ static inline void chacha_ivsetup(chacha_ctx *x, const u8 *iv,
   }
 }
 
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
 static inline void chacha_ivsetup_96bitnonce(chacha_ctx *x, const u8 *iv,
                                              const u8 *counter) {
   x->input[12] = counter == NULL ? 0 : _private_tls_U8TO32_LITTLE(counter + 0);
@@ -355,6 +342,7 @@ static inline void chacha_ivsetup_96bitnonce(chacha_ctx *x, const u8 *iv,
   }
 }
 
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
 static inline void chacha_ivupdate(chacha_ctx *x, const u8 *iv, const u8 *aad,
                                    const u8 *counter) {
   x->input[12] = counter == NULL ? 0 : _private_tls_U8TO32_LITTLE(counter + 0);
@@ -365,6 +353,7 @@ static inline void chacha_ivupdate(chacha_ctx *x, const u8 *iv, const u8 *aad,
       _private_tls_U8TO32_LITTLE(iv + 8) ^ _private_tls_U8TO32_LITTLE(aad + 4);
 }
 
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
 static inline void chacha_encrypt_bytes(chacha_ctx *x, const u8 *m, u8 *c,
                                         u32 bytes) {
   u32 x0, x1, x2, x3, x4, x5, x6, x7;
@@ -521,6 +510,7 @@ static inline void chacha_encrypt_bytes(chacha_ctx *x, const u8 *m, u8 *c,
   }
 }
 
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
 static inline void chacha20_block(chacha_ctx *x, unsigned char *c, u_int len) {
   u_int i;
 
@@ -543,6 +533,7 @@ static inline void chacha20_block(chacha_ctx *x, unsigned char *c, u_int len) {
     _private_tls_U32TO8_LITTLE(c + i, x->input[i / 4]);
   }
 }
+#pragma clang diagnostic pop
 
 static inline int poly1305_generate_key(unsigned char *key256,
                                         unsigned char *nonce,
@@ -578,33 +569,37 @@ typedef struct poly1305_state_internal_t {
   unsigned char final;
 } poly1305_state_internal_t;
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
 /* interpret four 8 bit unsigned integers as a 32 bit unsigned integer in little
  * endian */
-static unsigned long _private_tls_U8TO32(const unsigned char *p) {
+static unsigned long private_tls_U8TO32(const unsigned char *p) {
   return (((unsigned long)(p[0] & 0xff)) | ((unsigned long)(p[1] & 0xff) << 8) |
           ((unsigned long)(p[2] & 0xff) << 16) |
           ((unsigned long)(p[3] & 0xff) << 24));
 }
 
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
 /* store a 32 bit unsigned integer as four 8 bit unsigned integers in little
  * endian */
-static void _private_tls_U32TO8(unsigned char *p, unsigned long v) {
+static void private_tls_U32TO8(unsigned char *p, unsigned long v) {
   p[0] = (v)&0xff;
   p[1] = (v >> 8) & 0xff;
   p[2] = (v >> 16) & 0xff;
   p[3] = (v >> 24) & 0xff;
 }
 
-void _private_tls_poly1305_init(poly1305_context *ctx,
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
+void private_tls_poly1305_init(poly1305_context *ctx,
                                 const unsigned char key[32]) {
   poly1305_state_internal_t *st = (poly1305_state_internal_t *)ctx;
 
   /* r &= 0xffffffc0ffffffc0ffffffc0fffffff */
-  st->r[0] = (_private_tls_U8TO32(&key[0])) & 0x3ffffff;
-  st->r[1] = (_private_tls_U8TO32(&key[3]) >> 2) & 0x3ffff03;
-  st->r[2] = (_private_tls_U8TO32(&key[6]) >> 4) & 0x3ffc0ff;
-  st->r[3] = (_private_tls_U8TO32(&key[9]) >> 6) & 0x3f03fff;
-  st->r[4] = (_private_tls_U8TO32(&key[12]) >> 8) & 0x00fffff;
+  st->r[0] = (private_tls_U8TO32(&key[0])) & 0x3ffffff;
+  st->r[1] = (private_tls_U8TO32(&key[3]) >> 2) & 0x3ffff03;
+  st->r[2] = (private_tls_U8TO32(&key[6]) >> 4) & 0x3ffc0ff;
+  st->r[3] = (private_tls_U8TO32(&key[9]) >> 6) & 0x3f03fff;
+  st->r[4] = (private_tls_U8TO32(&key[12]) >> 8) & 0x00fffff;
 
   /* h = 0 */
   st->h[0] = 0;
@@ -614,16 +609,17 @@ void _private_tls_poly1305_init(poly1305_context *ctx,
   st->h[4] = 0;
 
   /* save pad for later */
-  st->pad[0] = _private_tls_U8TO32(&key[16]);
-  st->pad[1] = _private_tls_U8TO32(&key[20]);
-  st->pad[2] = _private_tls_U8TO32(&key[24]);
-  st->pad[3] = _private_tls_U8TO32(&key[28]);
+  st->pad[0] = private_tls_U8TO32(&key[16]);
+  st->pad[1] = private_tls_U8TO32(&key[20]);
+  st->pad[2] = private_tls_U8TO32(&key[24]);
+  st->pad[3] = private_tls_U8TO32(&key[28]);
 
   st->leftover = 0;
   st->final = 0;
 }
 
-static void _private_tls_poly1305_blocks(poly1305_state_internal_t *st,
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
+static void private_tls_poly1305_blocks(poly1305_state_internal_t *st,
                                          const unsigned char *m, size_t bytes) {
   const unsigned long hibit = (st->final) ? 0 : (1UL << 24); /* 1 << 128 */
   unsigned long r0, r1, r2, r3, r4;
@@ -651,11 +647,11 @@ static void _private_tls_poly1305_blocks(poly1305_state_internal_t *st,
 
   while (bytes >= poly1305_block_size) {
     /* h += m[i] */
-    h0 += (_private_tls_U8TO32(m + 0)) & 0x3ffffff;
-    h1 += (_private_tls_U8TO32(m + 3) >> 2) & 0x3ffffff;
-    h2 += (_private_tls_U8TO32(m + 6) >> 4) & 0x3ffffff;
-    h3 += (_private_tls_U8TO32(m + 9) >> 6) & 0x3ffffff;
-    h4 += (_private_tls_U8TO32(m + 12) >> 8) | hibit;
+    h0 += (private_tls_U8TO32(m + 0)) & 0x3ffffff;
+    h1 += (private_tls_U8TO32(m + 3) >> 2) & 0x3ffffff;
+    h2 += (private_tls_U8TO32(m + 6) >> 4) & 0x3ffffff;
+    h3 += (private_tls_U8TO32(m + 9) >> 6) & 0x3ffffff;
+    h4 += (private_tls_U8TO32(m + 12) >> 8) | hibit;
 
     /* h *= r */
     d0 = ((unsigned long long)h0 * r0) + ((unsigned long long)h1 * s4) +
@@ -705,7 +701,8 @@ static void _private_tls_poly1305_blocks(poly1305_state_internal_t *st,
   st->h[4] = h4;
 }
 
-void _private_tls_poly1305_finish(poly1305_context *ctx,
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
+void private_tls_poly1305_finish(poly1305_context *ctx,
                                   unsigned char mac[16]) {
   poly1305_state_internal_t *st = (poly1305_state_internal_t *)ctx;
   unsigned long h0, h1, h2, h3, h4, c;
@@ -719,7 +716,7 @@ void _private_tls_poly1305_finish(poly1305_context *ctx,
     st->buffer[i++] = 1;
     for (; i < poly1305_block_size; i++) st->buffer[i] = 0;
     st->final = 1;
-    _private_tls_poly1305_blocks(st, st->buffer, poly1305_block_size);
+    private_tls_poly1305_blocks(st, st->buffer, poly1305_block_size);
   }
 
   /* fully carry h */
@@ -790,10 +787,10 @@ void _private_tls_poly1305_finish(poly1305_context *ctx,
   f = (unsigned long long)h3 + st->pad[3] + (f >> 32);
   h3 = (unsigned long)f;
 
-  _private_tls_U32TO8(mac + 0, h0);
-  _private_tls_U32TO8(mac + 4, h1);
-  _private_tls_U32TO8(mac + 8, h2);
-  _private_tls_U32TO8(mac + 12, h3);
+  private_tls_U32TO8(mac + 0, h0);
+  private_tls_U32TO8(mac + 4, h1);
+  private_tls_U32TO8(mac + 8, h2);
+  private_tls_U32TO8(mac + 12, h3);
 
   /* zero out the state */
   st->h[0] = 0;
@@ -812,7 +809,8 @@ void _private_tls_poly1305_finish(poly1305_context *ctx,
   st->pad[3] = 0;
 }
 
-void _private_tls_poly1305_update(poly1305_context *ctx, const unsigned char *m,
+#pragma ide diagnostic ignored "hicpp-signed-bitwise"
+void private_tls_poly1305_update(poly1305_context *ctx, const unsigned char *m,
                                   size_t bytes) {
   poly1305_state_internal_t *st = (poly1305_state_internal_t *)ctx;
   size_t i;
@@ -825,14 +823,14 @@ void _private_tls_poly1305_update(poly1305_context *ctx, const unsigned char *m,
     m += want;
     st->leftover += want;
     if (st->leftover < poly1305_block_size) return;
-    _private_tls_poly1305_blocks(st, st->buffer, poly1305_block_size);
+    private_tls_poly1305_blocks(st, st->buffer, poly1305_block_size);
     st->leftover = 0;
   }
 
   /* process full blocks */
   if (bytes >= poly1305_block_size) {
     size_t want = (bytes & ~(poly1305_block_size - 1));
-    _private_tls_poly1305_blocks(st, m, want);
+    private_tls_poly1305_blocks(st, m, want);
     m += want;
     bytes -= want;
   }
@@ -843,15 +841,7 @@ void _private_tls_poly1305_update(poly1305_context *ctx, const unsigned char *m,
     st->leftover += bytes;
   }
 }
-
-int poly1305_verify(const unsigned char mac1[16],
-                    const unsigned char mac2[16]) {
-  size_t i;
-  unsigned int dif = 0;
-  for (i = 0; i < 16; i++) dif |= (mac1[i] ^ mac2[i]);
-  dif = (dif - 1) >> ((sizeof(unsigned int) * 8) - 1);
-  return (dif & 1);
-}
+#pragma clang diagnostic pop
 
 void chacha20_poly1305_key(struct chacha_ctx *ctx,
                            unsigned char *poly1305_key) {
@@ -862,7 +852,7 @@ void chacha20_poly1305_key(struct chacha_ctx *ctx,
   poly1305_generate_key(key, nonce, sizeof(nonce), poly1305_key, 0);
 }
 
-int chacha20_poly1305_aead(struct chacha_ctx *ctx, unsigned char *pt,
+unsigned chacha20_poly1305_aead(struct chacha_ctx *ctx, unsigned char *pt,
                            unsigned int len, unsigned char *aad,
                            unsigned int aad_len, unsigned char *poly_key,
                            unsigned char *out) {
@@ -875,47 +865,37 @@ int chacha20_poly1305_aead(struct chacha_ctx *ctx, unsigned char *pt,
   chacha_encrypt_bytes(ctx, pt, out, len);
 
   poly1305_context aead_ctx;
-  _private_tls_poly1305_init(&aead_ctx, poly_key);
-  _private_tls_poly1305_update(&aead_ctx, aad, aad_len);
-  int rem = aad_len % 16;
-  if (rem) _private_tls_poly1305_update(&aead_ctx, zeropad, 16 - rem);
-  _private_tls_poly1305_update(&aead_ctx, out, len);
+  private_tls_poly1305_init(&aead_ctx, poly_key);
+  private_tls_poly1305_update(&aead_ctx, aad, aad_len);
+  unsigned rem = aad_len % 16;
+  if (rem) private_tls_poly1305_update(&aead_ctx, zeropad, 16 - rem);
+  private_tls_poly1305_update(&aead_ctx, out, len);
   rem = len % 16;
-  if (rem) _private_tls_poly1305_update(&aead_ctx, zeropad, 16 - rem);
+  if (rem) private_tls_poly1305_update(&aead_ctx, zeropad, 16 - rem);
 
   unsigned char trail[16];
-  _private_tls_U32TO8(trail, aad_len);
+  private_tls_U32TO8(trail, aad_len);
   *(int *)(trail + 4) = 0;
-  _private_tls_U32TO8(trail + 8, len);
+  private_tls_U32TO8(trail + 8, len);
   *(int *)(trail + 12) = 0;
 
-  _private_tls_poly1305_update(&aead_ctx, trail, 16);
-  _private_tls_poly1305_finish(&aead_ctx, out + len);
+  private_tls_poly1305_update(&aead_ctx, trail, 16);
+  private_tls_poly1305_finish(&aead_ctx, out + len);
 
   return len + POLY1305_TAGLEN;
 }
 
 typedef enum {
-  KEA_dhe_dss,
-  KEA_dhe_rsa,
-  KEA_dh_anon,
-  KEA_rsa,
-  KEA_dh_dss,
-  KEA_dh_rsa,
+    KEA_dhe_rsa,
   KEA_ec_diffie_hellman
 } KeyExchangeAlgorithm;
 
 typedef enum {
   rsa_sign = 1,
   dss_sign = 2,
-  rsa_fixed_dh = 3,
-  dss_fixed_dh = 4,
   rsa_ephemeral_dh_RESERVED = 5,
   dss_ephemeral_dh_RESERVED = 6,
-  fortezza_dms_RESERVED = 20,
-  ecdsa_sign = 64,
-  rsa_fixed_ecdh = 65,
-  ecdsa_fixed_ecdh = 66
+  ecdsa_sign = 64
 } TLSClientCertificateType;
 
 typedef enum {
@@ -936,7 +916,7 @@ typedef enum {
   ecdsa = 3
 } TLSSignatureAlgorithm;
 
-struct _private_OID_chain {
+struct private_OID_chain {
   void *top;
   unsigned char *oid;
 };
@@ -947,8 +927,7 @@ struct TLSCertificate {
   unsigned int key_algorithm;
   unsigned int ec_algorithm;
   unsigned char *exponent;
-  unsigned int exponent_len;
-  unsigned char *pk;
+    unsigned char *pk;
   unsigned int pk_len;
   unsigned char *priv;
   unsigned int priv_len;
@@ -980,12 +959,10 @@ struct TLSCertificate {
 
 typedef struct {
   union {
-    // symmetric_CBC aes_local;
     gcm_state aes_gcm_local;
     chacha_ctx chacha_local;
   } ctx_local;
   union {
-    // symmetric_CBC aes_remote;
     gcm_state aes_gcm_remote;
     chacha_ctx chacha_remote;
   } ctx_remote;
@@ -1265,8 +1242,7 @@ struct TLSContext {
   unsigned char client_verified;
   // handshake messages flags
   unsigned char hs_messages[11];
-  void *user_data;
-  struct TLSCertificate **root_certificates;
+    struct TLSCertificate **root_certificates;
   unsigned int root_count;
   unsigned char *finished_key;
   unsigned char *remote_finished_key;
@@ -1320,20 +1296,20 @@ static const unsigned char TLS_RSA_SIGN_SHA384_OID[] = {
     0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x0C, 0x00};
 static const unsigned char TLS_RSA_SIGN_SHA512_OID[] = {
     0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x0D, 0x00};
-
-static const unsigned char TLS_ECDSA_SIGN_SHA1_OID[] = {
-    0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x01, 0x05, 0x00, 0x00};
-static const unsigned char TLS_ECDSA_SIGN_SHA224_OID[] = {
-    0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x01, 0x05, 0x00, 0x00};
-
+//
+//static const unsigned char TLS_ECDSA_SIGN_SHA1_OID[] = {
+//    0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x01, 0x05, 0x00, 0x00};
+//static const unsigned char TLS_ECDSA_SIGN_SHA224_OID[] = {
+//    0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x01, 0x05, 0x00, 0x00};
+//
 // 1.2.840.10045.4.3.2
-static const unsigned char TLS_ECDSA_SIGN_SHA256_OID[] = {
-    0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x02, 0x05, 0x00, 0x00};
-
-static const unsigned char TLS_ECDSA_SIGN_SHA384_OID[] = {
-    0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x03, 0x05, 0x00, 0x00};
-static const unsigned char TLS_ECDSA_SIGN_SHA512_OID[] = {
-    0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x04, 0x05, 0x00, 0x00};
+//static const unsigned char TLS_ECDSA_SIGN_SHA256_OID[] = {
+//    0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x02, 0x05, 0x00, 0x00};
+//
+//static const unsigned char TLS_ECDSA_SIGN_SHA384_OID[] = {
+//    0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x03, 0x05, 0x00, 0x00};
+//static const unsigned char TLS_ECDSA_SIGN_SHA512_OID[] = {
+//    0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x04, 0x05, 0x00, 0x00};
 
 static const unsigned char TLS_EC_PUBLIC_KEY_OID[] = {0x2A, 0x86, 0x48, 0xCE,
                                                       0x3D, 0x02, 0x01, 0x00};
@@ -1460,21 +1436,12 @@ void dtls_reset_cookie_secret() {
   tls_random(dtls_secret, sizeof(dtls_secret));
 }
 
+
 void tls_init() {
   if (dependecies_loaded) return;
   DEBUG_PRINT("Initializing dependencies\n");
   dependecies_loaded = 1;
-#ifdef LTM_DESC
   ltc_mp = ltm_desc;
-#else
-#ifdef TFM_DESC
-  ltc_mp = tfm_desc;
-#else
-#ifdef GMP_DESC
-  ltc_mp = gmp_desc;
-#endif
-#endif
-#endif
   register_prng(&sprng_desc);
   register_hash(&sha256_desc);
   register_hash(&sha1_desc);
@@ -3556,7 +3523,6 @@ char *tls_certificate_to_string(struct TLSCertificate *cert, char *buffer,
 void tls_certificate_set_exponent(struct TLSCertificate *cert,
                                   const unsigned char *val, int len) {
   tls_certificate_set_copy(&cert->exponent, val, len);
-  if (cert->exponent) cert->exponent_len = len;
 }
 
 void tls_certificate_set_serial(struct TLSCertificate *cert,
@@ -4223,22 +4189,6 @@ int _private_tls_update_hash(struct TLSContext *context,
   return 0;
 }
 
-int _private_tls_change_hash_type(struct TLSContext *context) {
-  if (!context) return 0;
-  TLSHash *hash = _private_tls_ensure_hash(context);
-  if ((hash) && (hash->created) && (context->cached_handshake) &&
-      (context->cached_handshake_len)) {
-    _private_tls_destroy_hash(context);
-    int res = _private_tls_update_hash(context, context->cached_handshake,
-                                       context->cached_handshake_len);
-    TLS_FREE(context->cached_handshake);
-    context->cached_handshake = NULL;
-    context->cached_handshake_len = 0;
-    return res;
-  }
-  return 0;
-}
-
 int _private_tls_done_hash(struct TLSContext *context, unsigned char *hout) {
   if (!context) return 0;
 
@@ -4461,14 +4411,6 @@ int tls_established(struct TLSContext *context) {
   return 0;
 }
 
-void tls_read_clear(struct TLSContext *context) {
-  if ((context) && (context->application_buffer)) {
-    TLS_FREE(context->application_buffer);
-    context->application_buffer = NULL;
-    context->application_buffer_len = 0;
-  }
-}
-
 int tls_read(struct TLSContext *context, unsigned char *buf,
              unsigned int size) {
   if (!context) return -1;
@@ -4503,14 +4445,6 @@ struct TLSContext *tls_create_context(unsigned char is_server,
     context->version = version;
   }
   return context;
-}
-
-const struct ECCCurveParameters *tls_set_curve(
-    struct TLSContext *context, const struct ECCCurveParameters *curve) {
-  if (!context->is_server) return NULL;
-  const struct ECCCurveParameters *old_curve = context->curve;
-  context->curve = curve;
-  return old_curve;
 }
 
 struct TLSContext *tls_accept(struct TLSContext *context) {
@@ -4594,11 +4528,6 @@ int tls_set_default_dhe_pg(struct TLSContext *context, const char *p_hex_str,
   memcpy(context->default_dhe_g, g_hex_str, g_len);
   context->default_dhe_g[g_len] = 0;
   return 1;
-}
-
-const char *tls_alpn(struct TLSContext *context) {
-  if (!context) return NULL;
-  return context->negotiated_alpn;
 }
 
 //int tls_add_alpn(struct TLSContext *context, const char *alpn) {
@@ -6311,11 +6240,11 @@ int tls_parse_hello(struct TLSContext *context, const unsigned char *buf,
   }
   if (buf_len != res) return TLS_NEED_MORE_DATA;
   if ((context->is_server) && (cipher_buffer) && (cipher_len)) {
-    int cipher =
+    int chooseCipher =
         tls_choose_cipher(context, cipher_buffer, cipher_len, &scsv_set);
-    if (cipher < 0) {
+    if (chooseCipher < 0) {
       DEBUG_PRINT("NO COMMON CIPHERS\n");
-      return cipher;
+      return chooseCipher;
     }
     if ((downgraded) && (scsv_set)) {
       DEBUG_PRINT("NO DOWNGRADE (SCSV SET)\n");
@@ -6324,7 +6253,7 @@ int tls_parse_hello(struct TLSContext *context, const unsigned char *buf,
       context->critical_error = 1;
       return TLS_NOT_SAFE;
     }
-    context->cipher = cipher;
+    context->cipher = chooseCipher;
   }
   if (!context->is_server) {
     if (!tls_cipher_supported(context, cipher)) {
@@ -6439,10 +6368,10 @@ int tls_parse_certificate(struct TLSContext *context, const unsigned char *buf,
         if (remaining >= 2) {
           // ignore extensions
           remaining -= 2;
-          unsigned short size = ntohs(*(unsigned short *)&buf[res2]);
-          if ((size) && (size >= remaining)) {
-            res2 += size;
-            remaining -= size;
+          unsigned short sz = ntohs(*(unsigned short *)&buf[res2]);
+          if ((sz) && (sz >= remaining)) {
+            res2 += sz;
+            remaining -= sz;
           }
         }
       }
@@ -7649,23 +7578,23 @@ int tls_parse_message(struct TLSContext *context, unsigned char *buf,
       chacha20_poly1305_key(&context->crypto.ctx_remote.chacha_remote,
                             poly1305_key);
       poly1305_context ctx;
-      _private_tls_poly1305_init(&ctx, poly1305_key);
-      _private_tls_poly1305_update(&ctx, aad, aad_size);
+      private_tls_poly1305_init(&ctx, poly1305_key);
+      private_tls_poly1305_update(&ctx, aad, aad_size);
       static unsigned char zeropad[] = {0, 0, 0, 0, 0, 0, 0, 0,
                                         0, 0, 0, 0, 0, 0, 0};
       int rem = aad_size % 16;
-      if (rem) _private_tls_poly1305_update(&ctx, zeropad, 16 - rem);
-      _private_tls_poly1305_update(&ctx, buf + header_size, pt_length);
+      if (rem) private_tls_poly1305_update(&ctx, zeropad, 16 - rem);
+      private_tls_poly1305_update(&ctx, buf + header_size, pt_length);
       rem = pt_length % 16;
-      if (rem) _private_tls_poly1305_update(&ctx, zeropad, 16 - rem);
+      if (rem) private_tls_poly1305_update(&ctx, zeropad, 16 - rem);
 
-      _private_tls_U32TO8(&trail[0], aad_size == 5 ? 5 : 13);
+      private_tls_U32TO8(&trail[0], aad_size == 5 ? 5 : 13);
       *(int *)&trail[4] = 0;
-      _private_tls_U32TO8(&trail[8], pt_length);
+      private_tls_U32TO8(&trail[8], pt_length);
       *(int *)&trail[12] = 0;
 
-      _private_tls_poly1305_update(&ctx, trail, 16);
-      _private_tls_poly1305_finish(&ctx, mac_tag);
+      private_tls_poly1305_update(&ctx, trail, 16);
+      private_tls_poly1305_finish(&ctx, mac_tag);
       if (memcmp(mac_tag, buf + header_size + pt_length, POLY1305_TAGLEN)) {
         DEBUG_PRINT("INTEGRITY CHECK FAILED (msg length %i)\n", length);
         DEBUG_DUMP_HEX_LABEL("POLY1305 TAG RECEIVED",
@@ -8108,13 +8037,13 @@ int tls_certificate_chain_is_valid_root(struct TLSContext *context,
   return bad_certificate;
 }
 
-int _private_is_oid(struct _private_OID_chain *ref_chain,
+int _private_is_oid(struct private_OID_chain *ref_chain,
                     const unsigned char *looked_oid, int looked_oid_len) {
   while (ref_chain) {
     if (ref_chain->oid) {
       if (_is_oid2(ref_chain->oid, looked_oid, 16, looked_oid_len)) return 1;
     }
-    ref_chain = (struct _private_OID_chain *)ref_chain->top;
+    ref_chain = (struct private_OID_chain *)ref_chain->top;
   }
   return 0;
 }
@@ -8123,8 +8052,8 @@ int _private_asn1_parse(struct TLSContext *context, struct TLSCertificate *cert,
                         const unsigned char *buffer, unsigned int size,
                         int level, unsigned int *fields, unsigned char *has_key,
                         int client_cert, unsigned char *top_oid,
-                        struct _private_OID_chain *chain) {
-  struct _private_OID_chain local_chain;
+                        struct private_OID_chain *chain) {
+  struct private_OID_chain local_chain;
   local_chain.top = chain;
   unsigned int pos = 0;
   // X.690

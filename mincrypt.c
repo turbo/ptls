@@ -1,3 +1,7 @@
+#define LTM_NO_FILE
+
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "ArgumentSelectionDefects"
 #define CRYPT 0x0117
 #define LTC_NO_ROLC
 
@@ -2308,7 +2312,6 @@ typedef mp_digit mp_min_u32;
 
 #define MP_DIGIT_BIT DIGIT_BIT
 #define MP_MASK ((((mp_digit)1) << ((mp_digit)DIGIT_BIT)) - ((mp_digit)1))
-#define MP_DIGIT_MAX MP_MASK
 
 /* equalities */
 #define MP_LT -1 /* less than */
@@ -2321,7 +2324,6 @@ typedef mp_digit mp_min_u32;
 #define MP_OKAY 0 /* ok result */
 #define MP_MEM -2 /* out of mem */
 #define MP_VAL -3 /* invalid input */
-#define MP_RANGE MP_VAL
 
 #define MP_YES 1 /* yes response */
 #define MP_NO 0  /* no response */
@@ -2363,12 +2365,7 @@ typedef struct {
  * how many read [upto len] */
 typedef int ltm_prime_callback(unsigned char *dst, int len, void *dat);
 
-#define USED(m) ((m)->used)
 #define DIGIT(m, k) ((m)->dp[(k)])
-#define SIGN(m) ((m)->sign)
-
-/* error code to char* string */
-const char *mp_error_to_string(int code);
 
 /* ---> init and deinit bignum functions <--- */
 /* init a bignum */
@@ -2401,7 +2398,6 @@ int mp_init_size(mp_int *a, int size);
   ((((a)->used > 0) && (((a)->dp[0] & 1u) == 0u)) ? MP_YES : MP_NO)
 #define mp_isodd(a) \
   ((((a)->used > 0) && (((a)->dp[0] & 1u) == 1u)) ? MP_YES : MP_NO)
-#define mp_isneg(a) (((a)->sign != MP_ZPOS) ? MP_YES : MP_NO)
 
 /* set to zero */
 void mp_zero(mp_int *a);
@@ -2688,13 +2684,6 @@ int mp_prime_rabin_miller_trials(int size);
  */
 int mp_prime_is_prime(mp_int *a, int t, int *result);
 
-/* finds the next prime after the number "a" using "t" trials
- * of Miller-Rabin.
- *
- * bbs_style = 1 means the prime must be congruent to 3 mod 4
- */
-int mp_prime_next_prime(mp_int *a, int t, int bbs_style);
-
 /* makes a truly random prime of a given size (bytes),
  * call with bbs = 1 if you want it to be congruent to 3 mod 4
  *
@@ -2704,25 +2693,6 @@ int mp_prime_next_prime(mp_int *a, int t, int bbs_style);
  *
  * The prime generated will be larger than 2^(8*size).
  */
-#define mp_prime_random(a, t, size, bbs, cb, dat)                              \
-  mp_prime_random_ex(a, t, ((size)*8) + 1, (bbs == 1) ? LTM_PRIME_BBS : 0, cb, \
-                     dat)
-
-/* makes a truly random prime of a given size (bits),
- *
- * Flags are as follows:
- *
- *   LTM_PRIME_BBS      - make prime congruent to 3 mod 4
- *   LTM_PRIME_SAFE     - make sure (p-1)/2 is prime as well (implies
- * LTM_PRIME_BBS) LTM_PRIME_2MSB_ON  - make the 2nd highest bit one
- *
- * You have to supply a callback which fills in a buffer with random bytes.
- * "dat" is a parameter you can have passed to the callback (e.g. a state or
- * something).  This function doesn't use "dat" itself so it can be NULL
- *
- */
-int mp_prime_random_ex(mp_int *a, int t, int size, int flags,
-                       ltm_prime_callback cb, void *dat);
 
 /* ---> radix conversion <--- */
 int mp_count_bits(mp_int *a);
@@ -2730,33 +2700,13 @@ int mp_count_bits(mp_int *a);
 int mp_unsigned_bin_size(mp_int *a);
 int mp_read_unsigned_bin(mp_int *a, const unsigned char *b, int c);
 int mp_to_unsigned_bin(mp_int *a, unsigned char *b);
-int mp_to_unsigned_bin_n(mp_int *a, unsigned char *b, unsigned long *outlen);
-
-int mp_signed_bin_size(mp_int *a);
-int mp_read_signed_bin(mp_int *a, const unsigned char *b, int c);
-int mp_to_signed_bin(mp_int *a, unsigned char *b);
-int mp_to_signed_bin_n(mp_int *a, unsigned char *b, unsigned long *outlen);
 
 int mp_read_radix(mp_int *a, const char *str, int radix);
 int mp_toradix(mp_int *a, char *str, int radix);
-int mp_toradix_n(mp_int *a, char *str, int radix, int maxlen);
+
 int mp_radix_size(mp_int *a, int radix, int *size);
 
-#ifndef LTM_NO_FILE
-int mp_fread(mp_int *a, int radix, FILE *stream);
-int mp_fwrite(mp_int *a, int radix, FILE *stream);
-#endif
 
-#define mp_read_raw(mp, str, len) mp_read_signed_bin((mp), (str), (len))
-#define mp_raw_size(mp) mp_signed_bin_size(mp)
-#define mp_toraw(mp, str) mp_to_signed_bin((mp), (str))
-#define mp_read_mag(mp, str, len) mp_read_unsigned_bin((mp), (str), (len))
-#define mp_mag_size(mp) mp_unsigned_bin_size(mp)
-#define mp_tomag(mp, str) mp_to_unsigned_bin((mp), (str))
-
-#define mp_tobinary(M, S) mp_toradix((M), (S), 2)
-#define mp_tooctal(M, S) mp_toradix((M), (S), 8)
-#define mp_todecimal(M, S) mp_toradix((M), (S), 10)
 #define mp_tohex(M, S) mp_toradix((M), (S), 16)
 
 #ifdef __cplusplus
@@ -6489,7 +6439,6 @@ int mp_init_copy(mp_int *a, mp_int *b) {
  *
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
-#include <stdarg.h>
 
 int mp_init_multi(mp_int *mp, ...) {
   mp_err res = MP_OKAY; /* Assume ok until proven otherwise */
@@ -8764,154 +8713,6 @@ LBL_N1:
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* finds the next prime after the number "a" using "t" trials
- * of Miller-Rabin.
- *
- * bbs_style = 1 means the prime must be congruent to 3 mod 4
- */
-int mp_prime_next_prime(mp_int *a, int t, int bbs_style) {
-  int err, res = MP_NO, x, y;
-  mp_digit res_tab[PRIME_SIZE], step, kstep;
-  mp_int b;
-
-  /* ensure t is valid */
-  if ((t <= 0) || (t > PRIME_SIZE)) {
-    return MP_VAL;
-  }
-
-  /* force positive */
-  a->sign = MP_ZPOS;
-
-  /* simple algo if a is less than the largest prime in the table */
-  if (mp_cmp_d(a, ltm_prime_tab[PRIME_SIZE - 1]) == MP_LT) {
-    /* find which prime it is bigger than */
-    for (x = PRIME_SIZE - 2; x >= 0; x--) {
-      if (mp_cmp_d(a, ltm_prime_tab[x]) != MP_LT) {
-        if (bbs_style == 1) {
-          /* ok we found a prime smaller or
-           * equal [so the next is larger]
-           *
-           * however, the prime must be
-           * congruent to 3 mod 4
-           */
-          if ((ltm_prime_tab[x + 1] & 3) != 3) {
-            /* scan upwards for a prime congruent to 3 mod 4 */
-            for (y = x + 1; y < PRIME_SIZE; y++) {
-              if ((ltm_prime_tab[y] & 3) == 3) {
-                mp_set(a, ltm_prime_tab[y]);
-                return MP_OKAY;
-              }
-            }
-          }
-        } else {
-          mp_set(a, ltm_prime_tab[x + 1]);
-          return MP_OKAY;
-        }
-      }
-    }
-    /* at this point a maybe 1 */
-    if (mp_cmp_d(a, 1) == MP_EQ) {
-      mp_set(a, 2);
-      return MP_OKAY;
-    }
-    /* fall through to the sieve */
-  }
-
-  /* generate a prime congruent to 3 mod 4 or 1/3 mod 4? */
-  if (bbs_style == 1) {
-    kstep = 4;
-  } else {
-    kstep = 2;
-  }
-
-  /* at this point we will use a combination of a sieve and Miller-Rabin */
-
-  if (bbs_style == 1) {
-    /* if a mod 4 != 3 subtract the correct value to make it so */
-    if ((a->dp[0] & 3) != 3) {
-      if ((err = mp_sub_d(a, (a->dp[0] & 3) + 1, a)) != MP_OKAY) {
-        return err;
-      }
-    }
-  } else {
-    if (mp_iseven(a) == MP_YES) {
-      /* force odd */
-      if ((err = mp_sub_d(a, 1, a)) != MP_OKAY) {
-        return err;
-      }
-    }
-  }
-
-  /* generate the restable */
-  for (x = 1; x < PRIME_SIZE; x++) {
-    if ((err = mp_mod_d(a, ltm_prime_tab[x], res_tab + x)) != MP_OKAY) {
-      return err;
-    }
-  }
-
-  /* init temp used for Miller-Rabin Testing */
-  if ((err = mp_init(&b)) != MP_OKAY) {
-    return err;
-  }
-
-  for (;;) {
-    /* skip to the next non-trivially divisible candidate */
-    step = 0;
-    do {
-      /* y == 1 if any residue was zero [e.g. cannot be prime] */
-      y = 0;
-
-      /* increase step to next candidate */
-      step += kstep;
-
-      /* compute the new residue without using division */
-      for (x = 1; x < PRIME_SIZE; x++) {
-        /* add the step to each residue */
-        res_tab[x] += kstep;
-
-        /* subtract the modulus [instead of using division] */
-        if (res_tab[x] >= ltm_prime_tab[x]) {
-          res_tab[x] -= ltm_prime_tab[x];
-        }
-
-        /* set flag if zero */
-        if (res_tab[x] == 0) {
-          y = 1;
-        }
-      }
-    } while ((y == 1) && (step < ((((mp_digit)1) << DIGIT_BIT) - kstep)));
-
-    /* add the step */
-    if ((err = mp_add_d(a, step, a)) != MP_OKAY) {
-      goto LBL_ERR;
-    }
-
-    /* if didn't pass sieve and step == MAX then skip test */
-    if ((y == 1) && (step >= ((((mp_digit)1) << DIGIT_BIT) - kstep))) {
-      continue;
-    }
-
-    /* is this prime? */
-    for (x = 0; x < t; x++) {
-      mp_set(&b, ltm_prime_tab[x]);
-      if ((err = mp_prime_miller_rabin(a, &b, &res)) != MP_OKAY) {
-        goto LBL_ERR;
-      }
-      if (res == MP_NO) {
-        break;
-      }
-    }
-
-    if (res == MP_YES) {
-      break;
-    }
-  }
-
-  err = MP_OKAY;
-LBL_ERR:
-  mp_clear(&b);
-  return err;
-}
 #endif
 
 /* $Source$ */
@@ -8990,107 +8791,6 @@ int mp_prime_rabin_miller_trials(int size) {
  *
  */
 
-/* This is possibly the mother of all prime generation functions, muahahahahaha!
- */
-int mp_prime_random_ex(mp_int *a, int t, int size, int flags,
-                       ltm_prime_callback cb, void *dat) {
-  unsigned char *tmp, maskAND, maskOR_msb, maskOR_lsb;
-  int res, err, bsize, maskOR_msb_offset;
-
-  /* sanity check the input */
-  if ((size <= 1) || (t <= 0)) {
-    return MP_VAL;
-  }
-
-  /* LTM_PRIME_SAFE implies LTM_PRIME_BBS */
-  if ((flags & LTM_PRIME_SAFE) != 0) {
-    flags |= LTM_PRIME_BBS;
-  }
-
-  /* calc the byte size */
-  bsize = (size >> 3) + ((size & 7) ? 1 : 0);
-
-  /* we need a buffer of bsize bytes */
-  tmp = OPT_CAST(unsigned char) XMALLOC(bsize);
-  if (tmp == NULL) {
-    return MP_MEM;
-  }
-
-  /* calc the maskAND value for the MSbyte*/
-  maskAND = ((size & 7) == 0) ? 0xFF : (0xFF >> (8 - (size & 7)));
-
-  /* calc the maskOR_msb */
-  maskOR_msb = 0;
-  maskOR_msb_offset = ((size & 7) == 1) ? 1 : 0;
-  if ((flags & LTM_PRIME_2MSB_ON) != 0) {
-    maskOR_msb |= 0x80 >> ((9 - size) & 7);
-  }
-
-  /* get the maskOR_lsb */
-  maskOR_lsb = 1;
-  if ((flags & LTM_PRIME_BBS) != 0) {
-    maskOR_lsb |= 3;
-  }
-
-  do {
-    /* read the bytes */
-    if (cb(tmp, bsize, dat) != bsize) {
-      err = MP_VAL;
-      goto error;
-    }
-
-    /* work over the MSbyte */
-    tmp[0] &= maskAND;
-    tmp[0] |= 1 << ((size - 1) & 7);
-
-    /* mix in the maskORs */
-    tmp[maskOR_msb_offset] |= maskOR_msb;
-    tmp[bsize - 1] |= maskOR_lsb;
-
-    /* read it in */
-    if ((err = mp_read_unsigned_bin(a, tmp, bsize)) != MP_OKAY) {
-      goto error;
-    }
-
-    /* is it prime? */
-    if ((err = mp_prime_is_prime(a, t, &res)) != MP_OKAY) {
-      goto error;
-    }
-    if (res == MP_NO) {
-      continue;
-    }
-
-    if ((flags & LTM_PRIME_SAFE) != 0) {
-      /* see if (a-1)/2 is prime */
-      if ((err = mp_sub_d(a, 1, a)) != MP_OKAY) {
-        goto error;
-      }
-      if ((err = mp_div_2(a, a)) != MP_OKAY) {
-        goto error;
-      }
-
-      /* is it prime? */
-      if ((err = mp_prime_is_prime(a, t, &res)) != MP_OKAY) {
-        goto error;
-      }
-    }
-  } while (res == MP_NO);
-
-  if ((flags & LTM_PRIME_SAFE) != 0) {
-    /* restore a to the original value */
-    if ((err = mp_mul_2(a, a)) != MP_OKAY) {
-      goto error;
-    }
-    if ((err = mp_add_d(a, 1, a)) != MP_OKAY) {
-      goto error;
-    }
-  }
-
-  err = MP_OKAY;
-error:
-  XFREE(tmp);
-  return err;
-}
 #endif
 
 /* $Source$ */
@@ -9356,24 +9056,6 @@ int mp_read_radix(mp_int *a, const char *str, int radix) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* read signed bin, big endian, first byte is 0==positive or 1==negative */
-int mp_read_signed_bin(mp_int *a, const unsigned char *b, int c) {
-  int res;
-
-  /* read magnitude */
-  if ((res = mp_read_unsigned_bin(a, b + 1, c - 1)) != MP_OKAY) {
-    return res;
-  }
-
-  /* first byte is 0 for positive, non-zero for negative */
-  if (b[0] == 0) {
-    a->sign = MP_ZPOS;
-  } else {
-    a->sign = MP_NEG;
-  }
-
-  return MP_OKAY;
-}
 #endif
 
 /* $Source$ */
@@ -10134,8 +9816,6 @@ int mp_shrink(mp_int *a) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* get the size for an signed equivalent */
-int mp_signed_bin_size(mp_int *a) { return 1 + mp_unsigned_bin_size(a); }
 #endif
 
 /* $Source$ */
@@ -10653,16 +10333,6 @@ int mp_submod(mp_int *a, mp_int *b, mp_int *c, mp_int *d) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* store in signed [big endian] format */
-int mp_to_signed_bin(mp_int *a, unsigned char *b) {
-  int res;
-
-  if ((res = mp_to_unsigned_bin(a, b + 1)) != MP_OKAY) {
-    return res;
-  }
-  b[0] = (a->sign == MP_ZPOS) ? (unsigned char)0 : (unsigned char)1;
-  return MP_OKAY;
-}
 #endif
 
 /* $Source$ */
@@ -10686,14 +10356,6 @@ int mp_to_signed_bin(mp_int *a, unsigned char *b) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* store in signed [big endian] format */
-int mp_to_signed_bin_n(mp_int *a, unsigned char *b, unsigned long *outlen) {
-  if (*outlen < (unsigned long)mp_signed_bin_size(a)) {
-    return MP_VAL;
-  }
-  *outlen = mp_signed_bin_size(a);
-  return mp_to_signed_bin(a, b);
-}
 #endif
 
 /* $Source$ */
@@ -12681,14 +12343,8 @@ void crypt_argchk(char *v, char *s, int d) {
 
 #ifndef TOMCRYPT_H_
 #define TOMCRYPT_H_
-#define USE_LTM
 #define LTM_DESC
 #define LTC_SHA1
-#include <assert.h>
-#include <ctype.h>
-#include <limits.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
@@ -14716,7 +14372,7 @@ int ctr_encrypt(const unsigned char *pt, unsigned char *ct, unsigned long len,
                 symmetric_CTR *ctr);
 int ctr_decrypt(const unsigned char *ct, unsigned char *pt, unsigned long len,
                 symmetric_CTR *ctr);
-int ctr_getiv(unsigned char *IV, unsigned long *len, symmetric_CTR *ctr);
+
 int ctr_setiv(const unsigned char *IV, unsigned long len, symmetric_CTR *ctr);
 int ctr_done(symmetric_CTR *ctr);
 int ctr_test(void);
@@ -16308,7 +15964,6 @@ int der_printable_value_decode(int v);
      defined(_WCHAR_T) || defined(_WCHAR_T_DEFINED) ||                         \
      defined(__WCHAR_TYPE__)) &&                                               \
     !defined(LTC_NO_WCHAR)
-#include <wchar.h>
 #else
 typedef ulong32 wchar_t;
 #endif
@@ -16902,7 +16557,6 @@ int crypt_fsa(void *mp, ...);
 /* ARGTYPE is defined in mycrypt_cfg.h */
 #if ARGTYPE == 0
 
-#include <signal.h>
 
 /* this is the default LibTomCrypt macro  */
 void crypt_argchk(char *v, char *s, int d);
@@ -17453,7 +17107,6 @@ int find_prng(const char *name) {
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-#include <stdarg.h>
 
 /**
    @file crypt_fsa.c
@@ -18765,7 +18418,6 @@ int der_decode_printable_string(const unsigned char *in, unsigned long inlen,
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-#include <stdarg.h>
 
 /**
    @file der_decode_sequence_ex.c
@@ -18788,6 +18440,7 @@ int der_decode_sequence_ex(const unsigned char *in, unsigned long inlen,
                            int ordered) {
   int err, type;
   unsigned long size, x, y, z, i, blksize;
+    blksize = 0;
   void *data;
 
   LTC_ARGCHK(in != NULL);
@@ -19491,7 +19144,6 @@ error:
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-#include <stdarg.h>
 
 /**
    @file der_decode_sequence_multi.c
@@ -20594,7 +20246,6 @@ int der_encode_printable_string(const unsigned char *in, unsigned long inlen,
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-#include <stdarg.h>
 
 /**
    @file der_encode_sequence_ex.c
@@ -20938,7 +20589,6 @@ LBL_ERR:
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-#include <stdarg.h>
 
 /**
    @file der_encode_sequence_multi.c
@@ -24594,7 +24244,6 @@ LBL_ERR:
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-#include <stdarg.h>
 
 /**
    @file hash_memory_multi.c
@@ -26716,7 +26365,6 @@ const ltc_math_descriptor ltm_desc = {
  */
 
 #ifdef MPI
-#include <stdarg.h>
 
 int ltc_init_multi(void **a, ...) {
   void **cur = a;
@@ -28030,9 +27678,7 @@ static unsigned long rng_ansic(unsigned char *buf, unsigned long len,
   clock_t t1;
   int l, acc, bits, a, b;
 
-  if ((XCLOCKS_PER_SEC < 100) || (XCLOCKS_PER_SEC > 10000)) {
     return 0;
-  }
 
   l = len;
   bits = 8;
@@ -32940,9 +32586,6 @@ int gcm_init(gcm_state *gcm, int cipher, const unsigned char *key, int keylen) {
   LTC_ARGCHK(key != NULL);
 
 #ifdef LTC_FAST
-  if (16 % sizeof(LTC_FAST_TYPE)) {
-    return CRYPT_INVALID_ARG;
-  }
 #endif
 
   /* is cipher valid? */
@@ -34390,29 +34033,9 @@ int ctr_setiv(const unsigned char *IV, unsigned long len, symmetric_CTR *ctr) {
 
 #ifdef LTC_CTR_MODE
 
-/**
-   Get the current initial vector
-   @param IV   [out] The destination of the initial vector
-   @param len  [in/out]  The max size and resulting size of the initial vector
-   @param ctr  The CTR state
-   @return CRYPT_OK if successful
-*/
-int ctr_getiv(unsigned char *IV, unsigned long *len, symmetric_CTR *ctr) {
-  LTC_ARGCHK(IV != NULL);
-  LTC_ARGCHK(len != NULL);
-  LTC_ARGCHK(ctr != NULL);
-  if ((unsigned long)ctr->blocklen > *len) {
-    *len = ctr->blocklen;
-    return CRYPT_BUFFER_OVERFLOW;
-  }
-  XMEMCPY(IV, ctr->ctr, ctr->blocklen);
-  *len = ctr->blocklen;
-
-  return CRYPT_OK;
-}
-
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_getiv.c,v $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
+
