@@ -28,15 +28,9 @@
 #include <stdlib.h>
 
 #if !(defined(LTM1) && defined(LTM2) && defined(LTM3))
-#if defined(LTM2)
-#define LTM3
-#endif
-#if defined(LTM1)
-#define LTM2
-#endif
+
 #define LTM1
 
-#if defined(LTM_ALL)
 #define BN_ERROR_C
 #define BN_FAST_MP_INVMOD_C
 #define BN_FAST_MP_MONTGOMERY_REDUCE_C
@@ -165,36 +159,29 @@
 #define BN_S_MP_SQR_C
 #define BN_S_MP_SUB_C
 #define BNCORE_C
-#endif
 
 #if defined(BN_ERROR_C)
-#define BN_MP_ERROR_TO_STRING_C
 #endif
 
 #if defined(BN_FAST_MP_INVMOD_C)
-#define BN_MP_ISEVEN_C
 #define BN_MP_INIT_MULTI_C
 #define BN_MP_COPY_C
 #define BN_MP_MOD_C
 #define BN_MP_SET_C
 #define BN_MP_DIV_2_C
-#define BN_MP_ISODD_C
 #define BN_MP_SUB_C
 #define BN_MP_CMP_C
-#define BN_MP_ISZERO_C
 #define BN_MP_CMP_D_C
 #define BN_MP_ADD_C
 #define BN_MP_EXCH_C
 #define BN_MP_CLEAR_MULTI_C
 #endif
 
-#if defined(BN_FAST_MP_MONTGOMERY_REDUCE_C)
 #define BN_MP_GROW_C
 #define BN_MP_RSHD_C
 #define BN_MP_CLAMP_C
 #define BN_MP_CMP_MAG_C
 #define BN_S_MP_SUB_C
-#endif
 
 #if defined(BN_FAST_S_MP_MUL_DIGS_C)
 #define BN_MP_GROW_C
@@ -267,7 +254,6 @@
 #endif
 
 #if defined(BN_MP_CNT_LSB_C)
-#define BN_MP_ISZERO_C
 #endif
 
 #if defined(BN_MP_COPY_C)
@@ -278,7 +264,6 @@
 #endif
 
 #if defined(BN_MP_DIV_C)
-#define BN_MP_ISZERO_C
 #define BN_MP_CMP_MAG_C
 #define BN_MP_COPY_C
 #define BN_MP_ZERO_C
@@ -327,7 +312,6 @@
 #endif
 
 #if defined(BN_MP_DIV_D_C)
-#define BN_MP_ISZERO_C
 #define BN_MP_COPY_C
 #define BN_MP_DIV_2D_C
 #define BN_MP_DIV_3_C
@@ -382,7 +366,6 @@
 #define BN_S_MP_EXPTMOD_C
 #define BN_MP_DR_IS_MODULUS_C
 #define BN_MP_REDUCE_IS_2K_C
-#define BN_MP_ISODD_C
 #define BN_MP_EXPTMOD_FAST_C
 #endif
 
@@ -411,7 +394,6 @@
 #define BN_MP_INIT_MULTI_C
 #define BN_MP_SET_C
 #define BN_MP_COPY_C
-#define BN_MP_ISZERO_C
 #define BN_MP_DIV_C
 #define BN_MP_MUL_C
 #define BN_MP_SUB_C
@@ -422,7 +404,6 @@
 
 #if defined(BN_MP_FREAD_C)
 #define BN_MP_ZERO_C
-#define BN_MP_S_RMAP_C
 #define BN_MP_MUL_D_C
 #define BN_MP_ADD_D_C
 #define BN_MP_CMP_D_C
@@ -434,7 +415,6 @@
 #endif
 
 #if defined(BN_MP_GCD_C)
-#define BN_MP_ISZERO_C
 #define BN_MP_ABS_C
 #define BN_MP_INIT_COPY_C
 #define BN_MP_CNT_LSB_C
@@ -473,7 +453,6 @@
 #endif
 
 #if defined(BN_MP_INIT_MULTI_C)
-#define BN_MP_ERR_C
 #define BN_MP_INIT_C
 #define BN_MP_CLEAR_C
 #endif
@@ -493,21 +472,16 @@
 #endif
 
 #if defined(BN_MP_INVMOD_C)
-#define BN_MP_ISZERO_C
-#define BN_MP_ISODD_C
 #define BN_FAST_MP_INVMOD_C
 #define BN_MP_INVMOD_SLOW_C
 #endif
 
 #if defined(BN_MP_INVMOD_SLOW_C)
-#define BN_MP_ISZERO_C
 #define BN_MP_INIT_MULTI_C
 #define BN_MP_MOD_C
 #define BN_MP_COPY_C
-#define BN_MP_ISEVEN_C
 #define BN_MP_SET_C
 #define BN_MP_DIV_2_C
-#define BN_MP_ISODD_C
 #define BN_MP_ADD_C
 #define BN_MP_SUB_C
 #define BN_MP_CMP_C
@@ -530,7 +504,6 @@
 
 #if defined(BN_MP_JACOBI_C)
 #define BN_MP_CMP_D_C
-#define BN_MP_ISZERO_C
 #define BN_MP_INIT_COPY_C
 #define BN_MP_CNT_LSB_C
 #define BN_MP_DIV_2D_C
@@ -578,7 +551,6 @@
 #define BN_MP_INIT_C
 #define BN_MP_DIV_C
 #define BN_MP_CLEAR_C
-#define BN_MP_ISZERO_C
 #define BN_MP_EXCH_C
 #define BN_MP_ADD_C
 #endif
@@ -593,32 +565,25 @@
 #define BN_MP_DIV_D_C
 #endif
 
-#if defined(BN_MP_MONTGOMERY_CALC_NORMALIZATION_C)
 #define BN_MP_COUNT_BITS_C
 #define BN_MP_2EXPT_C
 #define BN_MP_SET_C
 #define BN_MP_MUL_2_C
 #define BN_MP_CMP_MAG_C
 #define BN_S_MP_SUB_C
-#endif
 
-#if defined(BN_MP_MONTGOMERY_REDUCE_C)
 #define BN_FAST_MP_MONTGOMERY_REDUCE_C
 #define BN_MP_GROW_C
 #define BN_MP_CLAMP_C
 #define BN_MP_RSHD_C
 #define BN_MP_CMP_MAG_C
 #define BN_S_MP_SUB_C
-#endif
 
-#if defined(BN_MP_MONTGOMERY_SETUP_C)
-#endif
 
 #if defined(BN_MP_MUL_C)
 #define BN_MP_TOOM_MUL_C
 #define BN_MP_KARATSUBA_MUL_C
 #define BN_FAST_S_MP_MUL_DIGS_C
-#define BN_S_MP_MUL_C
 #define BN_S_MP_MUL_DIGS_C
 #endif
 
@@ -666,7 +631,6 @@
 
 #if defined(BN_MP_NEG_C)
 #define BN_MP_COPY_C
-#define BN_MP_ISZERO_C
 #endif
 
 #if defined(BN_MP_OR_C)
@@ -713,7 +677,6 @@
 #define BN_MP_CMP_D_C
 #define BN_MP_SET_C
 #define BN_MP_SUB_D_C
-#define BN_MP_ISEVEN_C
 #define BN_MP_MOD_D_C
 #define BN_MP_INIT_C
 #define BN_MP_ADD_D_C
@@ -734,15 +697,10 @@
 #endif
 
 #if defined(BN_MP_RADIX_SIZE_C)
-#define BN_MP_ISZERO_C
 #define BN_MP_COUNT_BITS_C
 #define BN_MP_INIT_COPY_C
 #define BN_MP_DIV_D_C
 #define BN_MP_CLEAR_C
-#endif
-
-#if defined(BN_MP_RADIX_SMAP_C)
-#define BN_MP_S_RMAP_C
 #endif
 
 #if defined(BN_MP_RAND_C)
@@ -753,10 +711,8 @@
 
 #if defined(BN_MP_READ_RADIX_C)
 #define BN_MP_ZERO_C
-#define BN_MP_S_RMAP_C
 #define BN_MP_MUL_D_C
 #define BN_MP_ADD_D_C
-#define BN_MP_ISZERO_C
 #endif
 
 #if defined(BN_MP_READ_SIGNED_BIN_C)
@@ -883,7 +839,6 @@
 
 #if defined(BN_MP_SQRT_C)
 #define BN_MP_N_ROOT_C
-#define BN_MP_ISZERO_C
 #define BN_MP_ZERO_C
 #define BN_MP_INIT_COPY_C
 #define BN_MP_RSHD_C
@@ -906,7 +861,6 @@
 #define BN_MP_EXPTMOD_C
 #define BN_MP_COPY_C
 #define BN_MP_SUB_D_C
-#define BN_MP_ISEVEN_C
 #define BN_MP_SET_INT_C
 #define BN_MP_SQRMOD_C
 #define BN_MP_MULMOD_C
@@ -944,7 +898,6 @@
 
 #if defined(BN_MP_TO_UNSIGNED_BIN_C)
 #define BN_MP_INIT_COPY_C
-#define BN_MP_ISZERO_C
 #define BN_MP_DIV_2D_C
 #define BN_MP_CLEAR_C
 #endif
@@ -989,19 +942,15 @@
 #endif
 
 #if defined(BN_MP_TORADIX_C)
-#define BN_MP_ISZERO_C
 #define BN_MP_INIT_COPY_C
 #define BN_MP_DIV_D_C
 #define BN_MP_CLEAR_C
-#define BN_MP_S_RMAP_C
 #endif
 
 #if defined(BN_MP_TORADIX_N_C)
-#define BN_MP_ISZERO_C
 #define BN_MP_INIT_COPY_C
 #define BN_MP_DIV_D_C
 #define BN_MP_CLEAR_C
-#define BN_MP_S_RMAP_C
 #endif
 
 #if defined(BN_MP_UNSIGNED_BIN_SIZE_C)
@@ -1082,7 +1031,6 @@
 /* super class file for PK algos */
 
 /* default ... include all MPI */
-#define LTM_ALL
 
 /* RSA only (does not support DH/DSA/ECC) */
 /* #define SC_RSA_1 */
@@ -1094,62 +1042,6 @@
  */
 
 /* Works for RSA only, mpi.o is 68KiB */
-#ifdef SC_RSA_1
-#define BN_MP_SHRINK_C
-#define BN_MP_LCM_C
-#define BN_MP_PRIME_RANDOM_EX_C
-#define BN_MP_INVMOD_C
-#define BN_MP_GCD_C
-#define BN_MP_MOD_C
-#define BN_MP_MULMOD_C
-#define BN_MP_ADDMOD_C
-#define BN_MP_EXPTMOD_C
-#define BN_MP_SET_INT_C
-#define BN_MP_INIT_MULTI_C
-#define BN_MP_CLEAR_MULTI_C
-#define BN_MP_UNSIGNED_BIN_SIZE_C
-#define BN_MP_TO_UNSIGNED_BIN_C
-#define BN_MP_MOD_D_C
-#define BN_MP_PRIME_RABIN_MILLER_TRIALS_C
-#define BN_REVERSE_C
-#define BN_PRIME_TAB_C
-
-/* other modifiers */
-#define BN_MP_DIV_SMALL /* Slower division, not critical */
-
-/* here we are on the last pass so we turn things off.  The functions classes
- * are still there but we remove them specifically from the build.  This also
- * invokes tweaks in functions like removing support for even moduli, etc...
- */
-#ifdef LTM_LAST
-#undef BN_MP_TOOM_MUL_C
-#undef BN_MP_TOOM_SQR_C
-#undef BN_MP_KARATSUBA_MUL_C
-#undef BN_MP_KARATSUBA_SQR_C
-#undef BN_MP_REDUCE_C
-#undef BN_MP_REDUCE_SETUP_C
-#undef BN_MP_DR_IS_MODULUS_C
-#undef BN_MP_DR_SETUP_C
-#undef BN_MP_DR_REDUCE_C
-#undef BN_MP_REDUCE_IS_2K_C
-#undef BN_MP_REDUCE_2K_SETUP_C
-#undef BN_MP_REDUCE_2K_C
-#undef BN_S_MP_EXPTMOD_C
-#undef BN_MP_DIV_3_C
-#undef BN_S_MP_MUL_HIGH_DIGS_C
-#undef BN_FAST_S_MP_MUL_HIGH_DIGS_C
-#undef BN_FAST_MP_INVMOD_C
-
-/* To safely undefine these you have to make sure your RSA key won't exceed the
- * Comba threshold which is roughly 255 digits [7140 bits for 32-bit machines,
- * 15300 bits for 64-bit machines] which means roughly speaking you can handle
- * upto 2536-bit RSA keys with these defined without trouble.
- */
-#undef BN_S_MP_MUL_DIGS_C
-#undef BN_S_MP_SQR_C
-#undef BN_MP_MONTGOMERY_REDUCE_C
-#endif
-#endif
 
 /* $Source$ */
 /* $Revision$ */
@@ -1163,7 +1055,6 @@
 #endif
 #define LTM1
 
-#if defined(LTM_ALL)
 #define BN_ERROR_C
 #define BN_FAST_MP_INVMOD_C
 #define BN_FAST_MP_MONTGOMERY_REDUCE_C
@@ -1292,36 +1183,29 @@
 #define BN_S_MP_SQR_C
 #define BN_S_MP_SUB_C
 #define BNCORE_C
-#endif
 
 #if defined(BN_ERROR_C)
-#define BN_MP_ERROR_TO_STRING_C
 #endif
 
 #if defined(BN_FAST_MP_INVMOD_C)
-#define BN_MP_ISEVEN_C
 #define BN_MP_INIT_MULTI_C
 #define BN_MP_COPY_C
 #define BN_MP_MOD_C
 #define BN_MP_SET_C
 #define BN_MP_DIV_2_C
-#define BN_MP_ISODD_C
 #define BN_MP_SUB_C
 #define BN_MP_CMP_C
-#define BN_MP_ISZERO_C
 #define BN_MP_CMP_D_C
 #define BN_MP_ADD_C
 #define BN_MP_EXCH_C
 #define BN_MP_CLEAR_MULTI_C
 #endif
 
-#if defined(BN_FAST_MP_MONTGOMERY_REDUCE_C)
 #define BN_MP_GROW_C
 #define BN_MP_RSHD_C
 #define BN_MP_CLAMP_C
 #define BN_MP_CMP_MAG_C
 #define BN_S_MP_SUB_C
-#endif
 
 #if defined(BN_FAST_S_MP_MUL_DIGS_C)
 #define BN_MP_GROW_C
@@ -1393,10 +1277,6 @@
 #if defined(BN_MP_CMP_MAG_C)
 #endif
 
-#if defined(BN_MP_CNT_LSB_C)
-#define BN_MP_ISZERO_C
-#endif
-
 #if defined(BN_MP_COPY_C)
 #define BN_MP_GROW_C
 #endif
@@ -1405,7 +1285,6 @@
 #endif
 
 #if defined(BN_MP_DIV_C)
-#define BN_MP_ISZERO_C
 #define BN_MP_CMP_MAG_C
 #define BN_MP_COPY_C
 #define BN_MP_ZERO_C
@@ -1454,7 +1333,6 @@
 #endif
 
 #if defined(BN_MP_DIV_D_C)
-#define BN_MP_ISZERO_C
 #define BN_MP_COPY_C
 #define BN_MP_DIV_2D_C
 #define BN_MP_DIV_3_C
@@ -1509,7 +1387,6 @@
 #define BN_S_MP_EXPTMOD_C
 #define BN_MP_DR_IS_MODULUS_C
 #define BN_MP_REDUCE_IS_2K_C
-#define BN_MP_ISODD_C
 #define BN_MP_EXPTMOD_FAST_C
 #endif
 
@@ -1538,7 +1415,6 @@
 #define BN_MP_INIT_MULTI_C
 #define BN_MP_SET_C
 #define BN_MP_COPY_C
-#define BN_MP_ISZERO_C
 #define BN_MP_DIV_C
 #define BN_MP_MUL_C
 #define BN_MP_SUB_C
@@ -1549,7 +1425,6 @@
 
 #if defined(BN_MP_FREAD_C)
 #define BN_MP_ZERO_C
-#define BN_MP_S_RMAP_C
 #define BN_MP_MUL_D_C
 #define BN_MP_ADD_D_C
 #define BN_MP_CMP_D_C
@@ -1561,7 +1436,6 @@
 #endif
 
 #if defined(BN_MP_GCD_C)
-#define BN_MP_ISZERO_C
 #define BN_MP_ABS_C
 #define BN_MP_INIT_COPY_C
 #define BN_MP_CNT_LSB_C
@@ -1600,7 +1474,6 @@
 #endif
 
 #if defined(BN_MP_INIT_MULTI_C)
-#define BN_MP_ERR_C
 #define BN_MP_INIT_C
 #define BN_MP_CLEAR_C
 #endif
@@ -1620,21 +1493,16 @@
 #endif
 
 #if defined(BN_MP_INVMOD_C)
-#define BN_MP_ISZERO_C
-#define BN_MP_ISODD_C
 #define BN_FAST_MP_INVMOD_C
 #define BN_MP_INVMOD_SLOW_C
 #endif
 
 #if defined(BN_MP_INVMOD_SLOW_C)
-#define BN_MP_ISZERO_C
 #define BN_MP_INIT_MULTI_C
 #define BN_MP_MOD_C
 #define BN_MP_COPY_C
-#define BN_MP_ISEVEN_C
 #define BN_MP_SET_C
 #define BN_MP_DIV_2_C
-#define BN_MP_ISODD_C
 #define BN_MP_ADD_C
 #define BN_MP_SUB_C
 #define BN_MP_CMP_C
@@ -1657,7 +1525,6 @@
 
 #if defined(BN_MP_JACOBI_C)
 #define BN_MP_CMP_D_C
-#define BN_MP_ISZERO_C
 #define BN_MP_INIT_COPY_C
 #define BN_MP_CNT_LSB_C
 #define BN_MP_DIV_2D_C
@@ -1705,7 +1572,6 @@
 #define BN_MP_INIT_C
 #define BN_MP_DIV_C
 #define BN_MP_CLEAR_C
-#define BN_MP_ISZERO_C
 #define BN_MP_EXCH_C
 #define BN_MP_ADD_C
 #endif
@@ -1720,32 +1586,25 @@
 #define BN_MP_DIV_D_C
 #endif
 
-#if defined(BN_MP_MONTGOMERY_CALC_NORMALIZATION_C)
 #define BN_MP_COUNT_BITS_C
 #define BN_MP_2EXPT_C
 #define BN_MP_SET_C
 #define BN_MP_MUL_2_C
 #define BN_MP_CMP_MAG_C
 #define BN_S_MP_SUB_C
-#endif
 
-#if defined(BN_MP_MONTGOMERY_REDUCE_C)
 #define BN_FAST_MP_MONTGOMERY_REDUCE_C
 #define BN_MP_GROW_C
 #define BN_MP_CLAMP_C
 #define BN_MP_RSHD_C
 #define BN_MP_CMP_MAG_C
 #define BN_S_MP_SUB_C
-#endif
 
-#if defined(BN_MP_MONTGOMERY_SETUP_C)
-#endif
 
 #if defined(BN_MP_MUL_C)
 #define BN_MP_TOOM_MUL_C
 #define BN_MP_KARATSUBA_MUL_C
 #define BN_FAST_S_MP_MUL_DIGS_C
-#define BN_S_MP_MUL_C
 #define BN_S_MP_MUL_DIGS_C
 #endif
 
@@ -1793,7 +1652,6 @@
 
 #if defined(BN_MP_NEG_C)
 #define BN_MP_COPY_C
-#define BN_MP_ISZERO_C
 #endif
 
 #if defined(BN_MP_OR_C)
@@ -1840,7 +1698,6 @@
 #define BN_MP_CMP_D_C
 #define BN_MP_SET_C
 #define BN_MP_SUB_D_C
-#define BN_MP_ISEVEN_C
 #define BN_MP_MOD_D_C
 #define BN_MP_INIT_C
 #define BN_MP_ADD_D_C
@@ -1861,7 +1718,6 @@
 #endif
 
 #if defined(BN_MP_RADIX_SIZE_C)
-#define BN_MP_ISZERO_C
 #define BN_MP_COUNT_BITS_C
 #define BN_MP_INIT_COPY_C
 #define BN_MP_DIV_D_C
@@ -1869,7 +1725,6 @@
 #endif
 
 #if defined(BN_MP_RADIX_SMAP_C)
-#define BN_MP_S_RMAP_C
 #endif
 
 #if defined(BN_MP_RAND_C)
@@ -1880,10 +1735,8 @@
 
 #if defined(BN_MP_READ_RADIX_C)
 #define BN_MP_ZERO_C
-#define BN_MP_S_RMAP_C
 #define BN_MP_MUL_D_C
 #define BN_MP_ADD_D_C
-#define BN_MP_ISZERO_C
 #endif
 
 #if defined(BN_MP_READ_SIGNED_BIN_C)
@@ -2010,7 +1863,6 @@
 
 #if defined(BN_MP_SQRT_C)
 #define BN_MP_N_ROOT_C
-#define BN_MP_ISZERO_C
 #define BN_MP_ZERO_C
 #define BN_MP_INIT_COPY_C
 #define BN_MP_RSHD_C
@@ -2033,7 +1885,6 @@
 #define BN_MP_EXPTMOD_C
 #define BN_MP_COPY_C
 #define BN_MP_SUB_D_C
-#define BN_MP_ISEVEN_C
 #define BN_MP_SET_INT_C
 #define BN_MP_SQRMOD_C
 #define BN_MP_MULMOD_C
@@ -2071,7 +1922,6 @@
 
 #if defined(BN_MP_TO_UNSIGNED_BIN_C)
 #define BN_MP_INIT_COPY_C
-#define BN_MP_ISZERO_C
 #define BN_MP_DIV_2D_C
 #define BN_MP_CLEAR_C
 #endif
@@ -2116,19 +1966,15 @@
 #endif
 
 #if defined(BN_MP_TORADIX_C)
-#define BN_MP_ISZERO_C
 #define BN_MP_INIT_COPY_C
 #define BN_MP_DIV_D_C
 #define BN_MP_CLEAR_C
-#define BN_MP_S_RMAP_C
 #endif
 
 #if defined(BN_MP_TORADIX_N_C)
-#define BN_MP_ISZERO_C
 #define BN_MP_INIT_COPY_C
 #define BN_MP_DIV_D_C
 #define BN_MP_CLEAR_C
-#define BN_MP_S_RMAP_C
 #endif
 
 #if defined(BN_MP_UNSIGNED_BIN_SIZE_C)
@@ -2213,16 +2059,8 @@
 #define LTM_LAST
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /* detect 64-bit mode if possible */
-#if defined(__x86_64__)
-#if !(defined(MP_32BIT) || defined(MP_16BIT) || defined(MP_8BIT))
-#define MP_64BIT
-#endif
-#endif
 
 /* some default configurations.
  *
@@ -2232,21 +2070,6 @@ extern "C" {
  * At the very least a mp_digit must be able to hold 7 bits
  * [any size beyond that is ok provided it doesn't overflow the data type]
  */
-#ifdef MP_8BIT
-typedef uint8_t mp_digit;
-typedef uint16_t mp_word;
-#define MP_SIZEOF_MP_DIGIT 1
-#ifdef DIGIT_BIT
-#error You must not define DIGIT_BIT when using MP_8BIT
-#endif
-#elif defined(MP_16BIT)
-typedef uint16_t mp_digit;
-typedef uint32_t mp_word;
-#define MP_SIZEOF_MP_DIGIT 2
-#ifdef DIGIT_BIT
-#error You must not define DIGIT_BIT when using MP_16BIT
-#endif
-#elif defined(MP_64BIT)
 /* for GCC only on supported platforms */
 #ifndef CRYPT
 typedef unsigned long long ulong64;
@@ -2254,9 +2077,7 @@ typedef signed long long long64;
 #endif
 
 typedef uint64_t mp_digit;
-#if defined(_WIN32)
-typedef unsigned __int128 mp_word;
-#elif defined(__GNUC__)
+#if   defined(__GNUC__)
 typedef unsigned long mp_word __attribute__((mode(TI)));
 #else
 
@@ -2266,27 +2087,6 @@ typedef uint128_t mp_word;
 #endif
 
 #define DIGIT_BIT 60
-#else
-/* this is the default case, 28-bit digits */
-
-/* this is to make porting into LibTomCrypt easier :-) */
-#ifndef CRYPT
-typedef unsigned long long ulong64;
-typedef signed long long long64;
-#endif
-
-typedef uint32_t mp_digit;
-typedef uint64_t mp_word;
-
-#ifdef MP_31BIT
-/* this is an extension that uses 31-bit digits */
-#define DIGIT_BIT 31
-#else
-/* default case is 28-bit digits, defines MP_28BIT as a handy macro to test */
-#define DIGIT_BIT 28
-#define MP_28BIT
-#endif
-#endif
 
 /* otherwise the bits per digit is calculated automatically from the size of a
  * mp_digit */
@@ -2338,11 +2138,7 @@ extern int KARATSUBA_MUL_CUTOFF, KARATSUBA_SQR_CUTOFF, TOOM_MUL_CUTOFF,
 
 /* default precision */
 #ifndef MP_PREC
-#ifndef MP_LOW_MEM
 #define MP_PREC 32 /* default digits of precision */
-#else
-#define MP_PREC 8 /* default digits of precision */
-#endif
 #endif
 
 /* size of comba arrays, should be at least 2 * 2**(BITS_PER_WORD -
@@ -2575,11 +2371,7 @@ int mp_exptmod(mp_int *a, mp_int *b, mp_int *c, mp_int *d);
 /* ---> Primes <--- */
 
 /* number of primes */
-#ifdef MP_8BIT
-#define PRIME_SIZE 31
-#else
 #define PRIME_SIZE 256
-#endif
 
 /* table of first PRIME_SIZE primes */
 extern const mp_digit ltm_prime_tab[PRIME_SIZE];
@@ -2626,9 +2418,6 @@ int mp_toradix(mp_int *a, char *str, int radix);
 
 #define mp_tohex(M, S) mp_toradix((M), (S), 16)
 
-#ifdef __cplusplus
-}
-#endif
 #endif
 
 /* $Source$ */
@@ -2658,16 +2447,9 @@ int mp_toradix(mp_int *a, char *str, int radix);
 
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 
-#ifdef __cplusplus
-extern "C" {
-/* C++ compilers don't like assigning void * to mp_digit * */
-#define OPT_CAST(x) (x *)
-
-#else
 
 /* C on the other hand doesn't care */
 #define OPT_CAST(x)
-#endif
 
 /* define heap macros */
 #ifndef XMALLOC
@@ -2758,9 +2540,6 @@ extern const char *mp_s_rmap;
     return MP_OKAY;                                        \
   }
 
-#ifdef __cplusplus
-}
-#endif
 #endif
 
 /* $Source$ */
@@ -2770,20 +2549,7 @@ extern const char *mp_s_rmap;
 #define BN_FAST_MP_INVMOD_C
 #ifdef BN_FAST_MP_INVMOD_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* computes the modular inverse via binary extended euclidean algorithm,
  * that is c = 1/a mod b
@@ -2918,22 +2684,8 @@ LBL_ERR:
 /* $Revision$ */
 /* $Date$ */
 
-#ifdef BN_FAST_MP_MONTGOMERY_REDUCE_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* computes xR**-1 == x (mod N) via Montgomery Reduction
  *
@@ -3085,7 +2837,6 @@ int fast_mp_montgomery_reduce(mp_int *x, mp_int *n, mp_digit rho) {
   return MP_OKAY;
 }
 
-#endif
 
 /* $Source$ */
 /* $Revision$ */
@@ -3093,20 +2844,7 @@ int fast_mp_montgomery_reduce(mp_int *x, mp_int *n, mp_digit rho) {
 
 #ifdef BN_FAST_S_MP_MUL_DIGS_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* Fast (comba) multiplier
  *
@@ -3200,20 +2938,7 @@ int fast_s_mp_mul_digs(mp_int *a, mp_int *b, mp_int *c, int digs) {
 
 #ifdef BN_FAST_S_MP_MUL_HIGH_DIGS_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* this is a modified version of fast_s_mul_digs that only produces
  * output digits *above* digs.  See the comments for fast_s_mul_digs
@@ -3299,20 +3024,7 @@ int fast_s_mp_mul_high_digs(mp_int *a, mp_int *b, mp_int *c, int digs) {
 
 #ifdef BN_FAST_S_MP_SQR_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* the jist of squaring...
  * you do like mult except the offset of the tmpx [one that
@@ -3414,20 +3126,7 @@ int fast_s_mp_sqr(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_2EXPT_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* computes a = 2**b
  *
@@ -3462,20 +3161,7 @@ int mp_2expt(mp_int *a, int b) {
 
 #ifdef BN_MP_ABS_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* b = |a|
  *
@@ -3505,20 +3191,7 @@ int mp_abs(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_ADD_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* high level addition (handles signs) */
 int mp_add(mp_int *a, mp_int *b, mp_int *c) {
@@ -3558,20 +3231,7 @@ int mp_add(mp_int *a, mp_int *b, mp_int *c) {
 
 #ifdef BN_MP_ADD_D_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* single digit addition */
 int mp_add_d(mp_int *a, mp_digit b, mp_int *c) {
@@ -3669,20 +3329,7 @@ int mp_add_d(mp_int *a, mp_digit b, mp_int *c) {
 
 #ifdef BN_MP_ADDMOD_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -3692,20 +3339,7 @@ int mp_add_d(mp_int *a, mp_digit b, mp_int *c) {
 
 #ifdef BN_MP_AND_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -3715,20 +3349,7 @@ int mp_add_d(mp_int *a, mp_digit b, mp_int *c) {
 
 #ifdef BN_MP_CLAMP_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* trim unused digits
  *
@@ -3759,20 +3380,7 @@ void mp_clamp(mp_int *a) {
 
 #ifdef BN_MP_CLEAR_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* clear one (frees)  */
 void mp_clear(mp_int *a) {
@@ -3803,20 +3411,7 @@ void mp_clear(mp_int *a) {
 
 #ifdef BN_MP_CLEAR_MULTI_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 #include <stdarg.h>
 
 void mp_clear_multi(mp_int *mp, ...) {
@@ -3839,20 +3434,7 @@ void mp_clear_multi(mp_int *mp, ...) {
 
 #ifdef BN_MP_CMP_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* compare two ints (signed)*/
 int mp_cmp(mp_int *a, mp_int *b) {
@@ -3882,20 +3464,7 @@ int mp_cmp(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_CMP_D_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* compare a digit */
 int mp_cmp_d(mp_int *a, mp_digit b) {
@@ -3927,20 +3496,7 @@ int mp_cmp_d(mp_int *a, mp_digit b) {
 
 #ifdef BN_MP_CMP_MAG_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* compare maginitude of two ints (unsigned) */
 int mp_cmp_mag(mp_int *a, mp_int *b) {
@@ -3983,20 +3539,7 @@ int mp_cmp_mag(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_CNT_LSB_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 static const int lnz[16] = {4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0};
 
@@ -4035,20 +3578,7 @@ int mp_cnt_lsb(mp_int *a) {
 
 #ifdef BN_MP_COPY_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* copy, b = a */
 int mp_copy(mp_int *a, mp_int *b) {
@@ -4103,20 +3633,7 @@ int mp_copy(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_COUNT_BITS_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* returns the number of bits in an int */
 int mp_count_bits(mp_int *a) {
@@ -4148,20 +3665,7 @@ int mp_count_bits(mp_int *a) {
 
 #ifdef BN_MP_DIV_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #ifdef BN_MP_DIV_SMALL
 
@@ -4445,20 +3949,7 @@ LBL_Q:
 
 #ifdef BN_MP_DIV_2_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* b = a/2 */
 int mp_div_2(mp_int *a, mp_int *b) {
@@ -4514,20 +4005,7 @@ int mp_div_2(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_DIV_2D_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* shift right by a certain bit count (store quotient in c, optional remainder
  * in d) */
@@ -4613,20 +4091,7 @@ int mp_div_2d(mp_int *a, int b, mp_int *c, mp_int *d) {
 
 #ifdef BN_MP_DIV_3_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* divide by three (based on routine from MPI and the GMP manual) */
 int mp_div_3(mp_int *a, mp_int *c, mp_digit *d) {
@@ -4691,20 +4156,7 @@ int mp_div_3(mp_int *a, mp_int *c, mp_digit *d) {
 
 #ifdef BN_MP_DIV_D_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 static int s_is_power_of_two(mp_digit b, int *p) {
   int x;
@@ -4805,20 +4257,7 @@ int mp_div_d(mp_int *a, mp_digit b, mp_int *c, mp_digit *d) {
 
 #ifdef BN_MP_DR_IS_MODULUS_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* determines if a number is a valid DR modulus */
 int mp_dr_is_modulus(mp_int *a) {
@@ -4848,20 +4287,7 @@ int mp_dr_is_modulus(mp_int *a) {
 
 #ifdef BN_MP_DR_REDUCE_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* reduce "x" in place modulo "n" using the Diminished Radix algorithm.
  *
@@ -4944,20 +4370,7 @@ top:
 
 #ifdef BN_MP_DR_SETUP_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* determines the setup value */
 void mp_dr_setup(mp_int *a, mp_digit *d) {
@@ -4975,20 +4388,7 @@ void mp_dr_setup(mp_int *a, mp_digit *d) {
 
 #ifdef BN_MP_EXCH_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* swap the elements of two integers, for cases where you can't simply swap the
  * mp_int pointers around
@@ -5009,20 +4409,7 @@ void mp_exch(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_EXPORT_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -5032,20 +4419,7 @@ void mp_exch(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_EXPT_D_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -5055,20 +4429,7 @@ void mp_exch(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_EXPT_D_EX_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -5078,20 +4439,7 @@ void mp_exch(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_EXPTMOD_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* this is a shell function that calls either the normal or Montgomery
  * exptmod functions.  Originally the call to the montgomery code was
@@ -5190,20 +4538,7 @@ int mp_exptmod(mp_int *G, mp_int *X, mp_int *P, mp_int *Y) {
 
 #ifdef BN_MP_EXPTMOD_FAST_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* computes Y == G**X mod P, HAC pp.616, Algorithm 14.85
  *
@@ -5213,11 +4548,7 @@ int mp_exptmod(mp_int *G, mp_int *X, mp_int *P, mp_int *Y) {
  * Uses Montgomery or Diminished Radix reduction [whichever appropriate]
  */
 
-#ifdef MP_LOW_MEM
-#define TAB_SIZE 32
-#else
 #define TAB_SIZE 256
-#endif
 
 int mp_exptmod_fast(mp_int *G, mp_int *X, mp_int *P, mp_int *Y, int redmode) {
   mp_int M[TAB_SIZE], res;
@@ -5248,11 +4579,6 @@ int mp_exptmod_fast(mp_int *G, mp_int *X, mp_int *P, mp_int *Y, int redmode) {
     winsize = 8;
   }
 
-#ifdef MP_LOW_MEM
-  if (winsize > 5) {
-    winsize = 5;
-  }
-#endif
 
   /* init M array */
   /* init first cell */
@@ -5273,32 +4599,20 @@ int mp_exptmod_fast(mp_int *G, mp_int *X, mp_int *P, mp_int *Y, int redmode) {
 
   /* determine and setup reduction code */
   if (redmode == 0) {
-#ifdef BN_MP_MONTGOMERY_SETUP_C
     /* now setup montgomery  */
     if ((err = mp_montgomery_setup(P, &mp)) != MP_OKAY) {
       goto LBL_M;
     }
-#else
-    err = MP_VAL;
-    goto LBL_M;
-#endif
 
     /* automatically pick the comba one if available (saves quite a few
      * calls/ifs) */
-#ifdef BN_FAST_MP_MONTGOMERY_REDUCE_C
     if ((((P->used * 2) + 1) < MP_WARRAY) &&
         (P->used < (1 << ((CHAR_BIT * sizeof(mp_word)) - (2 * DIGIT_BIT))))) {
       redux = fast_mp_montgomery_reduce;
     } else
-#endif
     {
-#ifdef BN_MP_MONTGOMERY_REDUCE_C
       /* use slower baseline Montgomery method */
       redux = mp_montgomery_reduce;
-#else
-      err = MP_VAL;
-      goto LBL_M;
-#endif
     }
   } else if (redmode == 1) {
 #if defined(BN_MP_DR_SETUP_C) && defined(BN_MP_DR_REDUCE_C)
@@ -5335,15 +4649,10 @@ int mp_exptmod_fast(mp_int *G, mp_int *X, mp_int *P, mp_int *Y, int redmode) {
  */
 
   if (redmode == 0) {
-#ifdef BN_MP_MONTGOMERY_CALC_NORMALIZATION_C
     /* now we need R mod m */
     if ((err = mp_montgomery_calc_normalization(&res, P)) != MP_OKAY) {
       goto LBL_RES;
     }
-#else
-    err = MP_VAL;
-    goto LBL_RES;
-#endif
 
     /* now set M[1] to G * R mod m */
     if ((err = mp_mulmod(G, &res, P, &M[1])) != MP_OKAY) {
@@ -5509,80 +4818,10 @@ LBL_M:
 
 #endif
 
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_EXTEUCLID_C
-
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_FREAD_C
-
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-#ifdef BN_MP_FWRITE_C
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
 
 #ifdef BN_MP_GCD_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* Greatest Common Divisor using the binary method */
 int mp_gcd(mp_int *a, mp_int *b, mp_int *c) {
@@ -5677,20 +4916,7 @@ LBL_U:
 
 #ifdef BN_MP_GET_INT_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* get the lower 32-bits of an mp_int */
 unsigned long mp_get_int(mp_int *a) {
@@ -5726,58 +4952,19 @@ unsigned long mp_get_int(mp_int *a) {
 
 #ifdef BN_MP_GET_LONG_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
 #ifdef BN_MP_GET_LONG_LONG_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
 #ifdef BN_MP_GROW_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* grow as required */
 int mp_grow(mp_int *a, int size) {
@@ -5822,20 +5009,7 @@ int mp_grow(mp_int *a, int size) {
 
 #ifdef BN_MP_IMPORT_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -5845,20 +5019,7 @@ int mp_grow(mp_int *a, int size) {
 
 #ifdef BN_MP_INIT_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* init a new mp_int */
 int mp_init(mp_int *a) {
@@ -5892,20 +5053,7 @@ int mp_init(mp_int *a) {
 
 #ifdef BN_MP_INIT_COPY_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* creates "a" then copies b into it */
 int mp_init_copy(mp_int *a, mp_int *b) {
@@ -5925,20 +5073,7 @@ int mp_init_copy(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_INIT_MULTI_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 int mp_init_multi(mp_int *mp, ...) {
   mp_err res = MP_OKAY; /* Assume ok until proven otherwise */
@@ -5983,20 +5118,7 @@ int mp_init_multi(mp_int *mp, ...) {
 
 #ifdef BN_MP_INIT_SET_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -6006,20 +5128,7 @@ int mp_init_multi(mp_int *mp, ...) {
 
 #ifdef BN_MP_INIT_SET_INT_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -6029,20 +5138,7 @@ int mp_init_multi(mp_int *mp, ...) {
 
 #ifdef BN_MP_INIT_SIZE_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* init an mp_init for a given size */
 int mp_init_size(mp_int *a, int size) {
@@ -6078,20 +5174,7 @@ int mp_init_size(mp_int *a, int size) {
 
 #ifdef BN_MP_INVMOD_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* hac 14.61, pp608 */
 int mp_invmod(mp_int *a, mp_int *b, mp_int *c) {
@@ -6122,20 +5205,7 @@ int mp_invmod(mp_int *a, mp_int *b, mp_int *c) {
 
 #ifdef BN_MP_INVMOD_SLOW_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* hac 14.61, pp608 */
 int mp_invmod_slow(mp_int *a, mp_int *b, mp_int *c) {
@@ -6297,20 +5367,7 @@ LBL_ERR:
 
 #ifdef BN_MP_IS_SQUARE_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -6320,20 +5377,7 @@ LBL_ERR:
 
 #ifdef BN_MP_JACOBI_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* computes the jacobi c = (a | n) (or Legendre if n is prime)
  * HAC pp. 73 Algorithm 2.149
@@ -6435,20 +5479,7 @@ LBL_A1:
 
 #ifdef BN_MP_KARATSUBA_MUL_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* c = |a| * |b| using Karatsuba Multiplication using
  * three half size multiplications
@@ -6595,20 +5626,7 @@ ERR:
 
 #ifdef BN_MP_KARATSUBA_SQR_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* Karatsuba squaring, computes b = a*a using three
  * half size squarings
@@ -6709,20 +5727,7 @@ ERR:
 
 #ifdef BN_MP_LCM_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* computes least common multiple as |a*b|/(a, b) */
 int mp_lcm(mp_int *a, mp_int *b, mp_int *c) {
@@ -6769,20 +5774,7 @@ LBL_T:
 
 #ifdef BN_MP_LSHD_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* shift left a certain amount of digits */
 int mp_lshd(mp_int *a, int b) {
@@ -6837,20 +5829,7 @@ int mp_lshd(mp_int *a, int b) {
 
 #ifdef BN_MP_MOD_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* c = a mod b, 0 <= c < b if b > 0, b < c <= 0 if b < 0 */
 int mp_mod(mp_int *a, mp_int *b, mp_int *c) {
@@ -6885,20 +5864,7 @@ int mp_mod(mp_int *a, mp_int *b, mp_int *c) {
 
 #ifdef BN_MP_MOD_2D_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* calc a value mod 2**b */
 int mp_mod_2d(mp_int *a, int b, mp_int *c) {
@@ -6941,20 +5907,7 @@ int mp_mod_2d(mp_int *a, int b, mp_int *c) {
 
 #ifdef BN_MP_MOD_D_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 int mp_mod_d(mp_int *a, mp_digit b, mp_digit *c) {
   return mp_div_d(a, b, NULL, c);
@@ -6966,22 +5919,8 @@ int mp_mod_d(mp_int *a, mp_digit b, mp_digit *c) {
 /* $Revision$ */
 /* $Date$ */
 
-#ifdef BN_MP_MONTGOMERY_CALC_NORMALIZATION_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /*
  * shifts with subtractions when the result is greater than b.
@@ -7020,28 +5959,13 @@ int mp_montgomery_calc_normalization(mp_int *a, mp_int *b) {
   return MP_OKAY;
 }
 
-#endif
 
 /* $Source$ */
 /* $Revision$ */
 /* $Date$ */
 
-#ifdef BN_MP_MONTGOMERY_REDUCE_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* computes xR**-1 == x (mod N) via Montgomery Reduction */
 int mp_montgomery_reduce(mp_int *x, mp_int *n, mp_digit rho) {
@@ -7135,28 +6059,13 @@ int mp_montgomery_reduce(mp_int *x, mp_int *n, mp_digit rho) {
   return MP_OKAY;
 }
 
-#endif
 
 /* $Source$ */
 /* $Revision$ */
 /* $Date$ */
 
-#ifdef BN_MP_MONTGOMERY_SETUP_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* setups the montgomery reduction stuff */
 int mp_montgomery_setup(mp_int *n, mp_digit *rho) {
@@ -7178,15 +6087,9 @@ int mp_montgomery_setup(mp_int *n, mp_digit *rho) {
 
   x = (((b + 2) & 4) << 1) + b; /* here x*a==1 mod 2**4 */
   x *= 2 - (b * x);             /* here x*a==1 mod 2**8 */
-#if !defined(MP_8BIT)
   x *= 2 - (b * x); /* here x*a==1 mod 2**16 */
-#endif
-#if defined(MP_64BIT) || !(defined(MP_8BIT) || defined(MP_16BIT))
   x *= 2 - (b * x); /* here x*a==1 mod 2**32 */
-#endif
-#ifdef MP_64BIT
   x *= 2 - (b * x); /* here x*a==1 mod 2**64 */
-#endif
 
   /* rho = -1/m mod b */
   *rho = (mp_digit)(((mp_word)1 << ((mp_word)DIGIT_BIT)) - x) & MP_MASK;
@@ -7194,7 +6097,6 @@ int mp_montgomery_setup(mp_int *n, mp_digit *rho) {
   return MP_OKAY;
 }
 
-#endif
 
 /* $Source$ */
 /* $Revision$ */
@@ -7202,20 +6104,7 @@ int mp_montgomery_setup(mp_int *n, mp_digit *rho) {
 
 #ifdef BN_MP_MUL_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* high level multiplication (handles sign) */
 int mp_mul(mp_int *a, mp_int *b, mp_int *c) {
@@ -7271,20 +6160,7 @@ int mp_mul(mp_int *a, mp_int *b, mp_int *c) {
 
 #ifdef BN_MP_MUL_2_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* b = a*2 */
 int mp_mul_2(mp_int *a, mp_int *b) {
@@ -7353,20 +6229,7 @@ int mp_mul_2(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_MUL_2D_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* shift left by a certain bit count */
 int mp_mul_2d(mp_int *a, int b, mp_int *c) {
@@ -7439,20 +6302,7 @@ int mp_mul_2d(mp_int *a, int b, mp_int *c) {
 
 #ifdef BN_MP_MUL_D_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* multiply by a digit */
 int mp_mul_d(mp_int *a, mp_digit b, mp_int *c) {
@@ -7518,20 +6368,7 @@ int mp_mul_d(mp_int *a, mp_digit b, mp_int *c) {
 
 #ifdef BN_MP_MULMOD_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* d = a * b (mod c) */
 int mp_mulmod(mp_int *a, mp_int *b, mp_int *c, mp_int *d) {
@@ -7559,20 +6396,7 @@ int mp_mulmod(mp_int *a, mp_int *b, mp_int *c, mp_int *d) {
 
 #ifdef BN_MP_N_ROOT_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -7582,20 +6406,7 @@ int mp_mulmod(mp_int *a, mp_int *b, mp_int *c, mp_int *d) {
 
 #ifdef BN_MP_N_ROOT_EX_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -7605,20 +6416,7 @@ int mp_mulmod(mp_int *a, mp_int *b, mp_int *c, mp_int *d) {
 
 #ifdef BN_MP_NEG_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* b = -a */
 int mp_neg(mp_int *a, mp_int *b) {
@@ -7647,20 +6445,7 @@ int mp_neg(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_OR_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -7670,20 +6455,7 @@ int mp_neg(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_PRIME_FERMAT_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -7693,20 +6465,7 @@ int mp_neg(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_PRIME_IS_DIVISIBLE_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* determines if an integers is divisible by one
  * of the first PRIME_SIZE primes or not
@@ -7744,20 +6503,7 @@ int mp_prime_is_divisible(mp_int *a, int *result) {
 
 #ifdef BN_MP_PRIME_IS_PRIME_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* performs a variable number of rounds of Miller-Rabin
  *
@@ -7829,20 +6575,7 @@ LBL_B:
 
 #ifdef BN_MP_PRIME_MILLER_RABIN_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* Miller-Rabin test of "a" to the base of "b" as described in
  * HAC pp. 139 Algorithm 4.24
@@ -7936,20 +6669,7 @@ LBL_N1:
 
 #ifdef BN_MP_PRIME_NEXT_PRIME_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -7959,20 +6679,7 @@ LBL_N1:
 
 #ifdef BN_MP_PRIME_RABIN_MILLER_TRIALS_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 static const struct {
   int k, t;
@@ -7987,20 +6694,7 @@ static const struct {
 
 #ifdef BN_MP_PRIME_RANDOM_EX_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* makes a truly random prime of a given size (bits),
  *
@@ -8024,20 +6718,7 @@ static const struct {
 
 #ifdef BN_MP_RADIX_SIZE_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -8047,20 +6728,7 @@ static const struct {
 
 #ifdef BN_MP_RADIX_SMAP_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* chars used in radix conversions */
 const char *mp_s_rmap =
@@ -8073,20 +6741,7 @@ const char *mp_s_rmap =
 
 #ifdef BN_MP_RAND_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -8096,20 +6751,7 @@ const char *mp_s_rmap =
 
 #ifdef BN_MP_READ_RADIX_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* read a string [ASCII] in a given radix */
 int mp_read_radix(mp_int *a, const char *str, int radix) {
@@ -8182,20 +6824,7 @@ int mp_read_radix(mp_int *a, const char *str, int radix) {
 
 #ifdef BN_MP_READ_SIGNED_BIN_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -8205,20 +6834,7 @@ int mp_read_radix(mp_int *a, const char *str, int radix) {
 
 #ifdef BN_MP_READ_UNSIGNED_BIN_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* reads a unsigned char array, assumes the msb is stored first [big endian] */
 int mp_read_unsigned_bin(mp_int *a, const unsigned char *b, int c) {
@@ -8240,14 +6856,8 @@ int mp_read_unsigned_bin(mp_int *a, const unsigned char *b, int c) {
       return res;
     }
 
-#ifndef MP_8BIT
     a->dp[0] |= *b++;
     a->used += 1;
-#else
-    a->dp[0] = (*b & MP_MASK);
-    a->dp[1] |= ((*b++ >> 7U) & 1);
-    a->used += 2;
-#endif
   }
   mp_clamp(a);
   return MP_OKAY;
@@ -8261,20 +6871,7 @@ int mp_read_unsigned_bin(mp_int *a, const unsigned char *b, int c) {
 
 #ifdef BN_MP_REDUCE_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* reduces x mod m, assumes 0 < x < m**2, mu is
  * precomputed via mp_reduce_setup.
@@ -8360,20 +6957,7 @@ CLEANUP:
 
 #ifdef BN_MP_REDUCE_2K_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* reduces a modulo n where n is of the form 2**p - d */
 int mp_reduce_2k(mp_int *a, mp_int *n, mp_digit d) {
@@ -8423,20 +7007,7 @@ ERR:
 
 #ifdef BN_MP_REDUCE_2K_L_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* reduces a modulo n where n is of the form 2**p - d
    This differs from reduce_2k since "d" can be larger
@@ -8487,20 +7058,7 @@ ERR:
 
 #ifdef BN_MP_REDUCE_2K_SETUP_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* determines the setup value */
 int mp_reduce_2k_setup(mp_int *a, mp_digit *d) {
@@ -8535,20 +7093,7 @@ int mp_reduce_2k_setup(mp_int *a, mp_digit *d) {
 
 #ifdef BN_MP_REDUCE_2K_SETUP_L_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* determines the setup value */
 int mp_reduce_2k_setup_l(mp_int *a, mp_int *d) {
@@ -8580,20 +7125,7 @@ ERR:
 
 #ifdef BN_MP_REDUCE_IS_2K_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* determines if mp_reduce_2k can be used */
 int mp_reduce_is_2k(mp_int *a) {
@@ -8632,20 +7164,7 @@ int mp_reduce_is_2k(mp_int *a) {
 
 #ifdef BN_MP_REDUCE_IS_2K_L_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* determines if reduce_2k_l can be used */
 int mp_reduce_is_2k_l(mp_int *a) {
@@ -8675,20 +7194,7 @@ int mp_reduce_is_2k_l(mp_int *a) {
 
 #ifdef BN_MP_REDUCE_SETUP_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* pre-calculate the value required for Barrett reduction
  * For a given modulus "b" it calulates the value required in "a"
@@ -8710,20 +7216,7 @@ int mp_reduce_setup(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_RSHD_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* shift right a certain amount of digits */
 void mp_rshd(mp_int *a, int b) {
@@ -8783,20 +7276,7 @@ void mp_rshd(mp_int *a, int b) {
 
 #ifdef BN_MP_SET_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* set to a digit */
 void mp_set(mp_int *a, mp_digit b) {
@@ -8813,20 +7293,7 @@ void mp_set(mp_int *a, mp_digit b) {
 
 #ifdef BN_MP_SET_INT_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* set a 32-bit const */
 int mp_set_int(mp_int *a, unsigned long b) {
@@ -8862,20 +7329,7 @@ int mp_set_int(mp_int *a, unsigned long b) {
 
 #ifdef BN_MP_SET_LONG_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* set a platform dependent unsigned long int */
 MP_SET_XLONG(mp_set_long, unsigned long)
@@ -8888,20 +7342,7 @@ MP_SET_XLONG(mp_set_long, unsigned long)
 
 #ifdef BN_MP_SET_LONG_LONG_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* set a platform dependent unsigned long long int */
 MP_SET_XLONG(mp_set_long_long, unsigned long long)
@@ -8914,20 +7355,7 @@ MP_SET_XLONG(mp_set_long_long, unsigned long long)
 
 #ifdef BN_MP_SHRINK_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -8937,20 +7365,7 @@ MP_SET_XLONG(mp_set_long_long, unsigned long long)
 
 #ifdef BN_MP_SIGNED_BIN_SIZE_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -8960,20 +7375,7 @@ MP_SET_XLONG(mp_set_long_long, unsigned long long)
 
 #ifdef BN_MP_SQR_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* computes b = a*a */
 int mp_sqr(mp_int *a, mp_int *b) {
@@ -9020,20 +7422,7 @@ int mp_sqr(mp_int *a, mp_int *b) {
 
 #ifdef BN_MP_SQRMOD_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* c = a * a (mod b) */
 int mp_sqrmod(mp_int *a, mp_int *b, mp_int *c) {
@@ -9061,20 +7450,7 @@ int mp_sqrmod(mp_int *a, mp_int *b, mp_int *c) {
 
 #ifdef BN_MP_SQRT_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -9097,20 +7473,7 @@ int mp_sqrmod(mp_int *a, mp_int *b, mp_int *c) {
 
 #ifdef BN_MP_SUB_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* high level subtraction (handles signs) */
 int mp_sub(mp_int *a, mp_int *b, mp_int *c) {
@@ -9155,20 +7518,7 @@ int mp_sub(mp_int *a, mp_int *b, mp_int *c) {
 
 #ifdef BN_MP_SUB_D_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* single digit subtraction */
 int mp_sub_d(mp_int *a, mp_digit b, mp_int *c) {
@@ -9247,20 +7597,7 @@ int mp_sub_d(mp_int *a, mp_digit b, mp_int *c) {
 
 #ifdef BN_MP_SUBMOD_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -9270,20 +7607,7 @@ int mp_sub_d(mp_int *a, mp_digit b, mp_int *c) {
 
 #ifdef BN_MP_TO_SIGNED_BIN_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -9293,20 +7617,7 @@ int mp_sub_d(mp_int *a, mp_digit b, mp_int *c) {
 
 #ifdef BN_MP_TO_SIGNED_BIN_N_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -9316,20 +7627,7 @@ int mp_sub_d(mp_int *a, mp_digit b, mp_int *c) {
 
 #ifdef BN_MP_TO_UNSIGNED_BIN_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* store in unsigned [big endian] format */
 int mp_to_unsigned_bin(mp_int *a, unsigned char *b) {
@@ -9342,11 +7640,7 @@ int mp_to_unsigned_bin(mp_int *a, unsigned char *b) {
 
   x = 0;
   while (mp_iszero(&t) == MP_NO) {
-#ifndef MP_8BIT
     b[x++] = (unsigned char)(t.dp[0] & 255);
-#else
-    b[x++] = (unsigned char)(t.dp[0] | ((t.dp[1] & 0x01) << 7));
-#endif
     if ((res = mp_div_2d(&t, 8, &t, NULL)) != MP_OKAY) {
       mp_clear(&t);
       return res;
@@ -9365,20 +7659,7 @@ int mp_to_unsigned_bin(mp_int *a, unsigned char *b) {
 
 #ifdef BN_MP_TOOM_MUL_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* multiplication using the Toom-Cook 3-way algorithm
  *
@@ -9648,20 +7929,7 @@ ERR:
 
 #ifdef BN_MP_TOOM_SQR_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* squaring using Toom-Cook 3-way algorithm */
 int mp_toom_sqr(mp_int *a, mp_int *b) {
@@ -9876,20 +8144,7 @@ ERR:
 
 #ifdef BN_MP_TORADIX_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* stores a bignum as a ASCII string in a given radix (2..64) */
 int mp_toradix(mp_int *a, char *str, int radix) {
@@ -9951,20 +8206,7 @@ int mp_toradix(mp_int *a, char *str, int radix) {
 
 #ifdef BN_MP_UNSIGNED_BIN_SIZE_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* get the size for an unsigned equivalent */
 int mp_unsigned_bin_size(mp_int *a) {
@@ -9981,20 +8223,7 @@ int mp_unsigned_bin_size(mp_int *a) {
 
 #ifdef BN_MP_XOR_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 #endif
 
@@ -10004,20 +8233,7 @@ int mp_unsigned_bin_size(mp_int *a) {
 
 #ifdef BN_MP_ZERO_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* set to zero */
 void mp_zero(mp_int *a) {
@@ -10041,26 +8257,12 @@ void mp_zero(mp_int *a) {
 
 #ifdef BN_PRIME_TAB_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 const mp_digit ltm_prime_tab[] = {
     0x0002, 0x0003, 0x0005, 0x0007, 0x000B, 0x000D, 0x0011, 0x0013, 0x0017,
     0x001D, 0x001F, 0x0025, 0x0029, 0x002B, 0x002F, 0x0035, 0x003B, 0x003D,
     0x0043, 0x0047, 0x0049, 0x004F, 0x0053, 0x0059, 0x0061, 0x0065, 0x0067,
     0x006B, 0x006D, 0x0071, 0x007F,
-#ifndef MP_8BIT
     0x0083, 0x0089, 0x008B, 0x0095, 0x0097, 0x009D, 0x00A3, 0x00A7, 0x00AD,
     0x00B3, 0x00B5, 0x00BF, 0x00C1, 0x00C5, 0x00C7, 0x00D3, 0x00DF, 0x00E3,
     0x00E5, 0x00E9, 0x00EF, 0x00F1, 0x00FB, 0x0101, 0x0107, 0x010D, 0x010F,
@@ -10092,7 +8294,6 @@ const mp_digit ltm_prime_tab[] = {
     0x05D5, 0x05DB, 0x05E7, 0x05F3, 0x05FB, 0x0607, 0x060D, 0x0611, 0x0617,
     0x061F, 0x0623, 0x062B, 0x062F, 0x063D, 0x0641, 0x0647, 0x0649, 0x064D,
     0x0653
-#endif
 };
 #endif
 
@@ -10102,20 +8303,7 @@ const mp_digit ltm_prime_tab[] = {
 
 #ifdef BN_REVERSE_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* reverse an array, used for radix code */
 void bn_reverse(unsigned char *s, int len) {
@@ -10141,20 +8329,7 @@ void bn_reverse(unsigned char *s, int len) {
 
 #ifdef BN_S_MP_ADD_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* low level addition, based on HAC pp.594, Algorithm 14.7 */
 int s_mp_add(mp_int *a, mp_int *b, mp_int *c) {
@@ -10250,20 +8425,7 @@ int s_mp_add(mp_int *a, mp_int *b, mp_int *c) {
 
 #ifdef BN_S_MP_EXPTMOD_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 int s_mp_exptmod(mp_int *G, mp_int *X, mp_int *P, mp_int *Y, int redmode) {
   mp_int M[TAB_SIZE], res, mu;
@@ -10290,11 +8452,6 @@ int s_mp_exptmod(mp_int *G, mp_int *X, mp_int *P, mp_int *Y, int redmode) {
     winsize = 8;
   }
 
-#ifdef MP_LOW_MEM
-  if (winsize > 5) {
-    winsize = 5;
-  }
-#endif
 
   /* init M array */
   /* init first cell */
@@ -10501,20 +8658,7 @@ LBL_M:
 
 #ifdef BN_S_MP_MUL_DIGS_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* multiplies |a| * |b| and only computes upto digs digits of result
  * HAC pp. 595, Algorithm 14.12  Modified so you can control how
@@ -10590,20 +8734,7 @@ int s_mp_mul_digs(mp_int *a, mp_int *b, mp_int *c, int digs) {
 
 #ifdef BN_S_MP_MUL_HIGH_DIGS_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* multiplies |a| * |b| and does not compute the lower digs digits
  * [meant to get the higher part of the product]
@@ -10670,20 +8801,7 @@ int s_mp_mul_high_digs(mp_int *a, mp_int *b, mp_int *c, int digs) {
 
 #ifdef BN_S_MP_SQR_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* low level squaring, b = a*a, HAC pp.596-597, Algorithm 14.16 */
 int s_mp_sqr(mp_int *a, mp_int *b) {
@@ -10754,20 +8872,7 @@ int s_mp_sqr(mp_int *a, mp_int *b) {
 
 #ifdef BN_S_MP_SUB_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* low level subtraction (assumes |a| > |b|), HAC pp.595 Algorithm 14.9 */
 int s_mp_sub(mp_int *a, mp_int *b, mp_int *c) {
@@ -10842,20 +8947,7 @@ int s_mp_sub(mp_int *a, mp_int *b, mp_int *c) {
 
 #ifdef BNCORE_C
 
-/* LibTomMath, multiple-precision integer library -- Tom St Denis
- *
- * LibTomMath is a library that provides multiple-precision
- * integer arithmetic as well as number theoretic functionality.
- *
- * The library was designed directly after the MPI library by
- * Michael Fromberger but has been written from scratch with
- * additional optimizations in place.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
- */
+
 
 /* Known optimal configurations
 
@@ -10880,31 +8972,13 @@ int KARATSUBA_MUL_CUTOFF =
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt.c,v $ */
 /* $Revision: 1.36 $ */
 /* $Date: 2007/05/12 14:46:12 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 #include <signal.h>
 
 /**
@@ -11116,9 +9190,6 @@ void crypt_argchk(char *v, char *s, int d) {
 #define LTC_XCBC
 #define LTC_PELICAN
 
-#if defined(LTC_PELICAN) && !defined(LTC_RIJNDAEL)
-#error Pelican-MAC requires LTC_RIJNDAEL
-#endif
 
 /* ---> Encrypt + Authenticate Modes <--- */
 
@@ -11131,9 +9202,7 @@ void crypt_argchk(char *v, char *s, int d) {
 #endif
 
 /* USE SSE2? requires GCC works on x86_32 and x86_64*/
-#ifdef LTC_GCM_TABLES
 /* #define LTC_GCM_TABLES_SSE2 */
-#endif
 #endif /* LTC_NO_MACS */
 
 /* Various tidbits of modern neatoness */
@@ -11281,9 +9350,6 @@ void crypt_argchk(char *v, char *s, int d) {
 /* $Revision: 1.73 $ */
 /* $Date: 2007/05/12 14:37:41 $ */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /* version */
 #define CRYPT 0x0117
@@ -11440,9 +9506,7 @@ LTC_EXPORT int LTC_CALL XSTRCMP(const char *s1, const char *s2);
 #endif
 
 #ifdef LTC_NO_FAST
-#ifdef LTC_FAST
 #undef LTC_FAST
-#endif
 #endif
 
 /* No asm is a quick way to disable anything "not portable" */
@@ -11489,11 +9553,7 @@ typedef unsigned long long ulong64;
 /* this is the "32-bit at least" data type
  * Re-define it to suit your platform but it must be at least 32-bits
  */
-#if defined(__x86_64__) || (defined(__sparc__) && defined(__arch64__))
 typedef unsigned ulong32;
-#else
-typedef unsigned long ulong32;
-#endif
 
 /* ---- HELPER MACROS ---- */
 #ifdef ENDIAN_NEUTRAL
@@ -11661,40 +9721,6 @@ typedef unsigned long ulong32;
   }
 #endif
 
-#ifdef ENDIAN_32BITWORD
-
-#define STORE32L(x, y)   \
-  {                      \
-    ulong32 __t = (x);   \
-    XMEMCPY(y, &__t, 4); \
-  }
-
-#define LOAD32L(x, y) XMEMCPY(&(x), y, 4);
-
-#define STORE64L(x, y)                           \
-  {                                              \
-    (y)[7] = (unsigned char)(((x) >> 56) & 255); \
-    (y)[6] = (unsigned char)(((x) >> 48) & 255); \
-    (y)[5] = (unsigned char)(((x) >> 40) & 255); \
-    (y)[4] = (unsigned char)(((x) >> 32) & 255); \
-    (y)[3] = (unsigned char)(((x) >> 24) & 255); \
-    (y)[2] = (unsigned char)(((x) >> 16) & 255); \
-    (y)[1] = (unsigned char)(((x) >> 8) & 255);  \
-    (y)[0] = (unsigned char)((x)&255);           \
-  }
-
-#define LOAD64L(x, y)                                                          \
-  {                                                                            \
-    x = (((ulong64)((y)[7] & 255)) << 56) |                                    \
-        (((ulong64)((y)[6] & 255)) << 48) |                                    \
-        (((ulong64)((y)[5] & 255)) << 40) |                                    \
-        (((ulong64)((y)[4] & 255)) << 32) |                                    \
-        (((ulong64)((y)[3] & 255)) << 24) |                                    \
-        (((ulong64)((y)[2] & 255)) << 16) | (((ulong64)((y)[1] & 255)) << 8) | \
-        (((ulong64)((y)[0] & 255)));                                           \
-  }
-
-#else /* 64-bit words then  */
 
 #define STORE32L(x, y)   \
   {                      \
@@ -11716,7 +9742,6 @@ typedef unsigned long ulong32;
 
 #define LOAD64L(x, y) \
   { XMEMCPY(&(x), y, 8); }
-#endif /* ENDIAN_64BITWORD */
 #endif /* ENDIAN_LITTLE */
 
 #ifdef ENDIAN_BIG
@@ -11759,40 +9784,6 @@ typedef unsigned long ulong32;
         (((ulong64)((y)[0] & 255)));                                           \
   }
 
-#ifdef ENDIAN_32BITWORD
-
-#define STORE32H(x, y)   \
-  {                      \
-    ulong32 __t = (x);   \
-    XMEMCPY(y, &__t, 4); \
-  }
-
-#define LOAD32H(x, y) XMEMCPY(&(x), y, 4);
-
-#define STORE64H(x, y)                           \
-  {                                              \
-    (y)[0] = (unsigned char)(((x) >> 56) & 255); \
-    (y)[1] = (unsigned char)(((x) >> 48) & 255); \
-    (y)[2] = (unsigned char)(((x) >> 40) & 255); \
-    (y)[3] = (unsigned char)(((x) >> 32) & 255); \
-    (y)[4] = (unsigned char)(((x) >> 24) & 255); \
-    (y)[5] = (unsigned char)(((x) >> 16) & 255); \
-    (y)[6] = (unsigned char)(((x) >> 8) & 255);  \
-    (y)[7] = (unsigned char)((x)&255);           \
-  }
-
-#define LOAD64H(x, y)                                                          \
-  {                                                                            \
-    x = (((ulong64)((y)[0] & 255)) << 56) |                                    \
-        (((ulong64)((y)[1] & 255)) << 48) |                                    \
-        (((ulong64)((y)[2] & 255)) << 40) |                                    \
-        (((ulong64)((y)[3] & 255)) << 32) |                                    \
-        (((ulong64)((y)[4] & 255)) << 24) |                                    \
-        (((ulong64)((y)[5] & 255)) << 16) | (((ulong64)((y)[6] & 255)) << 8) | \
-        (((ulong64)((y)[7] & 255)));                                           \
-  }
-
-#else /* 64-bit words then  */
 
 #define STORE32H(x, y)   \
   {                      \
@@ -11814,7 +9805,6 @@ typedef unsigned long ulong32;
 
 #define LOAD64H(x, y) \
   { XMEMCPY(&(x), y, 8); }
-#endif /* ENDIAN_64BITWORD */
 #endif /* ENDIAN_BIG */
 
 /* 32-bit Rotates */
@@ -11992,17 +9982,13 @@ static inline unsigned long ROR64c(unsigned long word, const int i) {
  * easier to use.
  */
 
-#ifdef LTC_RIJNDAEL
 struct rijndael_key {
   ulong32 eK[60], dK[60];
   int Nr;
 };
-#endif
 
 typedef union Symmetric_key {
-#ifdef LTC_RIJNDAEL
   struct rijndael_key rijndael;
-#endif
   void *data;
 } symmetric_key;
 
@@ -12045,11 +10031,6 @@ extern struct ltc_cipher_descriptor {
    @return CRYPT_OK if successful
  */
 
-  /** Test the block cipher
-    @return CRYPT_OK if successful, CRYPT_NOP if self-testing has been
-   disabled
- */
-  int (*test)(void);
 
   /** Terminate the context
    @param skey    The scheduled key
@@ -12058,7 +10039,6 @@ extern struct ltc_cipher_descriptor {
 
 } cipher_descriptor[];
 
-#ifdef LTC_RIJNDAEL
 
 /* make aes an alias */
 
@@ -12077,19 +10057,7 @@ void rijndael_done(symmetric_key *skey);
 
 int rijndael_keysize(int *keysize);
 
-int rijndael_enc_setup(const unsigned char *key, int keylen, int num_rounds,
-                       symmetric_key *skey);
-
-int rijndael_enc_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                             symmetric_key *skey);
-
-void rijndael_enc_done(symmetric_key *skey);
-
-int rijndael_enc_keysize(int *keysize);
-
 extern const struct ltc_cipher_descriptor aes_desc;
-extern const struct ltc_cipher_descriptor rijndael_enc_desc, aes_enc_desc;
-#endif
 
 int find_cipher(const char *name);
 
@@ -12129,13 +10097,11 @@ struct sha1_state {
 };
 #endif
 
-#ifdef LTC_MD5
 struct md5_state {
   ulong64 length;
   ulong32 state[4], curlen;
   unsigned char buf[64];
 };
-#endif
 
 typedef union Hash_state {
   char dummy[1];
@@ -12148,9 +10114,7 @@ typedef union Hash_state {
 #ifdef LTC_SHA1
   struct sha1_state sha1;
 #endif
-#ifdef LTC_MD5
   struct md5_state md5;
-#endif
   void *data;
 } hash_state;
 
@@ -12189,10 +10153,6 @@ extern struct ltc_hash_descriptor {
  */
   int (*done)(hash_state *hash, unsigned char *out);
 
-  /** Self-test
-   @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
- */
-  int (*test)(void);
 } hash_descriptor[];
 
 #ifdef LTC_SHA512
@@ -12203,8 +10163,6 @@ int sha512_process(hash_state *md, const unsigned char *in,
                    unsigned long inlen);
 
 int sha512_done(hash_state *md, unsigned char *hash);
-
-int sha512_test(void);
 
 extern const struct ltc_hash_descriptor sha512_desc;
 #endif
@@ -12220,8 +10178,6 @@ int sha384_init(hash_state *md);
 
 int sha384_done(hash_state *md, unsigned char *hash);
 
-int sha384_test(void);
-
 extern const struct ltc_hash_descriptor sha384_desc;
 #endif
 
@@ -12233,8 +10189,6 @@ int sha256_process(hash_state *md, const unsigned char *in,
                    unsigned long inlen);
 
 int sha256_done(hash_state *md, unsigned char *hash);
-
-int sha256_test(void);
 
 extern const struct ltc_hash_descriptor sha256_desc;
 
@@ -12248,12 +10202,9 @@ int sha1_process(hash_state *md, const unsigned char *in, unsigned long inlen);
 
 int sha1_done(hash_state *md, unsigned char *hash);
 
-int sha1_test(void);
-
 extern const struct ltc_hash_descriptor sha1_desc;
 #endif
 
-#ifdef LTC_MD5
 
 int md5_init(hash_state *md);
 
@@ -12261,10 +10212,7 @@ int md5_process(hash_state *md, const unsigned char *in, unsigned long inlen);
 
 int md5_done(hash_state *md, unsigned char *hash);
 
-int md5_test(void);
-
 extern const struct ltc_hash_descriptor md5_desc;
-#endif
 
 int find_hash(const char *name);
 
@@ -12335,12 +10283,10 @@ int hmac_done(hmac_state *hmac, unsigned char *out, unsigned long *outlen);
 
 #endif
 
-#if defined(LRW_MODE) || defined(LTC_GCM_MODE)
 
 void gcm_gf_mult(const unsigned char *a, const unsigned char *b,
                  unsigned char *c);
 
-#endif
 
 /* table shared between GCM and LRW */
 #if defined(LTC_GCM_TABLES) || defined(LRW_TABLES) || \
@@ -12348,7 +10294,6 @@ void gcm_gf_mult(const unsigned char *a, const unsigned char *b,
 extern const unsigned char gcm_shift_table[];
 #endif
 
-#ifdef LTC_GCM_MODE
 
 #define GCM_ENCRYPT 0
 #define GCM_DECRYPT 1
@@ -12373,13 +10318,11 @@ typedef struct {
   ulong64 totlen, /* 64-bit counter used for IV and AAD */
       pttotlen;   /* 64-bit counter for the PT */
 
-#ifdef LTC_GCM_TABLES
   unsigned char PC[16][256][16] /* 16 tables of 8x128 */
 #ifdef LTC_GCM_TABLES_SSE2
       __attribute__((aligned(16)))
 #endif
       ;
-#endif
 } gcm_state;
 
 void gcm_mult_h(gcm_state *gcm, unsigned char *I);
@@ -12398,7 +10341,6 @@ int gcm_process(gcm_state *gcm, unsigned char *pt, unsigned long ptlen,
 
 int gcm_done(gcm_state *gcm, unsigned char *tag, unsigned long *taglen);
 
-#endif /* LTC_GCM_MODE */
 
 #ifdef LTC_PELICAN
 
@@ -12473,13 +10415,6 @@ unsigned long sprng_read(unsigned char *out, unsigned long outlen,
                          prng_state *prng);
 
 int sprng_done(prng_state *prng);
-
-int sprng_export(unsigned char *out, unsigned long *outlen, prng_state *prng);
-
-int sprng_import(const unsigned char *in, unsigned long inlen,
-                 prng_state *prng);
-
-int sprng_test(void);
 
 extern const struct ltc_prng_descriptor sprng_desc;
 #endif
@@ -13527,8 +11462,6 @@ extern const ltc_math_descriptor gmp_desc;
 /* ---- MEM routines ---- */
 void zeromem(void *dst, size_t len);
 
-void burn_stack(unsigned long len);
-
 /* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_misc.h,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
@@ -13641,9 +11574,6 @@ int pkcs_1_pss_decode(const unsigned char *msghash, unsigned long msghashlen,
 /* $Revision: 1.8 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-#ifdef __cplusplus
-}
-#endif
 #endif /* TOMCRYPT_H_ */
 
 /* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt.h,v $ */
@@ -13654,16 +11584,7 @@ int pkcs_1_pss_decode(const unsigned char *msghash, unsigned long msghashlen,
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_cipher_descriptor.c
@@ -13677,7 +11598,6 @@ struct ltc_cipher_descriptor cipher_descriptor[TAB_SIZE] = {{
     NULL,
     NULL,
     NULL,
-    NULL,
 }};
 
 LTC_MUTEX_GLOBAL(ltc_cipher_mutex)
@@ -13687,16 +11607,7 @@ LTC_MUTEX_GLOBAL(ltc_cipher_mutex)
 /* $Revision: 1.13 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_cipher_is_valid.c
@@ -13723,16 +11634,7 @@ int cipher_is_valid(int idx) {
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_find_cipher.c
@@ -13764,16 +11666,7 @@ int find_cipher(const char *name) {
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_find_cipher_any.c
@@ -13785,16 +11678,7 @@ int find_cipher(const char *name) {
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_find_cipher_id.c
@@ -13805,16 +11689,7 @@ int find_cipher(const char *name) {
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_find_hash.c
@@ -13846,16 +11721,7 @@ int find_hash(const char *name) {
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_find_hash_any.c
@@ -13866,16 +11732,7 @@ int find_hash(const char *name) {
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_find_hash_id.c
@@ -13886,31 +11743,13 @@ int find_hash(const char *name) {
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_find_hash_oid.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_find_prng.c
@@ -13942,16 +11781,7 @@ int find_prng(const char *name) {
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_fsa.c
@@ -13962,16 +11792,7 @@ int find_prng(const char *name) {
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_hash_descriptor.c
@@ -13987,7 +11808,6 @@ struct ltc_hash_descriptor hash_descriptor[TAB_SIZE] = {{
     NULL,
     NULL,
     NULL,
-    NULL,
 }};
 
 LTC_MUTEX_GLOBAL(ltc_hash_mutex)
@@ -13997,16 +11817,7 @@ LTC_MUTEX_GLOBAL(ltc_hash_mutex)
 /* $Revision: 1.10 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_hash_is_valid.c
@@ -14032,29 +11843,11 @@ int hash_is_valid(int idx) {
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 ltc_math_descriptor ltc_mp;
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_prng_descriptor.c
@@ -14076,16 +11869,7 @@ LTC_MUTEX_GLOBAL(ltc_prng_mutex)
 /* $Revision: 1.8 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_prng_is_valid.c
@@ -14111,16 +11895,7 @@ int prng_is_valid(int idx) {
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_register_cipher.c
@@ -14168,16 +11943,7 @@ int register_cipher(const struct ltc_cipher_descriptor *cipher) {
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_register_hash.c
@@ -14223,16 +11989,7 @@ int register_hash(const struct ltc_hash_descriptor *hash) {
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_register_prng.c
@@ -14278,16 +12035,7 @@ int register_prng(const struct ltc_prng_descriptor *prng) {
 /* $Revision: 1.8 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_unregister_cipher.c
@@ -14299,16 +12047,7 @@ int register_prng(const struct ltc_prng_descriptor *prng) {
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_unregister_hash.c
@@ -14320,16 +12059,7 @@ int register_prng(const struct ltc_prng_descriptor *prng) {
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file crypt_unregister_prng.c
@@ -14341,16 +12071,7 @@ int register_prng(const struct ltc_prng_descriptor *prng) {
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_decode_bit_string.c
@@ -14442,16 +12163,7 @@ int der_decode_bit_string(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_decode_boolean.c
@@ -14488,16 +12200,7 @@ int der_decode_boolean(const unsigned char *in, unsigned long inlen, int *out) {
 /* $Revision: 1.2 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_decode_choice.c
@@ -14670,16 +12373,7 @@ int der_decode_choice(const unsigned char *in, unsigned long *inlen,
 /* $Revision: 1.9 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_decode_ia5_string.c
@@ -14765,16 +12459,7 @@ int der_decode_ia5_string(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_decode_integer.c
@@ -14877,16 +12562,7 @@ int der_decode_integer(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_decode_object_identifier.c
@@ -14978,16 +12654,7 @@ int der_decode_object_identifier(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_decode_octet_string.c
@@ -15069,16 +12736,7 @@ int der_decode_octet_string(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_decode_printable_string.c
@@ -15165,16 +12823,7 @@ int der_decode_printable_string(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_decode_sequence_ex.c
@@ -15486,16 +13135,7 @@ LBL_ERR:
 /* $Revision: 1.16 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_decode_sequence_flexi.c
@@ -15892,16 +13532,7 @@ error:
 /* $Revision: 1.26 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_decode_sequence_multi.c
@@ -16030,16 +13661,7 @@ LBL_ERR:
 /* $Revision: 1.13 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_decode_short_integer.c
@@ -16098,16 +13720,7 @@ int der_decode_short_integer(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_decode_utctime.c
@@ -16243,16 +13856,7 @@ int der_decode_utctime(const unsigned char *in, unsigned long *inlen,
 /* $Revision: 1.9 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_decode_utf8_string.c
@@ -16356,16 +13960,7 @@ int der_decode_utf8_string(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.8 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_encode_bit_string.c
@@ -16445,16 +14040,7 @@ int der_encode_bit_string(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_encode_boolean.c
@@ -16494,16 +14080,7 @@ int der_encode_boolean(int in, unsigned char *out, unsigned long *outlen) {
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_encode_ia5_string.c
@@ -16580,16 +14157,7 @@ int der_encode_ia5_string(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_encode_integer.c
@@ -16715,16 +14283,7 @@ int der_encode_integer(void *num, unsigned char *out, unsigned long *outlen) {
 /* $Revision: 1.9 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_encode_object_identifier.c
@@ -16830,16 +14389,7 @@ int der_encode_object_identifier(unsigned long *words, unsigned long nwords,
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_encode_octet_string.c
@@ -16917,16 +14467,7 @@ int der_encode_octet_string(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_encode_printable_string.c
@@ -17004,16 +14545,7 @@ int der_encode_printable_string(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_encode_sequence_ex.c
@@ -17347,16 +14879,7 @@ LBL_ERR:
 
 #endif
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_encode_sequence_multi.c
@@ -17483,16 +15006,7 @@ LBL_ERR:
 /* $Revision: 1.12 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_encode_set.c
@@ -17607,16 +15121,7 @@ int der_encode_set(ltc_asn1_list *list, unsigned long inlen, unsigned char *out,
 /* $Revision: 1.12 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_encode_setof.c
@@ -17750,9 +15255,6 @@ int der_encode_setof(ltc_asn1_list *list, unsigned long inlen,
     y += edges[x].size;
   }
 
-#ifdef LTC_CLEAN_STACK
-  zeromem(buf, *outlen);
-#endif
 
   /* free buffers */
   XFREE(edges);
@@ -17768,16 +15270,7 @@ int der_encode_setof(ltc_asn1_list *list, unsigned long inlen,
 /* $Revision: 1.12 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_encode_short_integer.c
@@ -17867,16 +15360,7 @@ int der_encode_short_integer(unsigned long num, unsigned char *out,
 /* $Revision: 1.8 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_encode_utctime.c
@@ -17951,16 +15435,7 @@ int der_encode_utctime(ltc_utctime *utctime, unsigned char *out,
 /* $Revision: 1.10 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_encode_utf8_string.c
@@ -18073,16 +15548,7 @@ int der_encode_utf8_string(const wchar_t *in, unsigned long inlen,
 /* $Revision: 1.9 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_length_bit_string.c
@@ -18128,16 +15594,7 @@ int der_length_bit_string(unsigned long nbits, unsigned long *outlen) {
 /* $Revision: 1.3 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_length_boolean.c
@@ -18164,16 +15621,7 @@ int der_length_boolean(unsigned long *outlen) {
 /* $Revision: 1.3 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_length_ia5_string.c
@@ -18272,16 +15720,7 @@ int der_length_ia5_string(const unsigned char *octets, unsigned long noctets,
 /* $Revision: 1.3 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_length_integer.c
@@ -18357,16 +15796,7 @@ int der_length_integer(void *num, unsigned long *outlen) {
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_length_object_identifier.c
@@ -18446,16 +15876,7 @@ int der_length_object_identifier(unsigned long *words, unsigned long nwords,
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_length_octet_string.c
@@ -18500,16 +15921,7 @@ int der_length_octet_string(unsigned long noctets, unsigned long *outlen) {
 /* $Revision: 1.3 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_length_printable_string.c
@@ -18608,16 +16020,7 @@ int der_length_printable_string(const unsigned char *octets,
 /* $Revision: 1.3 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_length_sequence.c
@@ -18777,16 +16180,7 @@ LBL_ERR:
 /* $Revision: 1.14 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_length_short_integer.c
@@ -18848,16 +16242,7 @@ int der_length_short_integer(unsigned long num, unsigned long *outlen) {
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_length_utctime.c
@@ -18894,16 +16279,7 @@ int der_length_utctime(ltc_utctime *utctime, unsigned long *outlen) {
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_length_utf8_string.c
@@ -18976,16 +16352,7 @@ int der_length_utf8_string(const wchar_t *in, unsigned long noctets,
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file der_sequence_free.c
@@ -19052,16 +16419,7 @@ void der_sequence_free(ltc_asn1_list *in) {
 /* $Revision: 1.4 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -19178,16 +16536,7 @@ const ltc_ecc_set_type ltc_ecc_sets[] = {
 /* $Revision: 1.40 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -19252,16 +16601,7 @@ int ecc_ansi_x963_export(ecc_key *key, unsigned char *out,
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -19352,16 +16692,7 @@ error:
 /* $Revision: 1.11 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -19382,16 +16713,7 @@ error:
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -19411,16 +16733,7 @@ error:
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -19440,16 +16753,7 @@ error:
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -19478,16 +16782,7 @@ void ecc_free(ecc_key *key) {
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -19507,16 +16802,7 @@ void ecc_free(ecc_key *key) {
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -19536,16 +16822,7 @@ void ecc_free(ecc_key *key) {
 /* $Revision: 1.13 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -19649,9 +16926,6 @@ cleanup:
   ltc_ecc_del_point(base);
   mp_clear_multi(prime, order, NULL);
 ERR_BUF:
-#ifdef LTC_CLEAN_STACK
-  zeromem(buf, ECC_MAXSIZE);
-#endif
   XFREE(buf);
   return err;
 }
@@ -19661,16 +16935,7 @@ ERR_BUF:
 /* $Revision: 1.13 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -19767,16 +17032,7 @@ done:
 /* $Revision: 1.10 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -19895,16 +17151,7 @@ errnokey:
 /* $Revision: 1.11 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -19924,16 +17171,7 @@ errnokey:
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -19954,16 +17192,7 @@ errnokey:
 /* $Revision: 1.12 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -20157,31 +17386,13 @@ error:
 /* $Revision: 1.14 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/error_to_string.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 #define DESC_DEF_ONLY
 
@@ -20189,16 +17400,7 @@ error:
 /* $Revision: 1.16 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file hash_file.c
@@ -20209,16 +17411,7 @@ error:
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:23 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file hash_filehandle.c
@@ -20229,16 +17422,7 @@ error:
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:23 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file hash_memory.c
@@ -20286,9 +17470,6 @@ int hash_memory(int hash, const unsigned char *in, unsigned long inlen,
   err = hash_descriptor[hash].done(md, out);
   *outlen = hash_descriptor[hash].hashsize;
 LBL_ERR:
-#ifdef LTC_CLEAN_STACK
-  zeromem(md, sizeof(hash_state));
-#endif
   XFREE(md);
 
   return err;
@@ -20298,16 +17479,7 @@ LBL_ERR:
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:23 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file hash_memory_multi.c
@@ -20318,16 +17490,7 @@ LBL_ERR:
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:23 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -20364,16 +17527,7 @@ int ltc_ecc_is_valid_idx(int n) {
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -20460,16 +17614,7 @@ done:
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -20689,10 +17834,6 @@ ERR_P:
     ltc_ecc_del_point(precomp[x]);
   }
 ERR_T:
-#ifdef LTC_CLEAN_STACK
-  zeromem(tA, ECC_BUF_SIZE);
-  zeromem(tB, ECC_BUF_SIZE);
-#endif
   XFREE(tA);
   XFREE(tB);
 
@@ -20706,16 +17847,7 @@ ERR_T:
 /* $Revision: 1.8 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -20975,16 +18107,7 @@ done:
 /* $Revision: 1.26 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -21177,16 +18300,7 @@ done:
 /* $Revision: 1.13 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -21236,16 +18350,7 @@ void ltc_ecc_del_point(ecc_point *p) {
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -21554,16 +18659,7 @@ done:
 /* $Revision: 1.16 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* Implements ECC over Z/pZ for curve y^2 = x^3 - 3x + b
  *
@@ -21784,16 +18880,7 @@ done:
 /* $Revision: 1.11 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 #define DESC_DEF_ONLY
 
@@ -22357,16 +19444,7 @@ const ltc_math_descriptor ltm_desc = {
 /* $Revision: 1.31 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 #ifdef MPI
 
@@ -22415,16 +19493,7 @@ void ltc_deinit_multi(void *a, ...) {
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:23 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file pkcs_1_i2osp.c
@@ -22443,16 +19512,7 @@ void ltc_deinit_multi(void *a, ...) {
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file pkcs_1_mgf1.c
@@ -22533,10 +19593,6 @@ int pkcs_1_mgf1(int hash_idx, const unsigned char *seed, unsigned long seedlen,
 
   err = CRYPT_OK;
 LBL_ERR:
-#ifdef LTC_CLEAN_STACK
-  zeromem(buf, hLen);
-  zeromem(md, sizeof(hash_state));
-#endif
 
   XFREE(buf);
   XFREE(md);
@@ -22550,16 +19606,7 @@ LBL_ERR:
 /* $Revision: 1.8 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file pkcs_1_oaep_decode.c
@@ -22722,11 +19769,6 @@ int pkcs_1_oaep_decode(const unsigned char *msg, unsigned long msglen,
 
   err = CRYPT_OK;
 LBL_ERR:
-#ifdef LTC_CLEAN_STACK
-  zeromem(DB, modulus_len);
-  zeromem(seed, hLen);
-  zeromem(mask, modulus_len);
-#endif
 
   XFREE(seed);
   XFREE(mask);
@@ -22741,16 +19783,7 @@ LBL_ERR:
 /* $Revision: 1.13 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file pkcs_1_oaep_encode.c
@@ -22897,11 +19930,6 @@ int pkcs_1_oaep_encode(const unsigned char *msg, unsigned long msglen,
 
   err = CRYPT_OK;
 LBL_ERR:
-#ifdef LTC_CLEAN_STACK
-  zeromem(DB, modulus_len);
-  zeromem(seed, hLen);
-  zeromem(mask, modulus_len);
-#endif
 
   XFREE(seed);
   XFREE(mask);
@@ -22916,16 +19944,7 @@ LBL_ERR:
 /* $Revision: 1.9 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file pkcs_1_os2ip.c
@@ -22939,16 +19958,7 @@ LBL_ERR:
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file pkcs_1_pss_decode.c
@@ -23099,12 +20109,6 @@ int pkcs_1_pss_decode(const unsigned char *msghash, unsigned long msghashlen,
 
   err = CRYPT_OK;
 LBL_ERR:
-#ifdef LTC_CLEAN_STACK
-  zeromem(DB, modulus_len);
-  zeromem(mask, modulus_len);
-  zeromem(salt, modulus_len);
-  zeromem(hash, modulus_len);
-#endif
 
   XFREE(hash);
   XFREE(salt);
@@ -23120,16 +20124,7 @@ LBL_ERR:
 /* $Revision: 1.11 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file pkcs_1_pss_encode.c
@@ -23276,12 +20271,6 @@ int pkcs_1_pss_encode(const unsigned char *msghash, unsigned long msghashlen,
   *outlen = modulus_len;
   err = CRYPT_OK;
 LBL_ERR:
-#ifdef LTC_CLEAN_STACK
-  zeromem(DB, modulus_len);
-  zeromem(mask, modulus_len);
-  zeromem(salt, modulus_len);
-  zeromem(hash, modulus_len);
-#endif
 
   XFREE(hash);
   XFREE(salt);
@@ -23297,16 +20286,7 @@ LBL_ERR:
 /* $Revision: 1.9 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /** @file pkcs_1_v1_5_decode.c
  *
@@ -23409,16 +20389,7 @@ bail:
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /*! \file pkcs_1_v1_5_encode.c
  *
@@ -23516,16 +20487,7 @@ bail:
 /* $Revision: 1.4 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file rand_prime.c
@@ -23588,9 +20550,6 @@ int rand_prime(void *N, long len, prng_state *prng, int wprng) {
     }
   } while (res == LTC_MP_NO);
 
-#ifdef LTC_CLEAN_STACK
-  zeromem(buf, len);
-#endif
 
   XFREE(buf);
   return CRYPT_OK;
@@ -23600,16 +20559,7 @@ int rand_prime(void *N, long len, prng_state *prng, int wprng) {
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:23 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file rng_get_bytes.c
@@ -23756,16 +20706,7 @@ unsigned long rng_get_bytes(unsigned char *out, unsigned long outlen,
 /* $Revision: 1.7 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file rng_make_prng.c
@@ -23816,9 +20757,6 @@ int rng_make_prng(int bits, int wprng, prng_state *prng,
     return err;
   }
 
-#ifdef LTC_CLEAN_STACK
-  zeromem(buf, sizeof(buf));
-#endif
   return CRYPT_OK;
 }
 
@@ -23826,16 +20764,7 @@ int rng_make_prng(int bits, int wprng, prng_state *prng,
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file rsa_decrypt_key.c
@@ -23931,16 +20860,7 @@ int rsa_decrypt_key_ex(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.10 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file rsa_encrypt_key.c
@@ -24033,16 +20953,7 @@ int rsa_encrypt_key_ex(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.10 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file rsa_exptmod.c
@@ -24167,16 +21078,7 @@ error:
 /* $Revision: 1.18 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file rsa_free.c
@@ -24201,16 +21103,7 @@ void rsa_free(rsa_key *key) {
 /* $Revision: 1.10 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file rsa_import.c
@@ -24339,16 +21232,7 @@ LBL_ERR:
 /* $Revision: 1.23 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file rsa_make_key.c
@@ -24490,16 +21374,7 @@ cleanup:
 /* $Revision: 1.16 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file rsa_sign_hash.c
@@ -24622,16 +21497,7 @@ int rsa_sign_hash_ex(const unsigned char *in, unsigned long inlen,
 /* $Revision: 1.11 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file rsa_verify_hash.c
@@ -24780,16 +21646,10 @@ int rsa_verify_hash_ex(const unsigned char *sig, unsigned long siglen,
       *stat = 1;
     }
 
-#ifdef LTC_CLEAN_STACK
-    zeromem(out, outlen);
-#endif
     XFREE(out);
   }
 
 bail_2:
-#ifdef LTC_CLEAN_STACK
-  zeromem(tmpbuf, siglen);
-#endif
   XFREE(tmpbuf);
   return err;
 }
@@ -24800,16 +21660,7 @@ bail_2:
 /* $Revision: 1.13 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file sprng.c
@@ -24874,54 +21725,13 @@ unsigned long sprng_read(unsigned char *out, unsigned long outlen,
  */
 int sprng_done(prng_state *prng) { return CRYPT_OK; }
 
-/**
-   Export the PRNG state
-   @param out       [out] Destination
-   @param outlen    [in/out] Max size and resulting size of the state
-   @param prng      The PRNG to export
-   @return CRYPT_OK if successful
- */
-int sprng_export(unsigned char *out, unsigned long *outlen, prng_state *prng) {
-  LTC_ARGCHK(outlen != NULL);
-
-  *outlen = 0;
-  return CRYPT_OK;
-}
-
-/**
-   Import a PRNG state
-   @param in       The PRNG state
-   @param inlen    Size of the state
-   @param prng     The PRNG to import
-   @return CRYPT_OK if successful
- */
-int sprng_import(const unsigned char *in, unsigned long inlen,
-                 prng_state *prng) {
-  return CRYPT_OK;
-}
-
-/**
-   PRNG self-test
-   @return CRYPT_OK if successful, CRYPT_NOP if self-testing has been disabled
- */
-int sprng_test(void) { return CRYPT_OK; }
-
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/prngs/sprng.c,v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file zeromem.c
@@ -24946,16 +21756,7 @@ void zeromem(void *out, size_t outlen) {
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file sha1.c
@@ -24984,7 +21785,6 @@ const struct ltc_hash_descriptor sha1_desc = {
     &sha1_init,
     &sha1_process,
     &sha1_done,
-    &sha1_test,
 };
 
 #define F0(x, y, z) (z ^ (x & (y ^ z)))
@@ -24992,18 +21792,11 @@ const struct ltc_hash_descriptor sha1_desc = {
 #define F2(x, y, z) ((x & y) | (z & (x | y)))
 #define F3(x, y, z) (x ^ y ^ z)
 
-#ifdef LTC_CLEAN_STACK
-static int _sha1_compress(hash_state *md, unsigned char *buf)
-#else
 
 static int sha1_compress(hash_state *md, unsigned char *buf)
-#endif
 {
   ulong32 a, b, c, d, e, W[80], i;
 
-#ifdef LTC_SMALL_CODE
-  ulong32 t;
-#endif
 
   /* copy the state into 512-bits into W[0..15] */
   for (i = 0; i < 16; i++) {
@@ -25037,48 +21830,6 @@ static int sha1_compress(hash_state *md, unsigned char *buf)
   e = (ROLc(a, 5) + F3(b, c, d) + e + W[i] + 0xca62c1d6UL); \
   b = ROLc(b, 30);
 
-#ifdef LTC_SMALL_CODE
-  for (i = 0; i < 20;) {
-    FF0(a, b, c, d, e, i++);
-    t = e;
-    e = d;
-    d = c;
-    c = b;
-    b = a;
-    a = t;
-  }
-
-  for (; i < 40;) {
-    FF1(a, b, c, d, e, i++);
-    t = e;
-    e = d;
-    d = c;
-    c = b;
-    b = a;
-    a = t;
-  }
-
-  for (; i < 60;) {
-    FF2(a, b, c, d, e, i++);
-    t = e;
-    e = d;
-    d = c;
-    c = b;
-    b = a;
-    a = t;
-  }
-
-  for (; i < 80;) {
-    FF3(a, b, c, d, e, i++);
-    t = e;
-    e = d;
-    d = c;
-    c = b;
-    b = a;
-    a = t;
-  }
-
-#else
   for (i = 0; i < 20;) {
     FF0(a, b, c, d, e, i++);
     FF0(e, a, b, c, d, i++);
@@ -25113,7 +21864,6 @@ static int sha1_compress(hash_state *md, unsigned char *buf)
     FF3(c, d, e, a, b, i++);
     FF3(b, c, d, e, a, i++);
   }
-#endif
 
 #undef FF0
 #undef FF1
@@ -25130,15 +21880,6 @@ static int sha1_compress(hash_state *md, unsigned char *buf)
   return CRYPT_OK;
 }
 
-#ifdef LTC_CLEAN_STACK
-static int sha1_compress(hash_state *md, unsigned char *buf) {
-  int err;
-
-  err = _sha1_compress(md, buf);
-  burn_stack(sizeof(ulong32) * 87);
-  return err;
-}
-#endif
 
 /**
    Initialize the hash state
@@ -25213,17 +21954,8 @@ int sha1_done(hash_state *md, unsigned char *out) {
   for (i = 0; i < 5; i++) {
     STORE32H(md->sha1.state[i], out + (4 * i));
   }
-#ifdef LTC_CLEAN_STACK
-  zeromem(md, sizeof(hash_state));
-#endif
   return CRYPT_OK;
 }
-
-/**
-   Self-test the hash
-   @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
- */
-int sha1_test(void) { return CRYPT_NOP; }
 
 #endif
 
@@ -25231,16 +21963,7 @@ int sha1_test(void) { return CRYPT_NOP; }
 /* $Revision: 1.10 $ */
 /* $Date: 2007/05/12 14:25:28 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
   @file sha256.c
@@ -25271,26 +21994,8 @@ const struct ltc_hash_descriptor sha256_desc = {
     &sha256_init,
     &sha256_process,
     &sha256_done,
-    &sha256_test,
 };
 
-#ifdef LTC_SMALL_CODE
-/* the K array */
-static const ulong32 K[64] = {
-    0x428a2f98UL, 0x71374491UL, 0xb5c0fbcfUL, 0xe9b5dba5UL, 0x3956c25bUL,
-    0x59f111f1UL, 0x923f82a4UL, 0xab1c5ed5UL, 0xd807aa98UL, 0x12835b01UL,
-    0x243185beUL, 0x550c7dc3UL, 0x72be5d74UL, 0x80deb1feUL, 0x9bdc06a7UL,
-    0xc19bf174UL, 0xe49b69c1UL, 0xefbe4786UL, 0x0fc19dc6UL, 0x240ca1ccUL,
-    0x2de92c6fUL, 0x4a7484aaUL, 0x5cb0a9dcUL, 0x76f988daUL, 0x983e5152UL,
-    0xa831c66dUL, 0xb00327c8UL, 0xbf597fc7UL, 0xc6e00bf3UL, 0xd5a79147UL,
-    0x06ca6351UL, 0x14292967UL, 0x27b70a85UL, 0x2e1b2138UL, 0x4d2c6dfcUL,
-    0x53380d13UL, 0x650a7354UL, 0x766a0abbUL, 0x81c2c92eUL, 0x92722c85UL,
-    0xa2bfe8a1UL, 0xa81a664bUL, 0xc24b8b70UL, 0xc76c51a3UL, 0xd192e819UL,
-    0xd6990624UL, 0xf40e3585UL, 0x106aa070UL, 0x19a4c116UL, 0x1e376c08UL,
-    0x2748774cUL, 0x34b0bcb5UL, 0x391c0cb3UL, 0x4ed8aa4aUL, 0x5b9cca4fUL,
-    0x682e6ff3UL, 0x748f82eeUL, 0x78a5636fUL, 0x84c87814UL, 0x8cc70208UL,
-    0x90befffaUL, 0xa4506cebUL, 0xbef9a3f7UL, 0xc67178f2UL};
-#endif
 
 /* Various logical functions */
 #define Ch(x, y, z) (z ^ (x & (y ^ z)))
@@ -25303,17 +22008,10 @@ static const ulong32 K[64] = {
 #define Gamma1(x) (S(x, 17) ^ S(x, 19) ^ R(x, 10))
 
 /* compress 512-bits */
-#ifdef LTC_CLEAN_STACK
-static int _sha256_compress(hash_state *md, unsigned char *buf)
-#else
 
 static int sha256_compress(hash_state *md, unsigned char *buf)
-#endif
 {
   ulong32 S[8], W[64], t0, t1;
-#ifdef LTC_SMALL_CODE
-  ulong32 t;
-#endif
   int i;
 
   /* copy state into S */
@@ -25332,26 +22030,6 @@ static int sha256_compress(hash_state *md, unsigned char *buf)
   }
 
   /* Compress */
-#ifdef LTC_SMALL_CODE
-#define RND(a, b, c, d, e, f, g, h, i)            \
-  t0 = h + Sigma1(e) + Ch(e, f, g) + K[i] + W[i]; \
-  t1 = Sigma0(a) + Maj(a, b, c);                  \
-  d += t0;                                        \
-  h = t0 + t1;
-
-  for (i = 0; i < 64; ++i) {
-    RND(S[0], S[1], S[2], S[3], S[4], S[5], S[6], S[7], i);
-    t = S[7];
-    S[7] = S[6];
-    S[6] = S[5];
-    S[5] = S[4];
-    S[4] = S[3];
-    S[3] = S[2];
-    S[2] = S[1];
-    S[1] = S[0];
-    S[0] = t;
-  }
-#else
 #define RND(a, b, c, d, e, f, g, h, i, ki)      \
   t0 = h + Sigma1(e) + Ch(e, f, g) + ki + W[i]; \
   t1 = Sigma0(a) + Maj(a, b, c);                \
@@ -25425,7 +22103,6 @@ static int sha256_compress(hash_state *md, unsigned char *buf)
 
 #undef RND
 
-#endif
 
   /* feedback */
   for (i = 0; i < 8; i++) {
@@ -25434,14 +22111,6 @@ static int sha256_compress(hash_state *md, unsigned char *buf)
   return CRYPT_OK;
 }
 
-#ifdef LTC_CLEAN_STACK
-static int sha256_compress(hash_state *md, unsigned char *buf) {
-  int err;
-  err = _sha256_compress(md, buf);
-  burn_stack(sizeof(ulong32) * 74);
-  return err;
-}
-#endif
 
 /**
    Initialize the hash state
@@ -25520,17 +22189,8 @@ int sha256_done(hash_state *md, unsigned char *out) {
   for (i = 0; i < 8; i++) {
     STORE32H(md->sha256.state[i], out + (4 * i));
   }
-#ifdef LTC_CLEAN_STACK
-  zeromem(md, sizeof(hash_state));
-#endif
   return CRYPT_OK;
 }
-
-/**
-  Self-test the hash
-  @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
-*/
-int sha256_test(void) { return CRYPT_NOP; }
 
 #endif
 
@@ -25538,16 +22198,7 @@ int sha256_test(void) { return CRYPT_NOP; }
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 /**
    @param sha384.c
    LTC_SHA384 hash included in sha512.c, Tom St Denis
@@ -25577,7 +22228,6 @@ const struct ltc_hash_descriptor sha384_desc = {
     &sha384_init,
     &sha512_process,
     &sha384_done,
-    &sha384_test,
 };
 
 /**
@@ -25619,17 +22269,8 @@ int sha384_done(hash_state *md, unsigned char *out) {
 
   sha512_done(md, buf);
   XMEMCPY(out, buf, 48);
-#ifdef LTC_CLEAN_STACK
-  zeromem(buf, sizeof(buf));
-#endif
   return CRYPT_OK;
 }
-
-/**
-  Self-test the hash
-  @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
-*/
-int sha384_test(void) { return CRYPT_NOP; }
 
 #endif /* defined(LTC_SHA384) && defined(LTC_SHA512) */
 
@@ -25637,16 +22278,7 @@ int sha384_test(void) { return CRYPT_NOP; }
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @param sha512.c
@@ -25677,7 +22309,6 @@ const struct ltc_hash_descriptor sha512_desc = {
     &sha512_init,
     &sha512_process,
     &sha512_done,
-    &sha512_test,
 };
 
 /* the K array */
@@ -25741,12 +22372,8 @@ static const ulong64 K[80] = {
 #define Gamma1(x) (S(x, 19) ^ S(x, 61) ^ R(x, 6))
 
 /* compress 1024-bits */
-#ifdef LTC_CLEAN_STACK
-static int _sha512_compress(hash_state *md, unsigned char *buf)
-#else
 
 static int sha512_compress(hash_state *md, unsigned char *buf)
-#endif
 {
   ulong64 S[8], W[80], t0, t1;
   int i;
@@ -25767,20 +22394,6 @@ static int sha512_compress(hash_state *md, unsigned char *buf)
   }
 
   /* Compress */
-#ifdef LTC_SMALL_CODE
-  for (i = 0; i < 80; i++) {
-    t0 = S[7] + Sigma1(S[4]) + Ch(S[4], S[5], S[6]) + K[i] + W[i];
-    t1 = Sigma0(S[0]) + Maj(S[0], S[1], S[2]);
-    S[7] = S[6];
-    S[6] = S[5];
-    S[5] = S[4];
-    S[4] = S[3] + t0;
-    S[3] = S[2];
-    S[2] = S[1];
-    S[1] = S[0];
-    S[0] = t0 + t1;
-  }
-#else
 #define RND(a, b, c, d, e, f, g, h, i)            \
   t0 = h + Sigma1(e) + Ch(e, f, g) + K[i] + W[i]; \
   t1 = Sigma0(a) + Maj(a, b, c);                  \
@@ -25797,7 +22410,6 @@ static int sha512_compress(hash_state *md, unsigned char *buf)
     RND(S[2], S[3], S[4], S[5], S[6], S[7], S[0], S[1], i + 6);
     RND(S[1], S[2], S[3], S[4], S[5], S[6], S[7], S[0], i + 7);
   }
-#endif
 
   /* feedback */
   for (i = 0; i < 8; i++) {
@@ -25808,14 +22420,6 @@ static int sha512_compress(hash_state *md, unsigned char *buf)
 }
 
 /* compress 1024-bits */
-#ifdef LTC_CLEAN_STACK
-static int sha512_compress(hash_state *md, unsigned char *buf) {
-  int err;
-  err = _sha512_compress(md, buf);
-  burn_stack(sizeof(ulong64) * 90 + sizeof(int));
-  return err;
-}
-#endif
 
 /**
    Initialize the hash state
@@ -25896,17 +22500,8 @@ int sha512_done(hash_state *md, unsigned char *out) {
   for (i = 0; i < 8; i++) {
     STORE64H(md->sha512.state[i], out + (8 * i));
   }
-#ifdef LTC_CLEAN_STACK
-  zeromem(md, sizeof(hash_state));
-#endif
   return CRYPT_OK;
 }
-
-/**
-  Self-test the hash
-  @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
-*/
-int sha512_test(void) { return CRYPT_NOP; }
 
 #endif
 
@@ -25914,16 +22509,7 @@ int sha512_test(void) { return CRYPT_NOP; }
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
   @file hmac_init.c
@@ -26011,9 +22597,6 @@ LBL_ERR:
   /* free the key since we failed */
   XFREE(hmac->key);
 done:
-#ifdef LTC_CLEAN_STACK
-  zeromem(buf, LTC_HMAC_BLOCKSIZE);
-#endif
 
   XFREE(buf);
   return err;
@@ -26025,16 +22608,7 @@ done:
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
   @file hmac_process.c
@@ -26067,16 +22641,7 @@ int hmac_process(hmac_state *hmac, const unsigned char *in,
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
   @file hmac_done.c
@@ -26160,11 +22725,6 @@ int hmac_done(hmac_state *hmac, unsigned char *out, unsigned long *outlen) {
   err = CRYPT_OK;
 LBL_ERR:
   XFREE(hmac->key);
-#ifdef LTC_CLEAN_STACK
-  zeromem(isha, hashsize);
-  zeromem(buf, hashsize);
-  zeromem(hmac, sizeof(*hmac));
-#endif
 
   XFREE(isha);
   XFREE(buf);
@@ -26179,16 +22739,7 @@ LBL_ERR:
 /* $Date$ */
 
 #define __LTC_AES_TAB_C__
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 /* The precomputed tables for AES */
 /*
 Te0[x] = S [x].[02, 01, 01, 03];
@@ -26266,63 +22817,8 @@ static const ulong32 TE0[256] = {
 };
 
 #ifndef PELI_TAB
-static const ulong32 Te4[256] = {
-    0x63636363UL, 0x7c7c7c7cUL, 0x77777777UL, 0x7b7b7b7bUL, 0xf2f2f2f2UL,
-    0x6b6b6b6bUL, 0x6f6f6f6fUL, 0xc5c5c5c5UL, 0x30303030UL, 0x01010101UL,
-    0x67676767UL, 0x2b2b2b2bUL, 0xfefefefeUL, 0xd7d7d7d7UL, 0xababababUL,
-    0x76767676UL, 0xcacacacaUL, 0x82828282UL, 0xc9c9c9c9UL, 0x7d7d7d7dUL,
-    0xfafafafaUL, 0x59595959UL, 0x47474747UL, 0xf0f0f0f0UL, 0xadadadadUL,
-    0xd4d4d4d4UL, 0xa2a2a2a2UL, 0xafafafafUL, 0x9c9c9c9cUL, 0xa4a4a4a4UL,
-    0x72727272UL, 0xc0c0c0c0UL, 0xb7b7b7b7UL, 0xfdfdfdfdUL, 0x93939393UL,
-    0x26262626UL, 0x36363636UL, 0x3f3f3f3fUL, 0xf7f7f7f7UL, 0xccccccccUL,
-    0x34343434UL, 0xa5a5a5a5UL, 0xe5e5e5e5UL, 0xf1f1f1f1UL, 0x71717171UL,
-    0xd8d8d8d8UL, 0x31313131UL, 0x15151515UL, 0x04040404UL, 0xc7c7c7c7UL,
-    0x23232323UL, 0xc3c3c3c3UL, 0x18181818UL, 0x96969696UL, 0x05050505UL,
-    0x9a9a9a9aUL, 0x07070707UL, 0x12121212UL, 0x80808080UL, 0xe2e2e2e2UL,
-    0xebebebebUL, 0x27272727UL, 0xb2b2b2b2UL, 0x75757575UL, 0x09090909UL,
-    0x83838383UL, 0x2c2c2c2cUL, 0x1a1a1a1aUL, 0x1b1b1b1bUL, 0x6e6e6e6eUL,
-    0x5a5a5a5aUL, 0xa0a0a0a0UL, 0x52525252UL, 0x3b3b3b3bUL, 0xd6d6d6d6UL,
-    0xb3b3b3b3UL, 0x29292929UL, 0xe3e3e3e3UL, 0x2f2f2f2fUL, 0x84848484UL,
-    0x53535353UL, 0xd1d1d1d1UL, 0x00000000UL, 0xededededUL, 0x20202020UL,
-    0xfcfcfcfcUL, 0xb1b1b1b1UL, 0x5b5b5b5bUL, 0x6a6a6a6aUL, 0xcbcbcbcbUL,
-    0xbebebebeUL, 0x39393939UL, 0x4a4a4a4aUL, 0x4c4c4c4cUL, 0x58585858UL,
-    0xcfcfcfcfUL, 0xd0d0d0d0UL, 0xefefefefUL, 0xaaaaaaaaUL, 0xfbfbfbfbUL,
-    0x43434343UL, 0x4d4d4d4dUL, 0x33333333UL, 0x85858585UL, 0x45454545UL,
-    0xf9f9f9f9UL, 0x02020202UL, 0x7f7f7f7fUL, 0x50505050UL, 0x3c3c3c3cUL,
-    0x9f9f9f9fUL, 0xa8a8a8a8UL, 0x51515151UL, 0xa3a3a3a3UL, 0x40404040UL,
-    0x8f8f8f8fUL, 0x92929292UL, 0x9d9d9d9dUL, 0x38383838UL, 0xf5f5f5f5UL,
-    0xbcbcbcbcUL, 0xb6b6b6b6UL, 0xdadadadaUL, 0x21212121UL, 0x10101010UL,
-    0xffffffffUL, 0xf3f3f3f3UL, 0xd2d2d2d2UL, 0xcdcdcdcdUL, 0x0c0c0c0cUL,
-    0x13131313UL, 0xececececUL, 0x5f5f5f5fUL, 0x97979797UL, 0x44444444UL,
-    0x17171717UL, 0xc4c4c4c4UL, 0xa7a7a7a7UL, 0x7e7e7e7eUL, 0x3d3d3d3dUL,
-    0x64646464UL, 0x5d5d5d5dUL, 0x19191919UL, 0x73737373UL, 0x60606060UL,
-    0x81818181UL, 0x4f4f4f4fUL, 0xdcdcdcdcUL, 0x22222222UL, 0x2a2a2a2aUL,
-    0x90909090UL, 0x88888888UL, 0x46464646UL, 0xeeeeeeeeUL, 0xb8b8b8b8UL,
-    0x14141414UL, 0xdedededeUL, 0x5e5e5e5eUL, 0x0b0b0b0bUL, 0xdbdbdbdbUL,
-    0xe0e0e0e0UL, 0x32323232UL, 0x3a3a3a3aUL, 0x0a0a0a0aUL, 0x49494949UL,
-    0x06060606UL, 0x24242424UL, 0x5c5c5c5cUL, 0xc2c2c2c2UL, 0xd3d3d3d3UL,
-    0xacacacacUL, 0x62626262UL, 0x91919191UL, 0x95959595UL, 0xe4e4e4e4UL,
-    0x79797979UL, 0xe7e7e7e7UL, 0xc8c8c8c8UL, 0x37373737UL, 0x6d6d6d6dUL,
-    0x8d8d8d8dUL, 0xd5d5d5d5UL, 0x4e4e4e4eUL, 0xa9a9a9a9UL, 0x6c6c6c6cUL,
-    0x56565656UL, 0xf4f4f4f4UL, 0xeaeaeaeaUL, 0x65656565UL, 0x7a7a7a7aUL,
-    0xaeaeaeaeUL, 0x08080808UL, 0xbabababaUL, 0x78787878UL, 0x25252525UL,
-    0x2e2e2e2eUL, 0x1c1c1c1cUL, 0xa6a6a6a6UL, 0xb4b4b4b4UL, 0xc6c6c6c6UL,
-    0xe8e8e8e8UL, 0xddddddddUL, 0x74747474UL, 0x1f1f1f1fUL, 0x4b4b4b4bUL,
-    0xbdbdbdbdUL, 0x8b8b8b8bUL, 0x8a8a8a8aUL, 0x70707070UL, 0x3e3e3e3eUL,
-    0xb5b5b5b5UL, 0x66666666UL, 0x48484848UL, 0x03030303UL, 0xf6f6f6f6UL,
-    0x0e0e0e0eUL, 0x61616161UL, 0x35353535UL, 0x57575757UL, 0xb9b9b9b9UL,
-    0x86868686UL, 0xc1c1c1c1UL, 0x1d1d1d1dUL, 0x9e9e9e9eUL, 0xe1e1e1e1UL,
-    0xf8f8f8f8UL, 0x98989898UL, 0x11111111UL, 0x69696969UL, 0xd9d9d9d9UL,
-    0x8e8e8e8eUL, 0x94949494UL, 0x9b9b9b9bUL, 0x1e1e1e1eUL, 0x87878787UL,
-    0xe9e9e9e9UL, 0xcecececeUL, 0x55555555UL, 0x28282828UL, 0xdfdfdfdfUL,
-    0x8c8c8c8cUL, 0xa1a1a1a1UL, 0x89898989UL, 0x0d0d0d0dUL, 0xbfbfbfbfUL,
-    0xe6e6e6e6UL, 0x42424242UL, 0x68686868UL, 0x41414141UL, 0x99999999UL,
-    0x2d2d2d2dUL, 0x0f0f0f0fUL, 0xb0b0b0b0UL, 0x54545454UL, 0xbbbbbbbbUL,
-    0x16161616UL,
-};
 #endif
 
-#ifndef ENCRYPT_ONLY
 
 static const ulong32 TD0[256] = {
     0x51f4a750UL, 0x7e416553UL, 0x1a17a4c3UL, 0x3a275e96UL, 0x3bab6bcbUL,
@@ -26434,26 +22930,7 @@ static const ulong32 Td4[256] = {
     0x7d7d7d7dUL,
 };
 
-#endif /* ENCRYPT_ONLY */
 
-#ifdef LTC_SMALL_CODE
-
-#define Te0(x) TE0[x]
-#define Te1(x) RORc(TE0[x], 8)
-#define Te2(x) RORc(TE0[x], 16)
-#define Te3(x) RORc(TE0[x], 24)
-
-#define Td0(x) TD0[x]
-#define Td1(x) RORc(TD0[x], 8)
-#define Td2(x) RORc(TD0[x], 16)
-#define Td3(x) RORc(TD0[x], 24)
-
-#define Te4_0 0x000000FF & Te4
-#define Te4_1 0x0000FF00 & Te4
-#define Te4_2 0x00FF0000 & Te4
-#define Te4_3 0xFF000000 & Te4
-
-#else
 
 #define Te0(x) TE0[x]
 #define Te1(x) TE1[x]
@@ -26847,7 +23324,6 @@ static const ulong32 Te4_3[] = {
     0x16000000UL};
 #endif /* pelimac */
 
-#ifndef ENCRYPT_ONLY
 
 static const ulong32 TD1[256] = {
     0x5051f4a7UL, 0x537e4165UL, 0xc31a17a4UL, 0x963a275eUL, 0xcb3bab6bUL,
@@ -27228,9 +23704,7 @@ static const ulong32 Tks3[] = {
     0x6bae84bbUL, 0x62a38fb5UL, 0x5d80be9fUL, 0x548db591UL, 0x4f9aa883UL,
     0x4697a38dUL};
 
-#endif /* ENCRYPT_ONLY */
 
-#endif /* SMALL CODE */
 
 static const ulong32 rcon[] = {
     0x01000000UL, 0x02000000UL, 0x04000000UL, 0x08000000UL,
@@ -27245,16 +23719,7 @@ static const ulong32 rcon[] = {
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /* AES implementation by Tom St Denis
  *
@@ -27277,9 +23742,7 @@ static const ulong32 rcon[] = {
   Implementation of AES
 */
 
-#ifdef LTC_RIJNDAEL
 
-#ifndef ENCRYPT_ONLY
 
 #define SETUP rijndael_setup
 #define ECB_ENC rijndael_ecb_encrypt
@@ -27289,27 +23752,9 @@ static const ulong32 rcon[] = {
 #define ECB_KS rijndael_keysize
 
 const struct ltc_cipher_descriptor aes_desc = {
-    "aes", 6, 16, SETUP, ECB_ENC, ECB_TEST, ECB_DONE,
+    "aes", 6, 16, SETUP, ECB_ENC, ECB_DONE,
 };
 
-#else
-
-#define SETUP rijndael_enc_setup
-#define ECB_ENC rijndael_enc_ecb_encrypt
-#define ECB_KS rijndael_enc_keysize
-#define ECB_DONE rijndael_enc_done
-
-const struct ltc_cipher_descriptor rijndael_enc_desc = {
-    "rijndael", 6,        16,     32,   16,   10,   SETUP, ECB_ENC, NULL,
-    NULL,       ECB_DONE, ECB_KS, NULL, NULL, NULL, NULL,  NULL,    NULL,
-    NULL,       NULL,     NULL,   NULL, NULL, NULL, NULL,  NULL};
-
-const struct ltc_cipher_descriptor aes_enc_desc = {
-    "aes", 6,        16,     32,   16,   10,   SETUP, ECB_ENC, NULL,
-    NULL,  ECB_DONE, ECB_KS, NULL, NULL, NULL, NULL,  NULL,    NULL,
-    NULL,  NULL,     NULL,   NULL, NULL, NULL, NULL,  NULL};
-
-#endif
 
 #define __LTC_AES_TAB_C__
 
@@ -27318,14 +23763,6 @@ static ulong32 setup_mix(ulong32 temp) {
          (Te4_1[byte(temp, 0)]) ^ (Te4_0[byte(temp, 3)]);
 }
 
-#ifndef ENCRYPT_ONLY
-#ifdef LTC_SMALL_CODE
-static ulong32 setup_mix2(ulong32 temp) {
-  return Td0(255 & Te4[byte(temp, 3)]) ^ Td1(255 & Te4[byte(temp, 2)]) ^
-         Td2(255 & Te4[byte(temp, 1)]) ^ Td3(255 & Te4[byte(temp, 0)]);
-}
-#endif
-#endif
 
 /**
    Initialize the AES (Rijndael) block cipher
@@ -27339,9 +23776,7 @@ int SETUP(const unsigned char *key, int keylen, int num_rounds,
           symmetric_key *skey) {
   int i;
   ulong32 temp, *rk;
-#ifndef ENCRYPT_ONLY
   ulong32 *rrk;
-#endif
   LTC_ARGCHK(key != NULL);
   LTC_ARGCHK(skey != NULL);
 
@@ -27425,7 +23860,6 @@ int SETUP(const unsigned char *key, int keylen, int num_rounds,
     return CRYPT_ERROR;
   }
 
-#ifndef ENCRYPT_ONLY
   /* setup the inverse key now */
   rk = skey->rijndael.dK;
   rrk = skey->rijndael.eK + (28 + keylen) - 4;
@@ -27443,16 +23877,6 @@ int SETUP(const unsigned char *key, int keylen, int num_rounds,
   for (i = 1; i < skey->rijndael.Nr; i++) {
     rrk -= 4;
     rk += 4;
-#ifdef LTC_SMALL_CODE
-    temp = rrk[0];
-    rk[0] = setup_mix2(temp);
-    temp = rrk[1];
-    rk[1] = setup_mix2(temp);
-    temp = rrk[2];
-    rk[2] = setup_mix2(temp);
-    temp = rrk[3];
-    rk[3] = setup_mix2(temp);
-#else
     temp = rrk[0];
     rk[0] = Tks0[byte(temp, 3)] ^ Tks1[byte(temp, 2)] ^ Tks2[byte(temp, 1)] ^
             Tks3[byte(temp, 0)];
@@ -27465,7 +23889,6 @@ int SETUP(const unsigned char *key, int keylen, int num_rounds,
     temp = rrk[3];
     rk[3] = Tks0[byte(temp, 3)] ^ Tks1[byte(temp, 2)] ^ Tks2[byte(temp, 1)] ^
             Tks3[byte(temp, 0)];
-#endif
   }
 
   /* copy last */
@@ -27475,7 +23898,6 @@ int SETUP(const unsigned char *key, int keylen, int num_rounds,
   *rk++ = *rrk++;
   *rk++ = *rrk++;
   *rk = *rrk;
-#endif /* ENCRYPT_ONLY */
 
   return CRYPT_OK;
 }
@@ -27487,13 +23909,8 @@ int SETUP(const unsigned char *key, int keylen, int num_rounds,
   @param skey The key as scheduled
   @return CRYPT_OK if successful
 */
-#ifdef LTC_CLEAN_STACK
-static int _rijndael_ecb_encrypt(const unsigned char *pt, unsigned char *ct,
-                                 symmetric_key *skey)
-#else
 
 int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey)
-#endif
 {
   ulong32 s0, s1, s2, s3, t0, t1, t2, t3, *rk;
   int Nr, r;
@@ -27518,29 +23935,6 @@ int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey)
   LOAD32H(s3, pt + 12);
   s3 ^= rk[3];
 
-#ifdef LTC_SMALL_CODE
-
-  for (r = 0;; r++) {
-    rk += 4;
-    t0 = Te0(byte(s0, 3)) ^ Te1(byte(s1, 2)) ^ Te2(byte(s2, 1)) ^
-         Te3(byte(s3, 0)) ^ rk[0];
-    t1 = Te0(byte(s1, 3)) ^ Te1(byte(s2, 2)) ^ Te2(byte(s3, 1)) ^
-         Te3(byte(s0, 0)) ^ rk[1];
-    t2 = Te0(byte(s2, 3)) ^ Te1(byte(s3, 2)) ^ Te2(byte(s0, 1)) ^
-         Te3(byte(s1, 0)) ^ rk[2];
-    t3 = Te0(byte(s3, 3)) ^ Te1(byte(s0, 2)) ^ Te2(byte(s1, 1)) ^
-         Te3(byte(s2, 0)) ^ rk[3];
-    if (r == Nr - 2) {
-      break;
-    }
-    s0 = t0;
-    s1 = t1;
-    s2 = t2;
-    s3 = t3;
-  }
-  rk += 4;
-
-#else
 
   /*
    * Nr - 1 full rounds:
@@ -27571,7 +23965,6 @@ int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey)
          Te3(byte(t2, 0)) ^ rk[3];
   }
 
-#endif
 
   /*
    * apply last round and
@@ -27593,16 +23986,7 @@ int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey)
   return CRYPT_OK;
 }
 
-#ifdef LTC_CLEAN_STACK
-int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey) {
-  int err = _rijndael_ecb_encrypt(pt, ct, skey);
-  burn_stack(sizeof(unsigned long) * 8 + sizeof(unsigned long *) +
-             sizeof(int) * 2);
-  return err;
-}
-#endif
 
-#ifndef ENCRYPT_ONLY
 
 /**
   Decrypts a block of text with AES
@@ -27611,13 +23995,8 @@ int ECB_ENC(const unsigned char *pt, unsigned char *ct, symmetric_key *skey) {
   @param skey The key as scheduled
   @return CRYPT_OK if successful
 */
-#ifdef LTC_CLEAN_STACK
-static int _rijndael_ecb_decrypt(const unsigned char *ct, unsigned char *pt,
-                                 symmetric_key *skey)
-#else
 
 int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey)
-#endif
 {
   ulong32 s0, s1, s2, s3, t0, t1, t2, t3, *rk;
   int Nr, r;
@@ -27642,28 +24021,6 @@ int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey)
   LOAD32H(s3, ct + 12);
   s3 ^= rk[3];
 
-#ifdef LTC_SMALL_CODE
-  for (r = 0;; r++) {
-    rk += 4;
-    t0 = Td0(byte(s0, 3)) ^ Td1(byte(s3, 2)) ^ Td2(byte(s2, 1)) ^
-         Td3(byte(s1, 0)) ^ rk[0];
-    t1 = Td0(byte(s1, 3)) ^ Td1(byte(s0, 2)) ^ Td2(byte(s3, 1)) ^
-         Td3(byte(s2, 0)) ^ rk[1];
-    t2 = Td0(byte(s2, 3)) ^ Td1(byte(s1, 2)) ^ Td2(byte(s0, 1)) ^
-         Td3(byte(s3, 0)) ^ rk[2];
-    t3 = Td0(byte(s3, 3)) ^ Td1(byte(s2, 2)) ^ Td2(byte(s1, 1)) ^
-         Td3(byte(s0, 0)) ^ rk[3];
-    if (r == Nr - 2) {
-      break;
-    }
-    s0 = t0;
-    s1 = t1;
-    s2 = t2;
-    s3 = t3;
-  }
-  rk += 4;
-
-#else
 
   /*
    * Nr - 1 full rounds:
@@ -27693,7 +24050,6 @@ int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey)
     s3 = Td0(byte(t3, 3)) ^ Td1(byte(t2, 2)) ^ Td2(byte(t1, 1)) ^
          Td3(byte(t0, 0)) ^ rk[3];
   }
-#endif
 
   /*
    * apply last round and
@@ -27719,14 +24075,6 @@ int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey)
   return CRYPT_OK;
 }
 
-#ifdef LTC_CLEAN_STACK
-int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey) {
-  int err = _rijndael_ecb_decrypt(ct, pt, skey);
-  burn_stack(sizeof(unsigned long) * 8 + sizeof(unsigned long *) +
-             sizeof(int) * 2);
-  return err;
-}
-#endif
 
 /**
   Performs a self-test of the AES block cipher
@@ -27734,7 +24082,6 @@ int ECB_DEC(const unsigned char *ct, unsigned char *pt, symmetric_key *skey) {
 */
 int ECB_TEST(void) { return CRYPT_NOP; }
 
-#endif /* ENCRYPT_ONLY */
 
 /** Terminate the context
    @param skey    The scheduled key
@@ -27765,22 +24112,12 @@ int ECB_KS(int *keysize) {
   }
 }
 
-#endif
 
 /* $Source$ */
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file cbc_decrypt.c
@@ -27791,16 +24128,7 @@ int ECB_KS(int *keysize) {
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file cbc_done.c
@@ -27811,16 +24139,7 @@ int ECB_KS(int *keysize) {
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file cbc_encrypt.c
@@ -27831,16 +24150,7 @@ int ECB_KS(int *keysize) {
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file cbc_getiv.c
@@ -27851,16 +24161,7 @@ int ECB_KS(int *keysize) {
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file cbc_setiv.c
@@ -27871,16 +24172,7 @@ int ECB_KS(int *keysize) {
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file cbc_start.c
@@ -27891,23 +24183,13 @@ int ECB_KS(int *keysize) {
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file gcm_add_iv.c
    GCM implementation, add IV data to the state, by Tom St Denis
 */
 
-#ifdef LTC_GCM_MODE
 
 /**
   Add IV data to the GCM state
@@ -27944,7 +24226,6 @@ int gcm_add_iv(gcm_state *gcm, const unsigned char *IV, unsigned long IVlen) {
   }
 
   x = 0;
-#ifdef LTC_FAST
   if (gcm->buflen == 0) {
     for (x = 0; x < (IVlen & ~15); x += 16) {
       for (y = 0; y < 16; y += sizeof(LTC_FAST_TYPE)) {
@@ -27955,7 +24236,6 @@ int gcm_add_iv(gcm_state *gcm, const unsigned char *IV, unsigned long IVlen) {
     }
     IV += x;
   }
-#endif
 
   /* start adding IV data to the state */
   for (; x < IVlen; x++) {
@@ -27975,29 +24255,18 @@ int gcm_add_iv(gcm_state *gcm, const unsigned char *IV, unsigned long IVlen) {
   return CRYPT_OK;
 }
 
-#endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/encauth/gcm/gcm_add_iv.c,v $ */
 /* $Revision: 1.9 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file gcm_done.c
    GCM implementation, Terminate the stream, by Tom St Denis
 */
 
-#ifdef LTC_GCM_MODE
 
 /**
   Terminate a GCM stream
@@ -28055,29 +24324,18 @@ int gcm_done(gcm_state *gcm, unsigned char *tag, unsigned long *taglen) {
   return CRYPT_OK;
 }
 
-#endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/encauth/gcm/gcm_done.c,v $ */
 /* $Revision: 1.11 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file gcm_init.c
    GCM implementation, initialize state, by Tom St Denis
 */
 
-#ifdef LTC_GCM_MODE
 
 /**
   Initialize a GCM state
@@ -28090,15 +24348,11 @@ int gcm_done(gcm_state *gcm, unsigned char *tag, unsigned long *taglen) {
 int gcm_init(gcm_state *gcm, int cipher, const unsigned char *key, int keylen) {
   int err;
   unsigned char B[16];
-#ifdef LTC_GCM_TABLES
   int x, y, z, t;
-#endif
 
   LTC_ARGCHK(gcm != NULL);
   LTC_ARGCHK(key != NULL);
 
-#ifdef LTC_FAST
-#endif
 
   /* is cipher valid? */
   if ((err = cipher_is_valid(cipher)) != CRYPT_OK) {
@@ -28131,7 +24385,6 @@ int gcm_init(gcm_state *gcm, int cipher, const unsigned char *key, int keylen) {
   gcm->totlen = 0;
   gcm->pttotlen = 0;
 
-#ifdef LTC_GCM_TABLES
   /* setup tables */
 
   /* generate the first table as it has no shifting (from which we make the
@@ -28155,34 +24408,22 @@ int gcm_init(gcm_state *gcm, int cipher, const unsigned char *key, int keylen) {
     }
   }
 
-#endif
 
   return CRYPT_OK;
 }
 
-#endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/encauth/gcm/gcm_init.c,v $ */
 /* $Revision: 1.20 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file gcm_process.c
    GCM implementation, process message data, by Tom St Denis
 */
 
-#ifdef LTC_GCM_MODE
 
 /**
   Process plaintext/ciphertext through GCM
@@ -28242,7 +24483,6 @@ int gcm_process(gcm_state *gcm, unsigned char *pt, unsigned long ptlen,
   }
 
   x = 0;
-#ifdef LTC_FAST
   if (gcm->buflen == 0) {
     if (direction == GCM_ENCRYPT) {
       for (x = 0; x < (ptlen & ~15); x += 16) {
@@ -28290,7 +24530,6 @@ int gcm_process(gcm_state *gcm, unsigned char *pt, unsigned long ptlen,
       }
     }
   }
-#endif
 
   /* process text */
   for (; x < ptlen; x++) {
@@ -28323,29 +24562,18 @@ int gcm_process(gcm_state *gcm, unsigned char *pt, unsigned long ptlen,
   return CRYPT_OK;
 }
 
-#endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/encauth/gcm/gcm_process.c,v $ */
 /* $Revision: 1.16 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file gcm_mult_h.c
    GCM implementation, do the GF mult, by Tom St Denis
 */
 
-#if defined(LTC_GCM_MODE)
 
 /**
   GCM multiply by H
@@ -28354,7 +24582,6 @@ int gcm_process(gcm_state *gcm, unsigned char *pt, unsigned long ptlen,
  */
 void gcm_mult_h(gcm_state *gcm, unsigned char *I) {
   unsigned char T[16];
-#ifdef LTC_GCM_TABLES
   int x, y;
 #ifdef LTC_GCM_TABLES_SSE2
   asm("movdqa (%0),%%xmm0" ::"r"(&gcm->PC[0][I[0]][0]));
@@ -28365,39 +24592,20 @@ void gcm_mult_h(gcm_state *gcm, unsigned char *I) {
 #else
   XMEMCPY(T, &gcm->PC[0][I[0]][0], 16);
   for (x = 1; x < 16; x++) {
-#ifdef LTC_FAST
     for (y = 0; y < 16; y += sizeof(LTC_FAST_TYPE)) {
       *((LTC_FAST_TYPE *)(T + y)) ^= *((LTC_FAST_TYPE *)(&gcm->PC[x][I[x]][y]));
     }
-#else
-    for (y = 0; y < 16; y++) {
-      T[y] ^= gcm->PC[x][I[x]][y];
-    }
-#endif /* LTC_FAST */
   }
 #endif /* LTC_GCM_TABLES_SSE2 */
-#else
-  gcm_gf_mult(gcm->H, I, T);
-#endif
   XMEMCPY(I, T, 16);
 }
 
-#endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/encauth/gcm/gcm_mult_h.c,v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file gcm_gf_mult.c
@@ -28457,50 +24665,7 @@ const unsigned char gcm_shift_table[256 * 2] = {
 
 #endif
 
-#if defined(LTC_GCM_MODE) || defined(LRW_MODE)
 
-#ifndef LTC_FAST
-/* right shift */
-static void gcm_rightshift(unsigned char *a) {
-  int x;
-  for (x = 15; x > 0; x--) {
-    a[x] = (a[x] >> 1) | ((a[x - 1] << 7) & 0x80);
-  }
-  a[0] >>= 1;
-}
-
-/* c = b*a */
-static const unsigned char mask[] = {0x80, 0x40, 0x20, 0x10,
-                                     0x08, 0x04, 0x02, 0x01};
-static const unsigned char poly[] = {0x00, 0xE1};
-
-/**
-  GCM GF multiplier (internal use only)  bitserial
-  @param a   First value
-  @param b   Second value
-  @param c   Destination for a * b
- */
-void gcm_gf_mult(const unsigned char *a, const unsigned char *b,
-                 unsigned char *c) {
-  unsigned char Z[16], V[16];
-  unsigned char x, y, z;
-
-  zeromem(Z, 16);
-  XMEMCPY(V, a, 16);
-  for (x = 0; x < 128; x++) {
-    if (b[x >> 3] & mask[x & 7]) {
-      for (y = 0; y < 16; y++) {
-        Z[y] ^= V[y];
-      }
-    }
-    z = V[15] & 0x01;
-    gcm_rightshift(V);
-    V[0] ^= poly[z];
-  }
-  XMEMCPY(c, Z, 16);
-}
-
-#else
 
 /* map normal numbers to "ieee" way ... e.g. bit reversed */
 #define M(x) (((x & 8) >> 3) | ((x & 4) >> 1) | ((x & 2) << 1) | ((x & 1) << 3))
@@ -28525,17 +24690,10 @@ void gcm_gf_mult(const unsigned char *a, const unsigned char *b,
   zeromem(B[0], sizeof(B[0]));
   zeromem(B[M(1)], sizeof(B[M(1)]));
 
-#ifdef ENDIAN_32BITWORD
-  for (i = 0; i < 4; i++) {
-    LOAD32H(B[M(1)][i], a + (i << 2));
-    LOAD32L(pB[i], b + (i << 2));
-  }
-#else
   for (i = 0; i < 2; i++) {
     LOAD64H(B[M(1)][i], a + (i << 3));
     LOAD64L(pB[i], b + (i << 3));
   }
-#endif
 
   /* now create 2, 4 and 8 */
   B[M(2)][0] = B[M(1)][0] >> 1;
@@ -28591,15 +24749,9 @@ void gcm_gf_mult(const unsigned char *a, const unsigned char *b,
   }
 
   /* store product */
-#ifdef ENDIAN_32BITWORD
-  for (i = 0; i < 8; i++) {
-    STORE32H(tmp[i], pTmp + (i << 2));
-  }
-#else
   for (i = 0; i < 4; i++) {
     STORE64H(tmp[i], pTmp + (i << 3));
   }
-#endif
 
   /* reduce by taking most significant byte and adding the appropriate two byte
    * sequence 16 bytes down */
@@ -28613,31 +24765,19 @@ void gcm_gf_mult(const unsigned char *a, const unsigned char *b,
   }
 }
 
-#endif
 
-#endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/encauth/gcm/gcm_gf_mult.c,v $ */
 /* $Revision: 1.25 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file gcm_add_aad.c
    GCM implementation, Add AAD data to the stream, by Tom St Denis
 */
 
-#ifdef LTC_GCM_MODE
 
 /**
   Add AAD to the GCM state
@@ -28650,9 +24790,7 @@ int gcm_add_aad(gcm_state *gcm, const unsigned char *adata,
                 unsigned long adatalen) {
   unsigned long x;
   int err;
-#ifdef LTC_FAST
   unsigned long y;
-#endif
 
   LTC_ARGCHK(gcm != NULL);
   if (adatalen > 0) {
@@ -28709,7 +24847,6 @@ int gcm_add_aad(gcm_state *gcm, const unsigned char *adata,
   }
 
   x = 0;
-#ifdef LTC_FAST
   if (gcm->buflen == 0) {
     for (x = 0; x < (adatalen & ~15); x += 16) {
       for (y = 0; y < 16; y += sizeof(LTC_FAST_TYPE)) {
@@ -28720,7 +24857,6 @@ int gcm_add_aad(gcm_state *gcm, const unsigned char *adata,
     }
     adata += x;
   }
-#endif
 
   /* start adding AAD data to the state */
   for (; x < adatalen; x++) {
@@ -28737,22 +24873,12 @@ int gcm_add_aad(gcm_state *gcm, const unsigned char *adata,
   return CRYPT_OK;
 }
 
-#endif
 
 /* $Source$ */
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
    @file gcm_reset.c
@@ -28760,7 +24886,6 @@ int gcm_add_aad(gcm_state *gcm, const unsigned char *adata,
    Denis
 */
 
-#ifdef LTC_GCM_MODE
 
 /**
   Reset a GCM state to as if you just called gcm_init().  This saves the
@@ -28782,29 +24907,18 @@ int gcm_reset(gcm_state *gcm) {
   return CRYPT_OK;
 }
 
-#endif
 
 /* $Source$ */
 /* $Revision$ */
 /* $Date$ */
 
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
+
 
 /**
   @file md5.c
   LTC_MD5 hash function by Tom St Denis
 */
 
-#ifdef LTC_MD5
 
 const struct ltc_hash_descriptor md5_desc = {
     "md5",
@@ -28825,7 +24939,6 @@ const struct ltc_hash_descriptor md5_desc = {
     &md5_init,
     &md5_process,
     &md5_done,
-    &md5_test,
 };
 
 #define F(x, y, z) (z ^ (x & (y ^ z)))
@@ -28833,52 +24946,6 @@ const struct ltc_hash_descriptor md5_desc = {
 #define H(x, y, z) (x ^ y ^ z)
 #define I(x, y, z) (y ^ (x | (~z)))
 
-#ifdef LTC_SMALL_CODE
-
-#define FF(a, b, c, d, M, s, t) \
-  a = (a + F(b, c, d) + M + t); \
-  a = ROL(a, s) + b;
-
-#define GG(a, b, c, d, M, s, t) \
-  a = (a + G(b, c, d) + M + t); \
-  a = ROL(a, s) + b;
-
-#define HH(a, b, c, d, M, s, t) \
-  a = (a + H(b, c, d) + M + t); \
-  a = ROL(a, s) + b;
-
-#define II(a, b, c, d, M, s, t) \
-  a = (a + I(b, c, d) + M + t); \
-  a = ROL(a, s) + b;
-
-static const unsigned char Worder[64] = {
-    0, 1, 2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15,
-    1, 6, 11, 0,  5,  10, 15, 4,  9,  14, 3,  8,  13, 2,  7,  12,
-    5, 8, 11, 14, 1,  4,  7,  10, 13, 0,  3,  6,  9,  12, 15, 2,
-    0, 7, 14, 5,  12, 3,  10, 1,  8,  15, 6,  13, 4,  11, 2,  9};
-
-static const unsigned char Rorder[64] = {
-    7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
-    5, 9,  14, 20, 5, 9,  14, 20, 5, 9,  14, 20, 5, 9,  14, 20,
-    4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
-    6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21};
-
-static const ulong32 Korder[64] = {
-    0xd76aa478UL, 0xe8c7b756UL, 0x242070dbUL, 0xc1bdceeeUL, 0xf57c0fafUL,
-    0x4787c62aUL, 0xa8304613UL, 0xfd469501UL, 0x698098d8UL, 0x8b44f7afUL,
-    0xffff5bb1UL, 0x895cd7beUL, 0x6b901122UL, 0xfd987193UL, 0xa679438eUL,
-    0x49b40821UL, 0xf61e2562UL, 0xc040b340UL, 0x265e5a51UL, 0xe9b6c7aaUL,
-    0xd62f105dUL, 0x02441453UL, 0xd8a1e681UL, 0xe7d3fbc8UL, 0x21e1cde6UL,
-    0xc33707d6UL, 0xf4d50d87UL, 0x455a14edUL, 0xa9e3e905UL, 0xfcefa3f8UL,
-    0x676f02d9UL, 0x8d2a4c8aUL, 0xfffa3942UL, 0x8771f681UL, 0x6d9d6122UL,
-    0xfde5380cUL, 0xa4beea44UL, 0x4bdecfa9UL, 0xf6bb4b60UL, 0xbebfbc70UL,
-    0x289b7ec6UL, 0xeaa127faUL, 0xd4ef3085UL, 0x04881d05UL, 0xd9d4d039UL,
-    0xe6db99e5UL, 0x1fa27cf8UL, 0xc4ac5665UL, 0xf4292244UL, 0x432aff97UL,
-    0xab9423a7UL, 0xfc93a039UL, 0x655b59c3UL, 0x8f0ccc92UL, 0xffeff47dUL,
-    0x85845dd1UL, 0x6fa87e4fUL, 0xfe2ce6e0UL, 0xa3014314UL, 0x4e0811a1UL,
-    0xf7537e82UL, 0xbd3af235UL, 0x2ad7d2bbUL, 0xeb86d391UL};
-
-#else
 
 #define FF(a, b, c, d, M, s, t) \
   a = (a + F(b, c, d) + M + t); \
@@ -28896,19 +24963,11 @@ static const ulong32 Korder[64] = {
   a = (a + I(b, c, d) + M + t); \
   a = ROLc(a, s) + b;
 
-#endif
 
-#ifdef LTC_CLEAN_STACK
-static int _md5_compress(hash_state *md, unsigned char *buf)
-#else
 
 static int md5_compress(hash_state *md, unsigned char *buf)
-#endif
 {
   ulong32 i, W[16], a, b, c, d;
-#ifdef LTC_SMALL_CODE
-  ulong32 t;
-#endif
 
   /* copy the state into 512-bits into W[0..15] */
   for (i = 0; i < 16; i++) {
@@ -28921,44 +24980,6 @@ static int md5_compress(hash_state *md, unsigned char *buf)
   c = md->md5.state[2];
   d = md->md5.state[3];
 
-#ifdef LTC_SMALL_CODE
-  for (i = 0; i < 16; ++i) {
-    FF(a, b, c, d, W[Worder[i]], Rorder[i], Korder[i]);
-    t = d;
-    d = c;
-    c = b;
-    b = a;
-    a = t;
-  }
-
-  for (; i < 32; ++i) {
-    GG(a, b, c, d, W[Worder[i]], Rorder[i], Korder[i]);
-    t = d;
-    d = c;
-    c = b;
-    b = a;
-    a = t;
-  }
-
-  for (; i < 48; ++i) {
-    HH(a, b, c, d, W[Worder[i]], Rorder[i], Korder[i]);
-    t = d;
-    d = c;
-    c = b;
-    b = a;
-    a = t;
-  }
-
-  for (; i < 64; ++i) {
-    II(a, b, c, d, W[Worder[i]], Rorder[i], Korder[i]);
-    t = d;
-    d = c;
-    c = b;
-    b = a;
-    a = t;
-  }
-
-#else
   FF(a, b, c, d, W[0], 7, 0xd76aa478UL)
   FF(d, a, b, c, W[1], 12, 0xe8c7b756UL)
   FF(c, d, a, b, W[2], 17, 0x242070dbUL)
@@ -29023,7 +25044,6 @@ static int md5_compress(hash_state *md, unsigned char *buf)
   II(d, a, b, c, W[11], 10, 0xbd3af235UL)
   II(c, d, a, b, W[2], 15, 0x2ad7d2bbUL)
   II(b, c, d, a, W[9], 21, 0xeb86d391UL)
-#endif
 
   md->md5.state[0] = md->md5.state[0] + a;
   md->md5.state[1] = md->md5.state[1] + b;
@@ -29033,14 +25053,6 @@ static int md5_compress(hash_state *md, unsigned char *buf)
   return CRYPT_OK;
 }
 
-#ifdef LTC_CLEAN_STACK
-static int md5_compress(hash_state *md, unsigned char *buf) {
-  int err;
-  err = _md5_compress(md, buf);
-  burn_stack(sizeof(ulong32) * 21);
-  return err;
-}
-#endif
 
 /**
    Initialize the hash state
@@ -29114,140 +25126,6 @@ int md5_done(hash_state *md, unsigned char *out) {
   for (i = 0; i < 4; i++) {
     STORE32L(md->md5.state[i], out + (4 * i));
   }
-#ifdef LTC_CLEAN_STACK
-  zeromem(md, sizeof(hash_state));
-#endif
   return CRYPT_OK;
 }
 
-/**
-  Self-test the hash
-  @return CRYPT_OK if successful, CRYPT_NOP if self-tests have been disabled
-*/
-int md5_test(void) { return CRYPT_NOP; }
-
-#endif
-
-/* $Source$ */
-/* $Revision$ */
-/* $Date$ */
-
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
-
-/**
-  @file ctr_encrypt.c
-  CTR implementation, encrypt data, Tom St Denis
-*/
-
-/* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_encrypt.c,v $ */
-/* $Revision: 1.22 $ */
-/* $Date: 2007/02/22 20:26:05 $ */
-
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
-
-/**
-   @file ctr_done.c
-   CTR implementation, finish chain, Tom St Denis
-*/
-
-/* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_done.c,v $ */
-/* $Revision: 1.7 $ */
-/* $Date: 2006/12/28 01:27:24 $ */
-
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
-
-/**
-  @file ctr_decrypt.c
-  CTR implementation, decrypt data, Tom St Denis
-*/
-
-/* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_decrypt.c,v $ */
-/* $Revision: 1.6 $ */
-/* $Date: 2006/12/28 01:27:24 $ */
-
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
-
-/**
-   @file ctr_start.c
-   CTR implementation, start chain, Tom St Denis
-*/
-
-/* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_start.c,v $ */
-/* $Revision: 1.15 $ */
-/* $Date: 2007/02/23 14:18:37 $ */
-
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
-
-/**
-  @file ctr_setiv.c
-  CTR implementation, set IV, Tom St Denis
-*/
-
-/* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_setiv.c,v $ */
-/* $Revision: 1.7 $ */
-/* $Date: 2006/12/28 01:27:24 $ */
-
-/* LibTomCrypt, modular cryptographic library -- Tom St Denis
- *
- * LibTomCrypt is a library that provides various cryptographic
- * algorithms in a highly modular and flexible manner.
- *
- * The library is free for all purposes without any express
- * guarantee it works.
- *
- * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
- */
-
-/**
-   @file ctr_getiv.c
-   CTR implementation, get IV, Tom St Denis
-*/
-
-/* $Source: /cvs/libtom/libtomcrypt/src/modes/ctr/ctr_getiv.c,v $ */
-/* $Revision: 1.7 $ */
-/* $Date: 2006/12/28 01:27:24 $ */
