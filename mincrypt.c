@@ -2404,9 +2404,6 @@ int mp_set_long_long(mp_int *a, unsigned long long b);
 /* get a 32-bit value */
 unsigned long mp_get_int(mp_int *a);
 
-/* initialize and set 32-bit value */
-int mp_init_set_int(mp_int *a, unsigned long b);
-
 /* copy, b = a */
 int mp_copy(mp_int *a, mp_int *b);
 
@@ -2501,8 +2498,6 @@ int mp_div_d(mp_int *a, mp_digit b, mp_int *c, mp_digit *d);
 /* a/3 => 3c + d == a */
 int mp_div_3(mp_int *a, mp_int *c, mp_digit *d);
 
-int mp_expt_d_ex(mp_int *a, mp_digit b, mp_int *c, int fast);
-
 /* c = a mod b, 0 <= c < b  */
 int mp_mod_d(mp_int *a, mp_digit b, mp_digit *c);
 
@@ -2522,11 +2517,6 @@ int mp_gcd(mp_int *a, mp_int *b, mp_int *c);
 
 /* c = [a, b] or (a*b)/(a, b) */
 int mp_lcm(mp_int *a, mp_int *b, mp_int *c);
-
-int mp_n_root_ex(mp_int *a, mp_digit b, mp_int *c, int fast);
-
-/* special sqrt algo */
-int mp_sqrt(mp_int *arg, mp_int *ret);
 
 /* computes the jacobi c = (a | n) (or Legendre if b is prime)  */
 int mp_jacobi(mp_int *a, mp_int *n, int *c);
@@ -2630,8 +2620,6 @@ int mp_to_unsigned_bin(mp_int *a, unsigned char *b);
 
 int mp_read_radix(mp_int *a, const char *str, int radix);
 int mp_toradix(mp_int *a, char *str, int radix);
-
-int mp_radix_size(mp_int *a, int radix, int *size);
 
 #define mp_tohex(M, S) mp_toradix((M), (S), 16)
 
@@ -5035,65 +5023,6 @@ void mp_exch(mp_int *a, mp_int *b) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* calculate c = a**b  using a square-multiply algorithm */
-int mp_expt_d_ex(mp_int *a, mp_digit b, mp_int *c, int fast) {
-  int res;
-  unsigned int x;
-
-  mp_int g;
-
-  if ((res = mp_init_copy(&g, a)) != MP_OKAY) {
-    return res;
-  }
-
-  /* set initial result */
-  mp_set(c, 1);
-
-  if (fast != 0) {
-    while (b > 0) {
-      /* if the bit is set multiply */
-      if ((b & 1) != 0) {
-        if ((res = mp_mul(c, &g, c)) != MP_OKAY) {
-          mp_clear(&g);
-          return res;
-        }
-      }
-
-      /* square */
-      if (b > 1) {
-        if ((res = mp_sqr(&g, &g)) != MP_OKAY) {
-          mp_clear(&g);
-          return res;
-        }
-      }
-
-      /* shift to next bit */
-      b >>= 1;
-    }
-  } else {
-    for (x = 0; x < DIGIT_BIT; x++) {
-      /* square */
-      if ((res = mp_sqr(c, c)) != MP_OKAY) {
-        mp_clear(&g);
-        return res;
-      }
-
-      /* if the bit is set multiply */
-      if ((b & (mp_digit)(((mp_digit)1) << (DIGIT_BIT - 1))) != 0) {
-        if ((res = mp_mul(c, &g, c)) != MP_OKAY) {
-          mp_clear(&g);
-          return res;
-        }
-      }
-
-      /* shift to next bit */
-      b <<= 1;
-    }
-  } /* if ... else */
-
-  mp_clear(&g);
-  return MP_OKAY;
-}
 #endif
 
 /* $Source$ */
@@ -6037,15 +5966,6 @@ int mp_init_multi(mp_int *mp, ...) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* initialize and set a digit */
-int mp_init_set_int(mp_int *a, unsigned long b) {
-  int err;
-
-  if ((err = mp_init(a)) != MP_OKAY) {
-    return err;
-  }
-  return mp_set_int(a, b);
-}
 #endif
 
 /* $Source$ */
@@ -6333,22 +6253,6 @@ LBL_ERR:
  *
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
-
-/* Check if remainders are possible squares - fast exclude non-squares */
-static const char rem_128[128] = {
-    0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1,
-    1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1,
-    1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0,
-    1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1,
-    1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1,
-    1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1};
-
-static const char rem_105[105] = {
-    0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1,
-    0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1,
-    1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1,
-    1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1,
-    0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1};
 
 #endif
 
@@ -7619,118 +7523,6 @@ int mp_mulmod(mp_int *a, mp_int *b, mp_int *c, mp_int *d) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* find the n'th root of an integer
- *
- * Result found such that (c)**b <= a and (c+1)**b > a
- *
- * This algorithm uses Newton's approximation
- * x[i+1] = x[i] - f(x[i])/f'(x[i])
- * which will find the root in log(N) time where
- * each step involves a fair bit.  This is not meant to
- * find huge roots [square and cube, etc].
- */
-int mp_n_root_ex(mp_int *a, mp_digit b, mp_int *c, int fast) {
-  mp_int t1, t2, t3;
-  int res, neg;
-
-  /* input must be positive if b is even */
-  if (((b & 1) == 0) && (a->sign == MP_NEG)) {
-    return MP_VAL;
-  }
-
-  if ((res = mp_init(&t1)) != MP_OKAY) {
-    return res;
-  }
-
-  if ((res = mp_init(&t2)) != MP_OKAY) {
-    goto LBL_T1;
-  }
-
-  if ((res = mp_init(&t3)) != MP_OKAY) {
-    goto LBL_T2;
-  }
-
-  /* if a is negative fudge the sign but keep track */
-  neg = a->sign;
-  a->sign = MP_ZPOS;
-
-  /* t2 = 2 */
-  mp_set(&t2, 2);
-
-  do {
-    /* t1 = t2 */
-    if ((res = mp_copy(&t2, &t1)) != MP_OKAY) {
-      goto LBL_T3;
-    }
-
-    /* t2 = t1 - ((t1**b - a) / (b * t1**(b-1))) */
-
-    /* t3 = t1**(b-1) */
-    if ((res = mp_expt_d_ex(&t1, b - 1, &t3, fast)) != MP_OKAY) {
-      goto LBL_T3;
-    }
-
-    /* numerator */
-    /* t2 = t1**b */
-    if ((res = mp_mul(&t3, &t1, &t2)) != MP_OKAY) {
-      goto LBL_T3;
-    }
-
-    /* t2 = t1**b - a */
-    if ((res = mp_sub(&t2, a, &t2)) != MP_OKAY) {
-      goto LBL_T3;
-    }
-
-    /* denominator */
-    /* t3 = t1**(b-1) * b  */
-    if ((res = mp_mul_d(&t3, b, &t3)) != MP_OKAY) {
-      goto LBL_T3;
-    }
-
-    /* t3 = (t1**b - a)/(b * t1**(b-1)) */
-    if ((res = mp_div(&t2, &t3, &t3, NULL)) != MP_OKAY) {
-      goto LBL_T3;
-    }
-
-    if ((res = mp_sub(&t1, &t3, &t2)) != MP_OKAY) {
-      goto LBL_T3;
-    }
-  } while (mp_cmp(&t1, &t2) != MP_EQ);
-
-  /* result can be off by a few so check */
-  for (;;) {
-    if ((res = mp_expt_d_ex(&t1, b, &t2, fast)) != MP_OKAY) {
-      goto LBL_T3;
-    }
-
-    if (mp_cmp(&t2, a) == MP_GT) {
-      if ((res = mp_sub_d(&t1, 1, &t1)) != MP_OKAY) {
-        goto LBL_T3;
-      }
-    } else {
-      break;
-    }
-  }
-
-  /* reset the sign of a first */
-  a->sign = neg;
-
-  /* set the result */
-  mp_exch(&t1, c);
-
-  /* set the sign of the result */
-  c->sign = neg;
-
-  res = MP_OKAY;
-
-LBL_T3:
-  mp_clear(&t3);
-LBL_T2:
-  mp_clear(&t2);
-LBL_T1:
-  mp_clear(&t1);
-  return res;
-}
 #endif
 
 /* $Source$ */
@@ -8169,60 +7961,6 @@ static const struct {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* returns size of ASCII reprensentation */
-int mp_radix_size(mp_int *a, int radix, int *size) {
-  int res, digs;
-  mp_int t;
-  mp_digit d;
-
-  *size = 0;
-
-  /* make sure the radix is in range */
-  if ((radix < 2) || (radix > 64)) {
-    return MP_VAL;
-  }
-
-  if (mp_iszero(a) == MP_YES) {
-    *size = 2;
-    return MP_OKAY;
-  }
-
-  /* special case for binary */
-  if (radix == 2) {
-    *size = mp_count_bits(a) + ((a->sign == MP_NEG) ? 1 : 0) + 1;
-    return MP_OKAY;
-  }
-
-  /* digs is the digit count */
-  digs = 0;
-
-  /* if it's negative add one for the sign */
-  if (a->sign == MP_NEG) {
-    ++digs;
-  }
-
-  /* init a copy of the input */
-  if ((res = mp_init_copy(&t, a)) != MP_OKAY) {
-    return res;
-  }
-
-  /* force temp to positive */
-  t.sign = MP_ZPOS;
-
-  /* fetch out all of the digits */
-  while (mp_iszero(&t) == MP_NO) {
-    if ((res = mp_div_d(&t, (mp_digit)radix, &t, &d)) != MP_OKAY) {
-      mp_clear(&t);
-      return res;
-    }
-    ++digs;
-  }
-  mp_clear(&t);
-
-  /* return digs + 1, the 1 is for the NULL byte that would be required. */
-  *size = digs + 1;
-  return MP_OKAY;
-}
 #endif
 
 /* $Source$ */
@@ -9243,65 +8981,6 @@ int mp_sqrmod(mp_int *a, mp_int *b, mp_int *c) {
  * Tom St Denis, tstdenis82@gmail.com, http://libtom.org
  */
 
-/* this function is less generic than mp_n_root, simpler and faster */
-int mp_sqrt(mp_int *arg, mp_int *ret) {
-  int res;
-  mp_int t1, t2;
-
-  /* must be positive */
-  if (arg->sign == MP_NEG) {
-    return MP_VAL;
-  }
-
-  /* easy out */
-  if (mp_iszero(arg) == MP_YES) {
-    mp_zero(ret);
-    return MP_OKAY;
-  }
-
-  if ((res = mp_init_copy(&t1, arg)) != MP_OKAY) {
-    return res;
-  }
-
-  if ((res = mp_init(&t2)) != MP_OKAY) {
-    goto E2;
-  }
-
-  /* First approx. (not very bad for large arg) */
-  mp_rshd(&t1, t1.used / 2);
-
-  /* t1 > 0  */
-  if ((res = mp_div(arg, &t1, &t2, NULL)) != MP_OKAY) {
-    goto E1;
-  }
-  if ((res = mp_add(&t1, &t2, &t1)) != MP_OKAY) {
-    goto E1;
-  }
-  if ((res = mp_div_2(&t1, &t1)) != MP_OKAY) {
-    goto E1;
-  }
-  /* And now t1 > sqrt(arg) */
-  do {
-    if ((res = mp_div(arg, &t1, &t2, NULL)) != MP_OKAY) {
-      goto E1;
-    }
-    if ((res = mp_add(&t1, &t2, &t1)) != MP_OKAY) {
-      goto E1;
-    }
-    if ((res = mp_div_2(&t1, &t1)) != MP_OKAY) {
-      goto E1;
-    }
-    /* t1 >= sqrt(arg) >= t2 at this point */
-  } while (mp_cmp_mag(&t1, &t2) == MP_GT);
-
-  mp_exch(&t1, ret);
-
-E1:
-  mp_clear(&t2);
-E2:
-  mp_clear(&t1);
-  return res;
-}
 #endif
 
 /* $Source$ */
@@ -11247,7 +10926,6 @@ void crypt_argchk(char *v, char *s, int d) {
 
 /* Enable self-test test vector checking */
 #ifndef LTC_NO_TEST
-#define LTC_TEST
 #endif
 
 /* clean the stack of functions which put private information on stack */
@@ -11269,19 +10947,12 @@ void crypt_argchk(char *v, char *s, int d) {
 #ifndef LTC_NO_CIPHERS
 
 #define LTC_BLOWFISH
-#define LTC_RC2
-#define LTC_RC5
-#define LTC_RC6
-#define LTC_SAFERP
 #define LTC_RIJNDAEL
-#define LTC_XTEA
 
 /* _TABLES tells it to use tables during setup, _SMALL means to use the smaller
  * scheduled key format (saves 4KB of ram), _ALL_TABLES enables all tables
  * during setup */
-#define LTC_TWOFISH
 #ifndef LTC_NO_TABLES
-#define LTC_TWOFISH_TABLES
 /* #define LTC_TWOFISH_ALL_TABLES */
 #else
 #define LTC_TWOFISH_SMALL
@@ -11290,30 +10961,18 @@ void crypt_argchk(char *v, char *s, int d) {
 /* LTC_DES includes EDE triple-LTC_DES */
 #define LTC_DES
 #define LTC_CAST5
-#define LTC_NOEKEON
-#define LTC_SKIPJACK
-#define LTC_SAFER
-#define LTC_KHAZAD
-#define LTC_ANUBIS
-#define LTC_ANUBIS_TWEAK
-#define LTC_KSEED
-#define LTC_KASUMI
 #endif /* LTC_NO_CIPHERS */
 
 /* ---> Block Cipher Modes of Operation <--- */
 #ifndef LTC_NO_MODES
 
-#define LTC_CFB_MODE
-#define LTC_OFB_MODE
 #define LTC_ECB_MODE
 #define LTC_CBC_MODE
 #define LTC_CTR_MODE
 
 /* F8 chaining mode */
-#define LTC_F8_MODE
 
 /* LRW mode */
-#define LTC_LRW_MODE
 #ifndef LTC_NO_TABLES
 
 /* like GCM mode this will enable 16 8x128 tables [64KB] that make
@@ -11323,27 +10982,17 @@ void crypt_argchk(char *v, char *s, int d) {
 #endif
 
 /* XTS mode */
-#define LTC_XTS_MODE
 #endif /* LTC_NO_MODES */
 
 /* ---> One-Way Hash Functions <--- */
 #ifndef LTC_NO_HASHES
 
-#define LTC_CHC_HASH
-#define LTC_WHIRLPOOL
 #define LTC_SHA512
 #define LTC_SHA384
 #define LTC_SHA256
 #define LTC_SHA224
-#define LTC_TIGER
 #define LTC_SHA1
 #define LTC_MD5
-#define LTC_MD4
-#define LTC_MD2
-#define LTC_RIPEMD128
-#define LTC_RIPEMD160
-#define LTC_RIPEMD256
-#define LTC_RIPEMD320
 #endif /* LTC_NO_HASHES */
 
 /* ---> MAC functions <--- */
@@ -11351,9 +11000,7 @@ void crypt_argchk(char *v, char *s, int d) {
 
 #define LTC_HMAC
 #define LTC_OMAC
-#define LTC_PMAC
 #define LTC_XCBC
-#define LTC_F9_MODE
 #define LTC_PELICAN
 
 #if defined(LTC_PELICAN) && !defined(LTC_RIJNDAEL)
@@ -11362,9 +11009,6 @@ void crypt_argchk(char *v, char *s, int d) {
 
 /* ---> Encrypt + Authenticate Modes <--- */
 
-#define LTC_EAX_MODE
-
-#define LTC_OCB_MODE
 #define LTC_CCM_MODE
 #define LTC_GCM_MODE
 
@@ -11380,7 +11024,6 @@ void crypt_argchk(char *v, char *s, int d) {
 #endif /* LTC_NO_MACS */
 
 /* Various tidbits of modern neatoness */
-#define LTC_BASE64
 
 /* --> Pseudo Random Number Generators <--- */
 #ifndef LTC_NO_PRNGS
@@ -11395,16 +11038,12 @@ void crypt_argchk(char *v, char *s, int d) {
 #define LTC_SPRNG
 
 /* The LTC_RC4 stream cipher */
-#define LTC_RC4
 
 /* Fortuna PRNG */
-#define LTC_FORTUNA
 /* reseed every N calls to the read function */
 /* number of pools (4..32) can save a bit of ram by lowering the count */
-#define LTC_FORTUNA_POOLS 32
 
 /* Greg's LTC_SOBER128 PRNG ;-0 */
-#define LTC_SOBER128
 
 /* the *nix style /dev/random device */
 #define LTC_DEVRANDOM
@@ -11455,7 +11094,6 @@ void crypt_argchk(char *v, char *s, int d) {
 #ifndef LTC_NO_PKCS
 
 #define LTC_PKCS_1
-#define LTC_PKCS_5
 
 /* Include ASN.1 DER (required by DSA/RSA) */
 #define LTC_DER
@@ -11551,8 +11189,8 @@ enum {
   CRYPT_NOP,    /* Not a failure but no operation was performed */
 
   CRYPT_INVALID_KEYSIZE, /* Invalid key size given */
-  CRYPT_INVALID_ROUNDS,  /* Invalid number of rounds */
-  CRYPT_FAIL_TESTVECTOR, /* Algorithm failed test vectors */
+  CRYPT_INVALID_ROUNDS  /* Invalid number of rounds */
+    , /* Algorithm failed test vectors */
 
   CRYPT_BUFFER_OVERFLOW, /* Not enough space for output */
   CRYPT_INVALID_PACKET,  /* Invalid input packet given */
@@ -11569,8 +11207,8 @@ enum {
   CRYPT_PK_TYPE_MISMATCH, /* Not equivalent types of PK keys */
   CRYPT_PK_NOT_PRIVATE,   /* Requires a private PK key */
 
-  CRYPT_INVALID_ARG,   /* Generic invalid argument */
-  CRYPT_FILE_NOTFOUND, /* File Not Found */
+  CRYPT_INVALID_ARG   /* Generic invalid argument */
+    , /* File Not Found */
 
   CRYPT_PK_INVALID_TYPE, /* Invalid type of PK key */
 
@@ -12491,16 +12129,6 @@ extern struct ltc_cipher_descriptor {
 #ifdef LTC_RIJNDAEL
 
 /* make aes an alias */
-#define aes_setup rijndael_setup
-#define aes_ecb_encrypt rijndael_ecb_encrypt
-#define aes_ecb_decrypt rijndael_ecb_decrypt
-#define aes_test rijndael_test
-#define aes_done rijndael_done
-#define aes_keysize rijndael_keysize
-
-#define aes_enc_setup rijndael_enc_setup
-#define aes_enc_ecb_encrypt rijndael_enc_ecb_encrypt
-#define aes_enc_keysize rijndael_enc_keysize
 
 int rijndael_setup(const unsigned char *key, int keylen, int num_rounds,
                    symmetric_key *skey);
@@ -12523,30 +12151,11 @@ extern const struct ltc_cipher_descriptor rijndael_enc_desc, aes_enc_desc;
 #endif
 
 
-#ifdef LTC_XTS_MODE
-typedef struct {
-  symmetric_key key1, key2;
-  int cipher;
-} symmetric_xts;
-
-int xts_start(int cipher, const unsigned char *key1, const unsigned char *key2,
-              unsigned long keylen, int num_rounds, symmetric_xts *xts);
-
-int xts_encrypt(const unsigned char *pt, unsigned long ptlen, unsigned char *ct,
-                const unsigned char *tweak, symmetric_xts *xts);
-int xts_decrypt(const unsigned char *ct, unsigned long ptlen, unsigned char *pt,
-                const unsigned char *tweak, symmetric_xts *xts);
-
-void xts_done(symmetric_xts *xts);
-int xts_test(void);
-void xts_mult_x(unsigned char *I);
-#endif
 
 int find_cipher(const char *name);
-int find_cipher_any(const char *name, int blocklen, int keylen);
-int find_cipher_id(unsigned char ID);
+
 int register_cipher(const struct ltc_cipher_descriptor *cipher);
-int unregister_cipher(const struct ltc_cipher_descriptor *cipher);
+
 int cipher_is_valid(int idx);
 
 LTC_MUTEX_PROTO(ltc_cipher_mutex)
@@ -12708,23 +12317,15 @@ extern const struct ltc_hash_descriptor md5_desc;
 #endif
 
 int find_hash(const char *name);
-int find_hash_id(unsigned char ID);
-int find_hash_oid(const unsigned long *ID, unsigned long IDlen);
-int find_hash_any(const char *name, int digestlen);
+
 int register_hash(const struct ltc_hash_descriptor *hash);
-int unregister_hash(const struct ltc_hash_descriptor *hash);
+
 int hash_is_valid(int idx);
 
 LTC_MUTEX_PROTO(ltc_hash_mutex)
 
 int hash_memory(int hash, const unsigned char *in, unsigned long inlen,
                 unsigned char *out, unsigned long *outlen);
-int hash_memory_multi(int hash, unsigned char *out, unsigned long *outlen,
-                      const unsigned char *in, unsigned long inlen, ...);
-int hash_filehandle(int hash, FILE *in, unsigned char *out,
-                    unsigned long *outlen);
-int hash_file(int hash, const char *fname, unsigned char *out,
-              unsigned long *outlen);
 
 /* a simple macro for making hash "process" functions */
 #define HASH_PROCESS(func_name, compress_name, state_var, block_size)     \
@@ -12780,15 +12381,7 @@ int hmac_init(hmac_state *hmac, int hash, const unsigned char *key,
 int hmac_process(hmac_state *hmac, const unsigned char *in,
                  unsigned long inlen);
 int hmac_done(hmac_state *hmac, unsigned char *out, unsigned long *outlen);
-int hmac_test(void);
-int hmac_memory(int hash, const unsigned char *key, unsigned long keylen,
-                const unsigned char *in, unsigned long inlen,
-                unsigned char *out, unsigned long *outlen);
-int hmac_memory_multi(int hash, const unsigned char *key, unsigned long keylen,
-                      unsigned char *out, unsigned long *outlen,
-                      const unsigned char *in, unsigned long inlen, ...);
-int hmac_file(int hash, const char *fname, const unsigned char *key,
-              unsigned long keylen, unsigned char *dst, unsigned long *dstlen);
+
 #endif
 
 
@@ -12856,38 +12449,15 @@ int gcm_process(gcm_state *gcm, unsigned char *pt, unsigned long ptlen,
 
 int gcm_done(gcm_state *gcm, unsigned char *tag, unsigned long *taglen);
 
-int gcm_memory(int cipher, const unsigned char *key, unsigned long keylen,
-               const unsigned char *IV, unsigned long IVlen,
-               const unsigned char *adata, unsigned long adatalen,
-               unsigned char *pt, unsigned long ptlen, unsigned char *ct,
-               unsigned char *tag, unsigned long *taglen, int direction);
-int gcm_test(void);
 #endif /* LTC_GCM_MODE */
 
 #ifdef LTC_PELICAN
 
-typedef struct pelican_state {
-  symmetric_key K;
-  unsigned char state[16];
-  int buflen;
-} pelican_state;
-
-int pelican_init(pelican_state *pelmac, const unsigned char *key,
-                 unsigned long keylen);
-int pelican_process(pelican_state *pelmac, const unsigned char *in,
-                    unsigned long inlen);
-int pelican_done(pelican_state *pelmac, unsigned char *out);
-int pelican_test(void);
-
-int pelican_memory(const unsigned char *key, unsigned long keylen,
-                   const unsigned char *in, unsigned long inlen,
-                   unsigned char *out);
 #endif
 
 #ifdef LTC_XCBC
 
 /* add this to "keylen" to xcbc_init to use a pure three-key XCBC MAC */
-#define LTC_XCBC_PURE 0x8000UL
 
 typedef struct {
   unsigned char K[3][MAXBLOCKSIZE], IV[MAXBLOCKSIZE];
@@ -12897,21 +12467,6 @@ typedef struct {
   int cipher, buflen, blocksize;
 } xcbc_state;
 
-int xcbc_init(xcbc_state *xcbc, int cipher, const unsigned char *key,
-              unsigned long keylen);
-int xcbc_process(xcbc_state *xcbc, const unsigned char *in,
-                 unsigned long inlen);
-int xcbc_done(xcbc_state *xcbc, unsigned char *out, unsigned long *outlen);
-int xcbc_memory(int cipher, const unsigned char *key, unsigned long keylen,
-                const unsigned char *in, unsigned long inlen,
-                unsigned char *out, unsigned long *outlen);
-int xcbc_memory_multi(int cipher, const unsigned char *key,
-                      unsigned long keylen, unsigned char *out,
-                      unsigned long *outlen, const unsigned char *in,
-                      unsigned long inlen, ...);
-int xcbc_file(int cipher, const unsigned char *key, unsigned long keylen,
-              const char *filename, unsigned char *out, unsigned long *outlen);
-int xcbc_test(void);
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_mac.h,v $ */
@@ -13016,7 +12571,7 @@ extern const struct ltc_prng_descriptor sprng_desc;
 
 int find_prng(const char *name);
 int register_prng(const struct ltc_prng_descriptor *prng);
-int unregister_prng(const struct ltc_prng_descriptor *prng);
+
 int prng_is_valid(int idx);
 
 LTC_MUTEX_PROTO(ltc_prng_mutex)
@@ -13078,25 +12633,6 @@ int rsa_exptmod(const unsigned char *in, unsigned long inlen,
 void rsa_free(rsa_key *key);
 
 /* These use LTC_PKCS #1 v2.0 padding */
-#define rsa_encrypt_key(_in, _inlen, _out, _outlen, _lparam, _lparamlen,     \
-                        _prng, _prng_idx, _hash_idx, _key)                   \
-  rsa_encrypt_key_ex(_in, _inlen, _out, _outlen, _lparam, _lparamlen, _prng, \
-                     _prng_idx, _hash_idx, LTC_LTC_PKCS_1_OAEP, _key)
-
-#define rsa_decrypt_key(_in, _inlen, _out, _outlen, _lparam, _lparamlen, \
-                        _hash_idx, _stat, _key)                          \
-  rsa_decrypt_key_ex(_in, _inlen, _out, _outlen, _lparam, _lparamlen,    \
-                     _hash_idx, LTC_LTC_PKCS_1_OAEP, _stat, _key)
-
-#define rsa_sign_hash(_in, _inlen, _out, _outlen, _prng, _prng_idx, _hash_idx, \
-                      _saltlen, _key)                                          \
-  rsa_sign_hash_ex(_in, _inlen, _out, _outlen, LTC_LTC_PKCS_1_PSS, _prng,      \
-                   _prng_idx, _hash_idx, _saltlen, _key)
-
-#define rsa_verify_hash(_sig, _siglen, _hash, _hashlen, _hash_idx, _saltlen, \
-                        _stat, _key)                                         \
-  rsa_verify_hash_ex(_sig, _siglen, _hash, _hashlen, LTC_LTC_PKCS_1_PSS,     \
-                     _hash_idx, _saltlen, _stat, _key)
 
 /* These can be switched between LTC_PKCS #1 v2.x and LTC_PKCS #1 v1.5 paddings
  */
@@ -13121,9 +12657,6 @@ int rsa_verify_hash_ex(const unsigned char *sig, unsigned long siglen,
                        int padding, int hash_idx, unsigned long saltlen,
                        int *stat, rsa_key *key);
 
-/* LTC_PKCS #1 import/export */
-int rsa_export(unsigned char *out, unsigned long *outlen, int type,
-               rsa_key *key);
 int rsa_import(const unsigned char *in, unsigned long inlen, rsa_key *key);
 #endif
 
@@ -13251,37 +12784,21 @@ typedef struct {
 /** the ECC params provided */
 extern const ltc_ecc_set_type ltc_ecc_sets[];
 
-int ecc_test(void);
-void ecc_sizes(int *low, int *high);
-int ecc_get_size(ecc_key *key);
-
-int ecc_make_key(prng_state *prng, int wprng, int keysize, ecc_key *key);
 int ecc_make_key_ex(prng_state *prng, int wprng, ecc_key *key,
                     const ltc_ecc_set_type *dp);
 void ecc_free(ecc_key *key);
 
-int ecc_export(unsigned char *out, unsigned long *outlen, int type,
-               ecc_key *key);
-int ecc_import(const unsigned char *in, unsigned long inlen, ecc_key *key);
 int ecc_import_ex(const unsigned char *in, unsigned long inlen, ecc_key *key,
                   const ltc_ecc_set_type *dp);
 
 int ecc_ansi_x963_export(ecc_key *key, unsigned char *out,
                          unsigned long *outlen);
-int ecc_ansi_x963_import(const unsigned char *in, unsigned long inlen,
-                         ecc_key *key);
+
 int ecc_ansi_x963_import_ex(const unsigned char *in, unsigned long inlen,
-                            ecc_key *key, ltc_ecc_set_type *dp);
+                            ecc_key *key, const ltc_ecc_set_type *dp);
 
 int ecc_shared_secret(ecc_key *private_key, ecc_key *public_key,
                       unsigned char *out, unsigned long *outlen);
-
-int ecc_encrypt_key(const unsigned char *in, unsigned long inlen,
-                    unsigned char *out, unsigned long *outlen, prng_state *prng,
-                    int wprng, int hash, ecc_key *key);
-
-int ecc_decrypt_key(const unsigned char *in, unsigned long inlen,
-                    unsigned char *out, unsigned long *outlen, ecc_key *key);
 
 int ecc_sign_hash(const unsigned char *in, unsigned long inlen,
                   unsigned char *out, unsigned long *outlen, prng_state *prng,
@@ -13411,7 +12928,7 @@ int der_length_sequence(ltc_asn1_list *list, unsigned long inlen,
 /* SET */
 #define der_decode_set(in, inlen, list, outlen) \
   der_decode_sequence_ex(in, inlen, list, outlen, 0)
-#define der_length_set der_length_sequence
+
 int der_encode_set(ltc_asn1_list *list, unsigned long inlen, unsigned char *out,
                    unsigned long *outlen);
 
@@ -13426,7 +12943,7 @@ int der_decode_sequence_multi(const unsigned char *in, unsigned long inlen,
 /* FLEXI DECODER handle unknown list decoder */
 int der_decode_sequence_flexi(const unsigned char *in, unsigned long *inlen,
                               ltc_asn1_list **out);
-void der_free_sequence_flexi(ltc_asn1_list *list);
+
 void der_sequence_free(ltc_asn1_list *in);
 
 /* BOOLEAN */
@@ -14067,13 +13584,6 @@ extern const ltc_math_descriptor gmp_desc;
 void zeromem(void *dst, size_t len);
 void burn_stack(unsigned long len);
 
-const char *error_to_string(int err);
-
-extern const char *crypt_build_settings;
-
-/* ---- HMM ---- */
-int crypt_fsa(void *mp, ...);
-
 /* $Source: /cvs/libtom/libtomcrypt/src/headers/tomcrypt_misc.h,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2007/05/12 14:32:35 $ */
@@ -14144,9 +13654,6 @@ enum ltc_pkcs_1_paddings {
 
 int pkcs_1_mgf1(int hash_idx, const unsigned char *seed, unsigned long seedlen,
                 unsigned char *mask, unsigned long masklen);
-
-int pkcs_1_i2osp(void *n, unsigned long modulus_len, unsigned char *out);
-int pkcs_1_os2ip(void *n, unsigned char *in, unsigned long inlen);
 
 /* *** v1.5 padding */
 int pkcs_1_v1_5_encode(const unsigned char *msg, unsigned long msglen,
@@ -14321,37 +13828,6 @@ int find_cipher(const char *name) {
    Find a cipher in the descriptor tables, Tom St Denis
  */
 
-/**
-   Find a cipher flexibly.  First by name then if not present by block and key
-   size
-   @param name        The name of the cipher desired
-   @param blocklen    The minimum length of the block cipher desired (octets)
-   @param keylen      The minimum length of the key size desired (octets)
-   @return >= 0 if found, -1 if not present
- */
-int find_cipher_any(const char *name, int blocklen, int keylen) {
-  int x;
-
-  LTC_ARGCHK(name != NULL);
-
-  x = find_cipher(name);
-  if (x != -1) return x;
-
-  LTC_MUTEX_LOCK(&ltc_cipher_mutex);
-  for (x = 0; x < TAB_SIZE; x++) {
-    if (cipher_descriptor[x].name == NULL) {
-      continue;
-    }
-    if ((blocklen <= (int)cipher_descriptor[x].block_length) &&
-        (keylen <= (int)cipher_descriptor[x].max_key_length)) {
-      LTC_MUTEX_UNLOCK(&ltc_cipher_mutex);
-      return x;
-    }
-  }
-  LTC_MUTEX_UNLOCK(&ltc_cipher_mutex);
-  return -1;
-}
-
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_find_cipher_any.c,v $
  */
 /* $Revision: 1.6 $ */
@@ -14372,26 +13848,6 @@ int find_cipher_any(const char *name, int blocklen, int keylen) {
    @file crypt_find_cipher_id.c
    Find cipher by ID, Tom St Denis
  */
-
-/**
-   Find a cipher by ID number
-   @param ID    The ID (not same as index) of the cipher to find
-   @return >= 0 if found, -1 if not present
- */
-int find_cipher_id(unsigned char ID) {
-  int x;
-
-  LTC_MUTEX_LOCK(&ltc_cipher_mutex);
-  for (x = 0; x < TAB_SIZE; x++) {
-    if (cipher_descriptor[x].ID == ID) {
-      x = (cipher_descriptor[x].name == NULL) ? -1 : x;
-      LTC_MUTEX_UNLOCK(&ltc_cipher_mutex);
-      return x;
-    }
-  }
-  LTC_MUTEX_UNLOCK(&ltc_cipher_mutex);
-  return -1;
-}
 
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_find_cipher_id.c,v $ */
 /* $Revision: 1.6 $ */
@@ -14454,37 +13910,6 @@ int find_hash(const char *name) {
    Find a hash, Tom St Denis
  */
 
-/**
-   Find a hash flexibly.  First by name then if not present by digest size
-   @param name        The name of the hash desired
-   @param digestlen   The minimum length of the digest size (octets)
-   @return >= 0 if found, -1 if not present
- */
-int find_hash_any(const char *name, int digestlen) {
-  int x, y, z;
-
-  LTC_ARGCHK(name != NULL);
-
-  x = find_hash(name);
-  if (x != -1) return x;
-
-  LTC_MUTEX_LOCK(&ltc_hash_mutex);
-  y = MAXBLOCKSIZE + 1;
-  z = -1;
-  for (x = 0; x < TAB_SIZE; x++) {
-    if (hash_descriptor[x].name == NULL) {
-      continue;
-    }
-    if (((int)hash_descriptor[x].hashsize >= digestlen) &&
-        ((int)hash_descriptor[x].hashsize < y)) {
-      z = x;
-      y = hash_descriptor[x].hashsize;
-    }
-  }
-  LTC_MUTEX_UNLOCK(&ltc_hash_mutex);
-  return z;
-}
-
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_find_hash_any.c,v $ */
 /* $Revision: 1.6 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
@@ -14505,26 +13930,6 @@ int find_hash_any(const char *name, int digestlen) {
    Find hash by ID, Tom St Denis
  */
 
-/**
-   Find a hash by ID number
-   @param ID    The ID (not same as index) of the hash to find
-   @return >= 0 if found, -1 if not present
- */
-int find_hash_id(unsigned char ID) {
-  int x;
-
-  LTC_MUTEX_LOCK(&ltc_hash_mutex);
-  for (x = 0; x < TAB_SIZE; x++) {
-    if (hash_descriptor[x].ID == ID) {
-      x = (hash_descriptor[x].name == NULL) ? -1 : x;
-      LTC_MUTEX_UNLOCK(&ltc_hash_mutex);
-      return x;
-    }
-  }
-  LTC_MUTEX_UNLOCK(&ltc_hash_mutex);
-  return -1;
-}
-
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_find_hash_id.c,v $ */
 /* $Revision: 1.7 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
@@ -14539,28 +13944,6 @@ int find_hash_id(unsigned char ID) {
  *
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
-
-/**
-   @file crypt_find_hash_oid.c
-   Find a hash, Tom St Denis
- */
-
-int find_hash_oid(const unsigned long *ID, unsigned long IDlen) {
-  int x;
-
-  LTC_ARGCHK(ID != NULL);
-  LTC_MUTEX_LOCK(&ltc_hash_mutex);
-  for (x = 0; x < TAB_SIZE; x++) {
-    if ((hash_descriptor[x].name != NULL) &&
-        (hash_descriptor[x].OIDlen == IDlen) &&
-        !XMEMCMP(hash_descriptor[x].OID, ID, sizeof(unsigned long) * IDlen)) {
-      LTC_MUTEX_UNLOCK(&ltc_hash_mutex);
-      return x;
-    }
-  }
-  LTC_MUTEX_UNLOCK(&ltc_hash_mutex);
-  return -1;
-}
 
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_find_hash_oid.c,v $ */
 /* $Revision: 1.5 $ */
@@ -14622,43 +14005,6 @@ int find_prng(const char *name) {
    @file crypt_fsa.c
    LibTomCrypt FULL SPEED AHEAD!, Tom St Denis
  */
-
-/* format is ltc_mp, cipher_desc, [cipher_desc], NULL, hash_desc, [hash_desc],
- * NULL, prng_desc, [prng_desc], NULL */
-int crypt_fsa(void *mp, ...) {
-  int err;
-  va_list args;
-  void *p;
-
-  va_start(args, mp);
-  if (mp != NULL) {
-    XMEMCPY(&ltc_mp, mp, sizeof(ltc_mp));
-  }
-
-  while ((p = va_arg(args, void *)) != NULL) {
-    if ((err = register_cipher(p)) != CRYPT_OK) {
-      va_end(args);
-      return err;
-    }
-  }
-
-  while ((p = va_arg(args, void *)) != NULL) {
-    if ((err = register_hash(p)) != CRYPT_OK) {
-      va_end(args);
-      return err;
-    }
-  }
-
-  while ((p = va_arg(args, void *)) != NULL) {
-    if ((err = register_prng(p)) != CRYPT_OK) {
-      va_end(args);
-      return err;
-    }
-  }
-
-  va_end(args);
-  return CRYPT_OK;
-}
 
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_fsa.c,v $ */
 /* $Revision: 1.5 $ */
@@ -14981,31 +14327,6 @@ int register_prng(const struct ltc_prng_descriptor *prng) {
    Unregister a cipher, Tom St Denis
  */
 
-/**
-   Unregister a cipher from the descriptor table
-   @param cipher   The cipher descriptor to remove
-   @return CRYPT_OK on success
- */
-int unregister_cipher(const struct ltc_cipher_descriptor *cipher) {
-  int x;
-
-  LTC_ARGCHK(cipher != NULL);
-
-  /* is it already registered? */
-  LTC_MUTEX_LOCK(&ltc_cipher_mutex);
-  for (x = 0; x < TAB_SIZE; x++) {
-    if (XMEMCMP(&cipher_descriptor[x], cipher,
-                sizeof(struct ltc_cipher_descriptor)) == 0) {
-      cipher_descriptor[x].name = NULL;
-      cipher_descriptor[x].ID = 255;
-      LTC_MUTEX_UNLOCK(&ltc_cipher_mutex);
-      return CRYPT_OK;
-    }
-  }
-  LTC_MUTEX_UNLOCK(&ltc_cipher_mutex);
-  return CRYPT_ERROR;
-}
-
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_unregister_cipher.c,v $
  */
 /* $Revision: 1.7 $ */
@@ -15027,30 +14348,6 @@ int unregister_cipher(const struct ltc_cipher_descriptor *cipher) {
    Unregister a hash, Tom St Denis
  */
 
-/**
-   Unregister a hash from the descriptor table
-   @param hash   The hash descriptor to remove
-   @return CRYPT_OK on success
- */
-int unregister_hash(const struct ltc_hash_descriptor *hash) {
-  int x;
-
-  LTC_ARGCHK(hash != NULL);
-
-  /* is it already registered? */
-  LTC_MUTEX_LOCK(&ltc_hash_mutex);
-  for (x = 0; x < TAB_SIZE; x++) {
-    if (XMEMCMP(&hash_descriptor[x], hash,
-                sizeof(struct ltc_hash_descriptor)) == 0) {
-      hash_descriptor[x].name = NULL;
-      LTC_MUTEX_UNLOCK(&ltc_hash_mutex);
-      return CRYPT_OK;
-    }
-  }
-  LTC_MUTEX_UNLOCK(&ltc_hash_mutex);
-  return CRYPT_ERROR;
-}
-
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_unregister_hash.c,v $
  */
 /* $Revision: 1.7 $ */
@@ -15071,30 +14368,6 @@ int unregister_hash(const struct ltc_hash_descriptor *hash) {
    @file crypt_unregister_prng.c
    Unregister a PRNG, Tom St Denis
  */
-
-/**
-   Unregister a PRNG from the descriptor table
-   @param prng   The PRNG descriptor to remove
-   @return CRYPT_OK on success
- */
-int unregister_prng(const struct ltc_prng_descriptor *prng) {
-  int x;
-
-  LTC_ARGCHK(prng != NULL);
-
-  /* is it already registered? */
-  LTC_MUTEX_LOCK(&ltc_prng_mutex);
-  for (x = 0; x < TAB_SIZE; x++) {
-    if (XMEMCMP(&prng_descriptor[x], prng,
-                sizeof(struct ltc_prng_descriptor)) != 0) {
-      prng_descriptor[x].name = NULL;
-      LTC_MUTEX_UNLOCK(&ltc_prng_mutex);
-      return CRYPT_OK;
-    }
-  }
-  LTC_MUTEX_UNLOCK(&ltc_prng_mutex);
-  return CRYPT_ERROR;
-}
 
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/crypt/crypt_unregister_prng.c,v $
  */
@@ -19995,18 +19268,8 @@ int ecc_ansi_x963_export(ecc_key *key, unsigned char *out,
 
 #ifdef LTC_MECC
 
-/** Import an ANSI X9.63 format public key
-   @param in      The input data to read
-   @param inlen   The length of the input data
-   @param key     [out] destination to store imported key \
- */
-int ecc_ansi_x963_import(const unsigned char *in, unsigned long inlen,
-                         ecc_key *key) {
-  return ecc_ansi_x963_import_ex(in, inlen, key, NULL);
-}
-
 int ecc_ansi_x963_import_ex(const unsigned char *in, unsigned long inlen,
-                            ecc_key *key, ltc_ecc_set_type *dp) {
+                            ecc_key *key, const ltc_ecc_set_type *dp) {
   int x, err;
 
   LTC_ARGCHK(in != NULL);
@@ -20104,124 +19367,6 @@ error:
 
 #ifdef LTC_MECC
 
-/**
-   Decrypt an ECC encrypted key
-   @param in       The ciphertext
-   @param inlen    The length of the ciphertext (octets)
-   @param out      [out] The plaintext
-   @param outlen   [in/out] The max size and resulting size of the plaintext
-   @param key      The corresponding private ECC key
-   @return CRYPT_OK if successful
- */
-int ecc_decrypt_key(const unsigned char *in, unsigned long inlen,
-                    unsigned char *out, unsigned long *outlen, ecc_key *key) {
-  unsigned char *ecc_shared, *skey, *pub_expt;
-  unsigned long x, y, hashOID[32];
-  int hash, err;
-  ecc_key pubkey;
-  ltc_asn1_list decode[3];
-
-  LTC_ARGCHK(in != NULL);
-  LTC_ARGCHK(out != NULL);
-  LTC_ARGCHK(outlen != NULL);
-  LTC_ARGCHK(key != NULL);
-
-  /* right key type? */
-  if (key->type != PK_PRIVATE) {
-    return CRYPT_PK_NOT_PRIVATE;
-  }
-
-  /* decode to find out hash */
-  LTC_SET_ASN1(decode, 0, LTC_ASN1_OBJECT_IDENTIFIER, hashOID,
-               sizeof(hashOID) / sizeof(hashOID[0]));
-
-  if ((err = der_decode_sequence(in, inlen, decode, 1)) != CRYPT_OK) {
-    return err;
-  }
-
-  hash = find_hash_oid(hashOID, decode[0].size);
-  if (hash_is_valid(hash) != CRYPT_OK) {
-    return CRYPT_INVALID_PACKET;
-  }
-
-  /* we now have the hash! */
-
-  /* allocate memory */
-  pub_expt = XMALLOC(ECC_BUF_SIZE);
-  ecc_shared = XMALLOC(ECC_BUF_SIZE);
-  skey = XMALLOC(MAXBLOCKSIZE);
-  if ((pub_expt == NULL) || (ecc_shared == NULL) || (skey == NULL)) {
-    if (pub_expt != NULL) {
-      XFREE(pub_expt);
-    }
-    if (ecc_shared != NULL) {
-      XFREE(ecc_shared);
-    }
-    if (skey != NULL) {
-      XFREE(skey);
-    }
-    return CRYPT_MEM;
-  }
-  LTC_SET_ASN1(decode, 1, LTC_ASN1_OCTET_STRING, pub_expt, ECC_BUF_SIZE);
-  LTC_SET_ASN1(decode, 2, LTC_ASN1_OCTET_STRING, skey, MAXBLOCKSIZE);
-
-  /* read the structure in now */
-  if ((err = der_decode_sequence(in, inlen, decode, 3)) != CRYPT_OK) {
-    goto LBL_ERR;
-  }
-
-  /* import ECC key from packet */
-  if ((err = ecc_import(decode[1].data, decode[1].size, &pubkey)) != CRYPT_OK) {
-    goto LBL_ERR;
-  }
-
-  /* make shared key */
-  x = ECC_BUF_SIZE;
-  if ((err = ecc_shared_secret(key, &pubkey, ecc_shared, &x)) != CRYPT_OK) {
-    ecc_free(&pubkey);
-    goto LBL_ERR;
-  }
-  ecc_free(&pubkey);
-
-  y = MIN(ECC_BUF_SIZE, MAXBLOCKSIZE);
-  if ((err = hash_memory(hash, ecc_shared, x, ecc_shared, &y)) != CRYPT_OK) {
-    goto LBL_ERR;
-  }
-
-  /* ensure the hash of the shared secret is at least as big as the encrypt
-   * itself */
-  if (decode[2].size > y) {
-    err = CRYPT_INVALID_PACKET;
-    goto LBL_ERR;
-  }
-
-  /* avoid buffer overflow */
-  if (*outlen < decode[2].size) {
-    *outlen = decode[2].size;
-    err = CRYPT_BUFFER_OVERFLOW;
-    goto LBL_ERR;
-  }
-
-  /* Decrypt the key */
-  for (x = 0; x < decode[2].size; x++) {
-    out[x] = skey[x] ^ ecc_shared[x];
-  }
-  *outlen = x;
-
-  err = CRYPT_OK;
-LBL_ERR:
-#ifdef LTC_CLEAN_STACK
-  zeromem(pub_expt, ECC_BUF_SIZE);
-  zeromem(ecc_shared, ECC_BUF_SIZE);
-  zeromem(skey, MAXBLOCKSIZE);
-#endif
-
-  XFREE(pub_expt);
-  XFREE(ecc_shared);
-  XFREE(skey);
-
-  return err;
-}
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_decrypt_key.c,v $ */
@@ -20252,109 +19397,6 @@ LBL_ERR:
 
 #ifdef LTC_MECC
 
-/**
-   Encrypt a symmetric key with ECC
-   @param in         The symmetric key you want to encrypt
-   @param inlen      The length of the key to encrypt (octets)
-   @param out        [out] The destination for the ciphertext
-   @param outlen     [in/out] The max size and resulting size of the ciphertext
-   @param prng       An active PRNG state
-   @param wprng      The index of the PRNG you wish to use
-   @param hash       The index of the hash you want to use
-   @param key        The ECC key you want to encrypt to
-   @return CRYPT_OK if successful
- */
-int ecc_encrypt_key(const unsigned char *in, unsigned long inlen,
-                    unsigned char *out, unsigned long *outlen, prng_state *prng,
-                    int wprng, int hash, ecc_key *key) {
-  unsigned char *pub_expt, *ecc_shared, *skey;
-  ecc_key pubkey;
-  unsigned long x, y, pubkeysize;
-  int err;
-
-  LTC_ARGCHK(in != NULL);
-  LTC_ARGCHK(out != NULL);
-  LTC_ARGCHK(outlen != NULL);
-  LTC_ARGCHK(key != NULL);
-
-  /* check that wprng/cipher/hash are not invalid */
-  if ((err = prng_is_valid(wprng)) != CRYPT_OK) {
-    return err;
-  }
-
-  if ((err = hash_is_valid(hash)) != CRYPT_OK) {
-    return err;
-  }
-
-  if (inlen > hash_descriptor[hash].hashsize) {
-    return CRYPT_INVALID_HASH;
-  }
-
-  /* make a random key and export the public copy */
-  if ((err = ecc_make_key_ex(prng, wprng, &pubkey, key->dp)) != CRYPT_OK) {
-    return err;
-  }
-
-  pub_expt = XMALLOC(ECC_BUF_SIZE);
-  ecc_shared = XMALLOC(ECC_BUF_SIZE);
-  skey = XMALLOC(MAXBLOCKSIZE);
-  if ((pub_expt == NULL) || (ecc_shared == NULL) || (skey == NULL)) {
-    if (pub_expt != NULL) {
-      XFREE(pub_expt);
-    }
-    if (ecc_shared != NULL) {
-      XFREE(ecc_shared);
-    }
-    if (skey != NULL) {
-      XFREE(skey);
-    }
-    ecc_free(&pubkey);
-    return CRYPT_MEM;
-  }
-
-  pubkeysize = ECC_BUF_SIZE;
-  if ((err = ecc_export(pub_expt, &pubkeysize, PK_PUBLIC, &pubkey)) !=
-      CRYPT_OK) {
-    ecc_free(&pubkey);
-    goto LBL_ERR;
-  }
-
-  /* make random key */
-  x = ECC_BUF_SIZE;
-  if ((err = ecc_shared_secret(&pubkey, key, ecc_shared, &x)) != CRYPT_OK) {
-    ecc_free(&pubkey);
-    goto LBL_ERR;
-  }
-  ecc_free(&pubkey);
-  y = MAXBLOCKSIZE;
-  if ((err = hash_memory(hash, ecc_shared, x, skey, &y)) != CRYPT_OK) {
-    goto LBL_ERR;
-  }
-
-  /* Encrypt key */
-  for (x = 0; x < inlen; x++) {
-    skey[x] ^= in[x];
-  }
-
-  err = der_encode_sequence_multi(
-      out, outlen, LTC_ASN1_OBJECT_IDENTIFIER, hash_descriptor[hash].OIDlen,
-      hash_descriptor[hash].OID, LTC_ASN1_OCTET_STRING, pubkeysize, pub_expt,
-      LTC_ASN1_OCTET_STRING, inlen, skey, LTC_ASN1_EOL, 0UL, NULL);
-
-LBL_ERR:
-#ifdef LTC_CLEAN_STACK
-  /* clean up */
-  zeromem(pub_expt, ECC_BUF_SIZE);
-  zeromem(ecc_shared, ECC_BUF_SIZE);
-  zeromem(skey, MAXBLOCKSIZE);
-#endif
-
-  XFREE(skey);
-  XFREE(ecc_shared);
-  XFREE(pub_expt);
-
-  return err;
-}
 #endif
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_encrypt_key.c,v $ */
 /* $Revision: 1.6 $ */
@@ -20384,53 +19426,6 @@ LBL_ERR:
 
 #ifdef LTC_MECC
 
-/**
-   Export an ECC key as a binary packet
-   @param out     [out] Destination for the key
-   @param outlen  [in/out] Max size and resulting size of the exported key
-   @param type    The type of key you want to export (PK_PRIVATE or PK_PUBLIC)
-   @param key     The key to export
-   @return CRYPT_OK if successful
- */
-int ecc_export(unsigned char *out, unsigned long *outlen, int type,
-               ecc_key *key) {
-  int err;
-  unsigned char flags[1];
-  unsigned long key_size;
-
-  LTC_ARGCHK(out != NULL);
-  LTC_ARGCHK(outlen != NULL);
-  LTC_ARGCHK(key != NULL);
-
-  /* type valid? */
-  if ((key->type != PK_PRIVATE) && (type == PK_PRIVATE)) {
-    return CRYPT_PK_TYPE_MISMATCH;
-  }
-
-  if (ltc_ecc_is_valid_idx(key->idx) == 0) {
-    return CRYPT_INVALID_ARG;
-  }
-
-  /* we store the NIST byte size */
-  key_size = key->dp->size;
-
-  if (type == PK_PRIVATE) {
-    flags[0] = 1;
-    err = der_encode_sequence_multi(
-        out, outlen, LTC_ASN1_BIT_STRING, 1UL, flags, LTC_ASN1_SHORT_INTEGER,
-        1UL, &key_size, LTC_ASN1_INTEGER, 1UL, key->pubkey.x, LTC_ASN1_INTEGER,
-        1UL, key->pubkey.y, LTC_ASN1_INTEGER, 1UL, key->k, LTC_ASN1_EOL, 0UL,
-        NULL);
-  } else {
-    flags[0] = 0;
-    err = der_encode_sequence_multi(
-        out, outlen, LTC_ASN1_BIT_STRING, 1UL, flags, LTC_ASN1_SHORT_INTEGER,
-        1UL, &key_size, LTC_ASN1_INTEGER, 1UL, key->pubkey.x, LTC_ASN1_INTEGER,
-        1UL, key->pubkey.y, LTC_ASN1_EOL, 0UL, NULL);
-  }
-
-  return err;
-}
 #endif
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_export.c,v $ */
 /* $Revision: 1.6 $ */
@@ -20497,19 +19492,6 @@ void ecc_free(ecc_key *key) {
 
 #ifdef LTC_MECC
 
-/**
-   Get the size of an ECC key
-   @param key    The key to get the size of
-   @return The size (octets) of the key or INT_MAX on error
- */
-int ecc_get_size(ecc_key *key) {
-  LTC_ARGCHK(key != NULL);
-  if (ltc_ecc_is_valid_idx(key->idx))
-    return key->dp->size;
-  else
-    return INT_MAX; /* large value known to cause it to fail when passed to
-                       ecc_make_key() */
-}
 #endif
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_get_size.c,v $ */
 /* $Revision: 1.6 $ */
@@ -20610,17 +19592,6 @@ static int is_point(ecc_key *key) {
 error:
   mp_clear_multi(prime, b, t1, t2, NULL);
   return err;
-}
-
-/**
-   Import an ECC key from a binary packet
-   @param in      The packet to import
-   @param inlen   The length of the packet
-   @param key     [out] The destination of the import
-   @return CRYPT_OK if successful, upon error all allocated memory will be freed
- */
-int ecc_import(const unsigned char *in, unsigned long inlen, ecc_key *key) {
-  return ecc_import_ex(in, inlen, key, NULL);
 }
 
 /**
@@ -20737,32 +19708,6 @@ done:
  */
 
 #ifdef LTC_MECC
-
-/**
-   Make a new ECC key
-   @param prng         An active PRNG state
-   @param wprng        The index of the PRNG you wish to use
-   @param keysize      The keysize for the new key (in octets from 20 to 65
-   bytes)
-   @param key          [out] Destination of the newly created key
-   @return CRYPT_OK if successful, upon error all allocated memory will be freed
- */
-int ecc_make_key(prng_state *prng, int wprng, int keysize, ecc_key *key) {
-  int x, err;
-
-  /* find key size */
-  for (x = 0; (keysize > ltc_ecc_sets[x].size) && (ltc_ecc_sets[x].size != 0);
-       x++)
-    ;
-  keysize = ltc_ecc_sets[x].size;
-
-  if ((keysize > ECC_MAXSIZE) || (ltc_ecc_sets[x].size == 0)) {
-    return CRYPT_INVALID_KEYSIZE;
-  }
-  err = ecc_make_key_ex(prng, wprng, key, &ltc_ecc_sets[x]);
-  key->idx = x;
-  return err;
-}
 
 int ecc_make_key_ex(prng_state *prng, int wprng, ecc_key *key,
                     const ltc_ecc_set_type *dp) {
@@ -21120,23 +20065,6 @@ errnokey:
 
 #ifdef LTC_MECC
 
-void ecc_sizes(int *low, int *high) {
-  int i;
-
-  LTC_ARGCHKVD(low != NULL);
-  LTC_ARGCHKVD(high != NULL);
-
-  *low = INT_MAX;
-  *high = 0;
-  for (i = 0; ltc_ecc_sets[i].size != 0; i++) {
-    if (ltc_ecc_sets[i].size < *low) {
-      *low = ltc_ecc_sets[i].size;
-    }
-    if (ltc_ecc_sets[i].size > *high) {
-      *high = ltc_ecc_sets[i].size;
-    }
-  }
-}
 #endif
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_sizes.c,v $ */
 /* $Revision: 1.6 $ */
@@ -21166,89 +20094,6 @@ void ecc_sizes(int *low, int *high) {
 
 #ifdef LTC_MECC
 
-/**
-   Perform on the ECC system
-   @return CRYPT_OK if successful
- */
-int ecc_test(void) {
-  void *modulus, *order;
-  ecc_point *G, *GG;
-  int i, err, primality;
-
-  if ((err = mp_init_multi(&modulus, &order, NULL)) != CRYPT_OK) {
-    return err;
-  }
-
-  G = ltc_ecc_new_point();
-  GG = ltc_ecc_new_point();
-  if ((G == NULL) || (GG == NULL)) {
-    mp_clear_multi(modulus, order, NULL);
-    ltc_ecc_del_point(G);
-    ltc_ecc_del_point(GG);
-    return CRYPT_MEM;
-  }
-
-  for (i = 0; ltc_ecc_sets[i].size; i++) {
-#if 0
-        printf("Testing %d\n", ltc_ecc_sets[i].size);
-#endif
-    if ((err = mp_read_radix(modulus, (char *)ltc_ecc_sets[i].prime, 16)) !=
-        CRYPT_OK) {
-      goto done;
-    }
-    if ((err = mp_read_radix(order, (char *)ltc_ecc_sets[i].order, 16)) !=
-        CRYPT_OK) {
-      goto done;
-    }
-
-    /* is prime actually prime? */
-    if ((err = mp_prime_is_prime(modulus, 8, &primality)) != CRYPT_OK) {
-      goto done;
-    }
-    if (primality == 0) {
-      err = CRYPT_FAIL_TESTVECTOR;
-      goto done;
-    }
-
-    /* is order prime ? */
-    if ((err = mp_prime_is_prime(order, 8, &primality)) != CRYPT_OK) {
-      goto done;
-    }
-    if (primality == 0) {
-      err = CRYPT_FAIL_TESTVECTOR;
-      goto done;
-    }
-
-    if ((err = mp_read_radix(G->x, (char *)ltc_ecc_sets[i].Gx, 16)) !=
-        CRYPT_OK) {
-      goto done;
-    }
-    if ((err = mp_read_radix(G->y, (char *)ltc_ecc_sets[i].Gy, 16)) !=
-        CRYPT_OK) {
-      goto done;
-    }
-    mp_set(G->z, 1);
-
-    /* then we should have G == (order + 1)G */
-    if ((err = mp_add_d(order, 1, order)) != CRYPT_OK) {
-      goto done;
-    }
-    if ((err = ltc_mp.ecc_ptmul(order, G, GG, modulus, 1)) != CRYPT_OK) {
-      goto done;
-    }
-    if ((mp_cmp(G->x, GG->x) != LTC_MP_EQ) ||
-        (mp_cmp(G->y, GG->y) != LTC_MP_EQ)) {
-      err = CRYPT_FAIL_TESTVECTOR;
-      goto done;
-    }
-  }
-  err = CRYPT_OK;
-done:
-  ltc_ecc_del_point(GG);
-  ltc_ecc_del_point(G);
-  mp_clear_multi(order, modulus, NULL);
-  return err;
-}
 #endif
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/ecc/ecc_test.c,v $ */
@@ -21468,61 +20313,6 @@ error:
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
 
-/**
-   @file error_to_string.c
-   Convert error codes to ASCII strings, Tom St Denis
- */
-
-static const char *const err_2_str[] = {
-    "CRYPT_OK",
-    "CRYPT_ERROR",
-    "Non-fatal 'no-operation' requested.",
-
-    "Invalid keysize for block cipher.",
-    "Invalid number of rounds for block cipher.",
-    "Algorithm failed test vectors.",
-
-    "Buffer overflow.",
-    "Invalid input packet.",
-
-    "Invalid number of bits for a PRNG.",
-    "Error reading the PRNG.",
-
-    "Invalid cipher specified.",
-    "Invalid hash specified.",
-    "Invalid PRNG specified.",
-
-    "Out of memory.",
-
-    "Invalid PK key or key type specified for function.",
-    "A private PK key is required.",
-
-    "Invalid argument provided.",
-    "File Not Found",
-
-    "Invalid PK type.",
-    "Invalid PK system.",
-    "Duplicate PK key found on keyring.",
-    "Key not found in keyring.",
-    "Invalid sized parameter.",
-
-    "Invalid size for prime.",
-};
-
-/**
-   Convert an LTC error code to ASCII
-   @param err    The error code
-   @return A pointer to the ASCII NUL terminated string for the error or
-   "Invalid error code." if the err code was not valid.
- */
-const char *error_to_string(int err) {
-  if ((err < 0) || (err >= (int)(sizeof(err_2_str) / sizeof(err_2_str[0])))) {
-    return "Invalid error code.";
-  } else {
-    return err_2_str[err];
-  }
-}
-
 /* $Source: /cvs/libtom/libtomcrypt/src/misc/error_to_string.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:24 $ */
@@ -21560,42 +20350,6 @@ const char *error_to_string(int err) {
    Hash a file, Tom St Denis
  */
 
-/**
-   @param hash   The index of the hash desired
-   @param fname  The name of the file you wish to hash
-   @param out    [out] The destination of the digest
-   @param outlen [in/out] The max size and resulting size of the message digest
-   @result CRYPT_OK if successful
- */
-int hash_file(int hash, const char *fname, unsigned char *out,
-              unsigned long *outlen) {
-#ifdef LTC_NO_FILE
-  return CRYPT_NOP;
-#else
-  FILE *in;
-  int err;
-  LTC_ARGCHK(fname != NULL);
-  LTC_ARGCHK(out != NULL);
-  LTC_ARGCHK(outlen != NULL);
-
-  if ((err = hash_is_valid(hash)) != CRYPT_OK) {
-    return err;
-  }
-
-  in = fopen(fname, "rb");
-  if (in == NULL) {
-    return CRYPT_FILE_NOTFOUND;
-  }
-
-  err = hash_filehandle(hash, in, out, outlen);
-  if (fclose(in) != 0) {
-    return CRYPT_ERROR;
-  }
-
-  return err;
-#endif
-}
-
 /* $Source: /cvs/libtom/libtomcrypt/src/hashes/helper/hash_file.c,v $ */
 /* $Revision: 1.5 $ */
 /* $Date: 2006/12/28 01:27:23 $ */
@@ -21615,56 +20369,6 @@ int hash_file(int hash, const char *fname, unsigned char *out,
    @file hash_filehandle.c
    Hash open files, Tom St Denis
  */
-
-/**
-   Hash data from an open file handle.
-   @param hash   The index of the hash you want to use
-   @param in     The FILE* handle of the file you want to hash
-   @param out    [out] The destination of the digest
-   @param outlen [in/out] The max size and resulting size of the digest
-   @result CRYPT_OK if successful
- */
-int hash_filehandle(int hash, FILE *in, unsigned char *out,
-                    unsigned long *outlen) {
-#ifdef LTC_NO_FILE
-  return CRYPT_NOP;
-#else
-  hash_state md;
-  unsigned char buf[512];
-  size_t x;
-  int err;
-
-  LTC_ARGCHK(out != NULL);
-  LTC_ARGCHK(outlen != NULL);
-  LTC_ARGCHK(in != NULL);
-
-  if ((err = hash_is_valid(hash)) != CRYPT_OK) {
-    return err;
-  }
-
-  if (*outlen < hash_descriptor[hash].hashsize) {
-    *outlen = hash_descriptor[hash].hashsize;
-    return CRYPT_BUFFER_OVERFLOW;
-  }
-  if ((err = hash_descriptor[hash].init(&md)) != CRYPT_OK) {
-    return err;
-  }
-
-  *outlen = hash_descriptor[hash].hashsize;
-  do {
-    x = fread(buf, 1, sizeof(buf), in);
-    if ((err = hash_descriptor[hash].process(&md, buf, x)) != CRYPT_OK) {
-      return err;
-    }
-  } while (x == sizeof(buf));
-  err = hash_descriptor[hash].done(&md, out);
-
-#ifdef LTC_CLEAN_STACK
-  zeromem(buf, sizeof(buf));
-#endif
-  return err;
-#endif
-}
 
 /* $Source: /cvs/libtom/libtomcrypt/src/hashes/helper/hash_filehandle.c,v $ */
 /* $Revision: 1.6 $ */
@@ -21754,73 +20458,6 @@ LBL_ERR:
    @file hash_memory_multi.c
    Hash (multiple buffers) memory helper, Tom St Denis
  */
-
-/**
-   Hash multiple (non-adjacent) blocks of memory at once.
-   @param hash   The index of the hash you wish to use
-   @param out    [out] Where to store the digest
-   @param outlen [in/out] Max size and resulting size of the digest
-   @param in     The data you wish to hash
-   @param inlen  The length of the data to hash (octets)
-   @param ...    tuples of (data,len) pairs to hash, terminated with a (NULL,x)
-   (x=don't care)
-   @return CRYPT_OK if successful
- */
-int hash_memory_multi(int hash, unsigned char *out, unsigned long *outlen,
-                      const unsigned char *in, unsigned long inlen, ...) {
-  hash_state *md;
-  int err;
-  va_list args;
-  const unsigned char *curptr;
-  unsigned long curlen;
-
-  LTC_ARGCHK(in != NULL);
-  LTC_ARGCHK(out != NULL);
-  LTC_ARGCHK(outlen != NULL);
-
-  if ((err = hash_is_valid(hash)) != CRYPT_OK) {
-    return err;
-  }
-
-  if (*outlen < hash_descriptor[hash].hashsize) {
-    *outlen = hash_descriptor[hash].hashsize;
-    return CRYPT_BUFFER_OVERFLOW;
-  }
-
-  md = XMALLOC(sizeof(hash_state));
-  if (md == NULL) {
-    return CRYPT_MEM;
-  }
-
-  if ((err = hash_descriptor[hash].init(md)) != CRYPT_OK) {
-    goto LBL_ERR;
-  }
-
-  va_start(args, inlen);
-  curptr = in;
-  curlen = inlen;
-  for (;;) {
-    /* process buf */
-    if ((err = hash_descriptor[hash].process(md, curptr, curlen)) != CRYPT_OK) {
-      goto LBL_ERR;
-    }
-    /* step to next */
-    curptr = va_arg(args, const unsigned char *);
-    if (curptr == NULL) {
-      break;
-    }
-    curlen = va_arg(args, unsigned long);
-  }
-  err = hash_descriptor[hash].done(md, out);
-  *outlen = hash_descriptor[hash].hashsize;
-LBL_ERR:
-#ifdef LTC_CLEAN_STACK
-  zeromem(md, sizeof(hash_state));
-#endif
-  XFREE(md);
-  va_end(args);
-  return err;
-}
 
 /* $Source: /cvs/libtom/libtomcrypt/src/hashes/helper/hash_memory_multi.c,v $ */
 /* $Revision: 1.6 $ */
@@ -23937,26 +22574,6 @@ void ltc_deinit_multi(void *a, ...) {
    as required
  */
 
-/**
-   LTC_PKCS #1 Integer to binary
-   @param n             The integer to store
-   @param modulus_len   The length of the RSA modulus
-   @param out           [out] The destination for the integer
-   @return CRYPT_OK if successful
- */
-int pkcs_1_i2osp(void *n, unsigned long modulus_len, unsigned char *out) {
-  unsigned long size;
-
-  size = mp_unsigned_bin_size(n);
-
-  if (size > modulus_len) {
-    return CRYPT_BUFFER_OVERFLOW;
-  }
-
-  /* store it */
-  zeromem(out, modulus_len);
-  return mp_to_unsigned_bin(n, out + (modulus_len - size));
-}
 #endif /* LTC_PKCS_1 */
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_i2osp.c,v $ */
@@ -24450,16 +23067,6 @@ LBL_ERR:
  */
 #ifdef LTC_PKCS_1
 
-/**
-   Read a binary string into an mp_int
-   @param n          [out] The mp_int destination
-   @param in         The binary string to read
-   @param inlen      The length of the binary string
-   @return CRYPT_OK if successful
- */
-int pkcs_1_os2ip(void *n, unsigned char *in, unsigned long inlen) {
-  return mp_read_unsigned_bin(n, in, inlen);
-}
 #endif /* LTC_PKCS_1 */
 
 /* $Source: /cvs/libtom/libtomcrypt/src/pk/pkcs1/pkcs_1_os2ip.c,v $ */
@@ -28802,11 +27409,6 @@ static const ulong32 rcon[] = {
 #define ECB_DONE rijndael_done
 #define ECB_TEST rijndael_test
 #define ECB_KS rijndael_keysize
-
-const struct ltc_cipher_descriptor rijndael_desc = {
-    "rijndael", 6,        16,       32,     16,   10,   SETUP, ECB_ENC,
-    ECB_DEC,    ECB_TEST, ECB_DONE, ECB_KS, NULL, NULL, NULL,  NULL,
-    NULL,       NULL,     NULL,     NULL,   NULL, NULL, NULL,  NULL};
 
 const struct ltc_cipher_descriptor aes_desc = {
     "aes",   6,        16,       32,     16,   10,   SETUP, ECB_ENC,

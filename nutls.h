@@ -17,7 +17,6 @@
 #define TLS_NOT_SAFE -4
 #define TLS_NO_COMMON_CIPHER -5
 #define TLS_UNEXPECTED_MESSAGE -6
-#define TLS_CLOSE_CONNECTION -7
 #define TLS_COMPRESSION_NOT_SUPPORTED -8
 #define TLS_NO_MEMORY -9
 #define TLS_NOT_VERIFIED -10
@@ -44,8 +43,6 @@
 #define TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 0x009E
 #define TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 0x009F
 
-#define TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA 0xC013
-#define TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA 0xC014
 #define TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 0xC02F
 #define TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 0xC030
 
@@ -290,11 +287,6 @@ int tls_consume_stream(struct TLSContext *context, const unsigned char *buf,
                        int buf_len, tls_validation_function certificate_verify);
 void tls_close_notify(struct TLSContext *context);
 void tls_alert(struct TLSContext *context, unsigned char critical, int code);
-
-int tls_export_context(struct TLSContext *context, unsigned char *buffer,
-                       unsigned int buf_len, unsigned char small_version);
-struct TLSContext *tls_import_context(const unsigned char *buffer,
-                                      unsigned int buf_len);
 
 int tls_client_verified(struct TLSContext *context);
 const char *tls_sni(struct TLSContext *context);

@@ -1,9 +1,5 @@
 #include "nutls.c"
 
-#include <stdio.h>
-#include <string.h>  //strlen
-#include <arpa/inet.h>
-#include <sys/socket.h>
 #include <unistd.h>
 
 static char identity_str[0xFF] = {0};

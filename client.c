@@ -1,7 +1,5 @@
 #include <netdb.h>
-#include <netinet/in.h>
 #include <stdio.h>
-#include <sys/socket.h>
 #include "nutls.c"
 
 void error(char *msg) {
@@ -144,7 +142,7 @@ int main(int argc, char *argv[]) {
   }
   memset((char *)&serv_addr, 0, sizeof(serv_addr));
   serv_addr.sin_family = AF_INET;
-  memcpy((char *)&serv_addr.sin_addr.s_addr, (char *)server->h_addr,
+  memcpy((char *)&serv_addr.sin_addr.s_addr, server->h_addr,
          server->h_length);
   serv_addr.sin_port = htons(portno);
   if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)

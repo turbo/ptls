@@ -592,7 +592,7 @@ static void private_tls_U32TO8(unsigned char *p, unsigned long v) {
 #pragma ide diagnostic ignored "hicpp-signed-bitwise"
 void private_tls_poly1305_init(poly1305_context *ctx,
                                 const unsigned char key[32]) {
-  poly1305_state_internal_t *st = (poly1305_state_internal_t *)ctx;
+  poly1305_state_internal_t *st = ctx;
 
   /* r &= 0xffffffc0ffffffc0ffffffc0fffffff */
   st->r[0] = (private_tls_U8TO32(&key[0])) & 0x3ffffff;
@@ -704,7 +704,7 @@ static void private_tls_poly1305_blocks(poly1305_state_internal_t *st,
 #pragma ide diagnostic ignored "hicpp-signed-bitwise"
 void private_tls_poly1305_finish(poly1305_context *ctx,
                                   unsigned char mac[16]) {
-  poly1305_state_internal_t *st = (poly1305_state_internal_t *)ctx;
+  poly1305_state_internal_t *st = ctx;
   unsigned long h0, h1, h2, h3, h4, c;
   unsigned long g0, g1, g2, g3, g4;
   unsigned long long f;
@@ -812,7 +812,7 @@ void private_tls_poly1305_finish(poly1305_context *ctx,
 #pragma ide diagnostic ignored "hicpp-signed-bitwise"
 void private_tls_poly1305_update(poly1305_context *ctx, const unsigned char *m,
                                   size_t bytes) {
-  poly1305_state_internal_t *st = (poly1305_state_internal_t *)ctx;
+  poly1305_state_internal_t *st = ctx;
   size_t i;
   /* handle leftover */
   if (st->leftover) {
@@ -1392,8 +1392,8 @@ static const char cd64[] =
     "abcdefghijklmnopq";
 
 void _private_b64_decodeblock(unsigned char in[4], unsigned char out[3]) {
-  out[0] = (unsigned char)(in[0] << 2 | in[1] >> 4);
-  out[1] = (unsigned char)(in[1] << 4 | in[2] >> 2);
+  out[0] = in[0] << 2 | in[1] >> 4;
+  out[1] = in[1] << 4 | in[2] >> 2;
   out[2] = (unsigned char)(((in[2] << 6) & 0xc0) | in[3]);
 }
 
@@ -1471,7 +1471,7 @@ int _private_tls_dh_shared_secret(DHKey *private_key, DHKey *public_key,
     return err;
   }
 
-  x = (unsigned long)mp_unsigned_bin_size(tmp);
+  x = mp_unsigned_bin_size(tmp);
   if (*outlen < x) {
     err = CRYPT_BUFFER_OVERFLOW;
     mp_clear(tmp);
@@ -1552,7 +1552,7 @@ unsigned char *_private_tls_decrypt_ecc_dhe(struct TLSContext *context,
   else
     curve = default_curve;
 
-  ltc_ecc_set_type *dp = (ltc_ecc_set_type *)&curve->dp;
+  const ltc_ecc_set_type *dp = &curve->dp;
 
   ecc_key client_key;
   memset(&client_key, 0, sizeof(client_key));
@@ -2158,7 +2158,7 @@ int _private_tls_sign_ecdsa(struct TLSContext *context, unsigned int hash_type,
   ecc_key key;
   int err;
 
-  ltc_ecc_set_type *dp = (ltc_ecc_set_type *)&curve->dp;
+  const ltc_ecc_set_type *dp = &curve->dp;
 
   // broken ... fix this
   err = _private_tls_ecc_import_key(
@@ -2335,7 +2335,7 @@ int _private_tls_verify_ecdsa(struct TLSContext *context,
     }
     err = _private_tls_ecc_import_pk(context->certificates[0]->pk,
                                      context->certificates[0]->pk_len, &key,
-                                     (ltc_ecc_set_type *)&curve_hint->dp);
+                                     &curve_hint->dp);
   }
   if (err) {
     DEBUG_PRINT("Error importing ECC certificate (code: %i)", err);
@@ -2434,8 +2434,8 @@ unsigned int _private_tls_random_int(int limit) {
 void _private_tls_sleep(unsigned int microseconds) {
   struct timespec ts;
 
-  ts.tv_sec = (unsigned int)(microseconds / 1000000);
-  ts.tv_nsec = (unsigned int)(microseconds % 1000000) * 1000ul;
+  ts.tv_sec = microseconds / 1000000;
+  ts.tv_nsec = microseconds % 1000000 * 1000ul;
 
   nanosleep(&ts, NULL);
 }
@@ -2507,7 +2507,7 @@ int _private_tls_hkdf_label(const char *label, unsigned char label_len,
   }
   hkdflabel[2] = (unsigned char)prefix_len + label_len;
   memcpy(&hkdflabel[3 + prefix_len], label, label_len);
-  hkdflabel[3 + prefix_len + label_len] = (unsigned char)data_len;
+  hkdflabel[3 + prefix_len + label_len] = data_len;
   if (data_len) memcpy(&hkdflabel[4 + prefix_len + label_len], data, data_len);
   return 4 + prefix_len + label_len + data_len;
 }
@@ -4342,52 +4342,52 @@ const unsigned char *tls_get_write_buffer(struct TLSContext *context,
   return context->tls_buffer;
 }
 
-const unsigned char *tls_get_message(struct TLSContext *context,
-                                     unsigned int *outlen,
-                                     unsigned int offset) {
-  if (!outlen) return NULL;
-  if ((!context) || (!context->tls_buffer)) {
-    *outlen = 0;
-    return NULL;
-  }
-
-  if (offset >= context->tls_buffer_len) {
-    *outlen = 0;
-    return NULL;
-  }
-  // check if any error
-  if (context->sleep_until) {
-    if (context->sleep_until < time(NULL)) {
-      *outlen = 0;
-      return NULL;
-    }
-    context->sleep_until = 0;
-  }
-  unsigned char *tls_buffer = &context->tls_buffer[offset];
-  unsigned int tls_buffer_len = context->tls_buffer_len - offset;
-  unsigned int len = 0;
-  if (context->dtls) {
-    if (tls_buffer_len < 13) {
-      *outlen = 0;
-      return NULL;
-    }
-
-    len = ntohs(*(unsigned short *)&tls_buffer[11]) + 13;
-  } else {
-    if (tls_buffer_len < 5) {
-      *outlen = 0;
-      return NULL;
-    }
-    len = ntohs(*(unsigned short *)&tls_buffer[3]) + 5;
-  }
-  if (len > tls_buffer_len) {
-    *outlen = 0;
-    return NULL;
-  }
-
-  *outlen = len;
-  return tls_buffer;
-}
+//const unsigned char *tls_get_message(struct TLSContext *context,
+//                                     unsigned int *outlen,
+//                                     unsigned int offset) {
+//  if (!outlen) return NULL;
+//  if ((!context) || (!context->tls_buffer)) {
+//    *outlen = 0;
+//    return NULL;
+//  }
+//
+//  if (offset >= context->tls_buffer_len) {
+//    *outlen = 0;
+//    return NULL;
+//  }
+//  // check if any error
+//  if (context->sleep_until) {
+//    if (context->sleep_until < time(NULL)) {
+//      *outlen = 0;
+//      return NULL;
+//    }
+//    context->sleep_until = 0;
+//  }
+//  unsigned char *tls_buffer = &context->tls_buffer[offset];
+//  unsigned int tls_buffer_len = context->tls_buffer_len - offset;
+//  unsigned int len = 0;
+//  if (context->dtls) {
+//    if (tls_buffer_len < 13) {
+//      *outlen = 0;
+//      return NULL;
+//    }
+//
+//    len = ntohs(*(unsigned short *)&tls_buffer[11]) + 13;
+//  } else {
+//    if (tls_buffer_len < 5) {
+//      *outlen = 0;
+//      return NULL;
+//    }
+//    len = ntohs(*(unsigned short *)&tls_buffer[3]) + 5;
+//  }
+//  if (len > tls_buffer_len) {
+//    *outlen = 0;
+//    return NULL;
+//  }
+//
+//  *outlen = len;
+//  return tls_buffer;
+//}
 
 void tls_buffer_clear(struct TLSContext *context) {
   if ((context) && (context->tls_buffer)) {
@@ -5192,7 +5192,7 @@ struct TLSPacket *tls_build_server_key_exchange(struct TLSContext *context,
     tls_init();
     _private_tls_ecc_dhe_create(context);
 
-    ltc_ecc_set_type *dp = (ltc_ecc_set_type *)&context->curve->dp;
+    const ltc_ecc_set_type *dp = &context->curve->dp;
 
     if (ecc_make_key_ex(NULL, find_prng("sprng"), context->ecc_dhe, dp)) {
       TLS_FREE(context->ecc_dhe);
@@ -5574,7 +5574,7 @@ struct TLSPacket *tls_build_hello(struct TLSContext *context,
           tls_packet_uint16(packet, shared_key_short + 4);
 
           _private_tls_ecc_dhe_create(context);
-          ltc_ecc_set_type *dp = (ltc_ecc_set_type *)&secp256r1.dp;
+          ltc_ecc_set_type *dp = &secp256r1.dp;
 
           if (ecc_make_key_ex(NULL, find_prng("sprng"), context->ecc_dhe, dp)) {
             TLS_FREE(context->ecc_dhe);
@@ -5900,7 +5900,7 @@ int _private_tls_parse_key_share(struct TLSContext *context,
     if (context->is_server) {
       _private_tls_ecc_dhe_create(context);
       if (ecc_make_key_ex(NULL, find_prng("sprng"), context->ecc_dhe,
-                          (ltc_ecc_set_type *)&context->curve->dp)) {
+                          &context->curve->dp)) {
         TLS_FREE(context->ecc_dhe);
         context->ecc_dhe = NULL;
         DEBUG_PRINT("Error generating ECC DHE key\n");
@@ -5908,7 +5908,7 @@ int _private_tls_parse_key_share(struct TLSContext *context,
       }
     }
 
-    ltc_ecc_set_type *dp = (ltc_ecc_set_type *)&context->curve->dp;
+    const ltc_ecc_set_type *dp = &context->curve->dp;
 
     if ((context->is_server) &&
         (!tls_random(context->local_random, TLS_SERVER_RANDOM_SIZE)))
@@ -6688,7 +6688,7 @@ int tls_parse_server_key_exchange(struct TLSContext *context,
       tls_init();
       _private_tls_ecc_dhe_create(context);
 
-      ltc_ecc_set_type *dp = (ltc_ecc_set_type *)&curve->dp;
+      const ltc_ecc_set_type *dp = &curve->dp;
       if (ecc_make_key_ex(NULL, find_prng("sprng"), context->ecc_dhe, dp)) {
         TLS_FREE(context->ecc_dhe);
         context->ecc_dhe = NULL;
